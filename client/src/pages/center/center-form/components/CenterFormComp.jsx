@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { postCenter } from "../api/postCenter";
 
 const initialValues = {
   centerName: "",
-  centerAddress: "",
+  centerEmail: "",
 };
 
 export default function Form() {
@@ -13,8 +14,11 @@ export default function Form() {
     setFormData({ ...formData, [name]: value });
   };
 
-  console.log(formData);
-  
+  const onSubmit = (e) => {
+    e.preventDefault();
+    postCenter(formData);
+  };
+
   return (
     <form className="flex items-center">
       <label>
@@ -23,18 +27,19 @@ export default function Form() {
           onChange={handleChange}
           value={formData.centerName}
           type="text"
-          name="centerName"
+          name="center_name"
         />
       </label>
       <label>
-        Center Address:
+        Center Email:
         <input
           onChange={handleChange}
-          value={formData.centerAddress}
-          type="text"
-          name="centerAddress"
+          value={formData.centerEmail}
+          type="email"
+          name="center_email"
         />
       </label>
+      <button onClick={onSubmit}>Enviar</button>
     </form>
   );
 }
