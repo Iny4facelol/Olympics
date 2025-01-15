@@ -43,23 +43,15 @@ class AdminDal {
   };
 
   createCenter = async (centerData) => {
-    const {
-      center_name,
-      center_city,
-      center_province,
-      center_address,
-      center_phone,
-      center_email,
-      center_auth_doc
-    } = centerData;
-  
+    const { center_name, center_email } = centerData;
+
     try {
       const result = await executeQuery(
-        `INSERT INTO center (center_name, center_city, center_province, center_address, center_phone, center_email, center_auth_doc)
-        VALUES (?, ?, ?, ?, ?, ?, ?)`, 
-        [center_name, center_city, center_province, center_address, center_phone, center_email, center_auth_doc]
+        `INSERT INTO center (center_name, center_email)
+        VALUES (?, ?)`, 
+        [center_name, center_email]
       );
-  
+
       return result;
     } catch (err) {
       console.log("Error al crear el centro:", err);
