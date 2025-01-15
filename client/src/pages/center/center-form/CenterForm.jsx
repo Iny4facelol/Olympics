@@ -1,6 +1,6 @@
 import HeaderDashboard from "../../../core/components/HeaderDashboard";
 import AppLayout from "../../../core/layout/AppLayout";
-import Form from "./components/Form";
+import Form from "./components/CenterFormComp";
 
 export default function CenterForm() {
   return (

@@ -4,9 +4,10 @@ export const AppContext = createContext();
 
 export const ContextProvider = ({ children }) => {
   return (
-    <AppContext.Provider value={{}}>
+    <AppContext.Provider value={{ }}>
       {children}
-    </AppContext.Provider>);  
+    </AppContext.Provider>
+    );  
 };
 
 export const useAppContext = () => {
