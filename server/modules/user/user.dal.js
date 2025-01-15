@@ -2,10 +2,10 @@ import { executeQuery } from '../../config/db.js';
 
 class UserDal {
   
-  getCenterByName = async (center_name) => {
+  getCenter = async () => {
     try {
-      const sql = `SELECT center_id FROM center WHERE center_name = ? AND center_is_deleted = 0`;
-      const [result] = await executeQuery(sql, [center_name]);
+      const sql = `SELECT center_name, center_id FROM center WHERE center_is_deleted = 0`;
+      const result = await executeQuery(sql);
       return result;
       
     } catch (error) {
