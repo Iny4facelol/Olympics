@@ -49,6 +49,42 @@ class UserDal {
       throw error;
     }
   }
+
+  completeCenter = async (centerData) => {
+    const { 
+      center_city, 
+      center_province, 
+      center_address, 
+      center_phone, 
+      center_auth_doc, 
+      center_id
+    } = centerData;
+
+    try {
+      const sql = `
+        UPDATE center
+        SET 
+          center_city = ?, 
+          center_province = ?, 
+          center_address = ?, 
+          center_phone = ?, 
+          center_auth_doc = ?
+        WHERE center_id = ?
+      `;
+      const result = await executeQuery(sql, [
+        center_city, 
+        center_province, 
+        center_address, 
+        center_phone, 
+        center_auth_doc,
+        center_id
+      ]);
+      return result;
+    } catch (error) {
+      console.log("Error al completar el centro:", error);
+      throw new Error("Error al completar el centro");
+    }
+  };
 }
 
 export default new UserDal();

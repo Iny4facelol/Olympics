@@ -97,6 +97,30 @@ login = async (req, res) =>{
 
 }
 
+  completeCenter = async (req, res) => {
+  try {
+    const { center_id, center_city, center_province, center_address, center_phone, center_auth_doc } = req.body;
+    
+    if (!center_id || !center_city || !center_province || !center_address || !center_phone || !center_auth_doc) {
+      throw new Error("Todos los campos son requeridos para completar el centro.");
+    }
+
+    const result = await userDal.completeCenter({
+      center_id,
+      center_city,
+      center_province,
+      center_address,
+      center_phone,
+      center_auth_doc
+    });
+
+    return res.status(200).json({ message: "Centro completado con éxito." });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: error.message });
+  }
+};
+
 }
 
 export default new UserController();
