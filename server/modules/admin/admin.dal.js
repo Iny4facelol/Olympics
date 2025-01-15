@@ -13,6 +13,7 @@ class AdminDal {
       olimpics_description,
     } = data;
 
+
     const connection = await dbPool.getConnection();
     try {
       await connection.beginTransaction();
