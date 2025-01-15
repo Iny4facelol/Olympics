@@ -1,8 +1,8 @@
-import { executeQuery } from '../../config/db.js';
+import { executeQuery } from "../../config/db.js";
 import { dbPool } from "../../config/db.js";
 
 class AdminDal {
-  addOlympics = async (data) => {
+  addOlympics = async (olympicsData) => {
     const {
       olympics_name,
       olympics_host_name,
@@ -11,7 +11,7 @@ class AdminDal {
       olympics_start_date,
       olympics_end_date,
       olimpics_description,
-    } = data;
+    } = olympicsData;
 
     const connection = await dbPool.getConnection();
     try {
@@ -28,10 +28,8 @@ class AdminDal {
         olimpics_description,
       ];
       const result = await connection.execute(sql, values);
-
-      const olympics_id = result[0].insertId;
       connection.commit();
-      return olympics_id;
+      return result;
     } catch (error) {
       await connection.rollback();
       console.log("Error en insert olympics", error);
@@ -49,16 +47,24 @@ class AdminDal {
       center_address,
       center_phone,
       center_email,
-      center_auth_doc
+      center_auth_doc,
     } = centerData;
-  
+
     try {
       const result = await executeQuery(
         `INSERT INTO center (center_name, center_city, center_province, center_address, center_phone, center_email, center_auth_doc)
-        VALUES (?, ?, ?, ?, ?, ?, ?)`, 
-        [center_name, center_city, center_province, center_address, center_phone, center_email, center_auth_doc]
+        VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          center_name,
+          center_city,
+          center_province,
+          center_address,
+          center_phone,
+          center_email,
+          center_auth_doc,
+        ]
       );
-  
+
       return result;
     } catch (err) {
       console.log("Error al crear el centro:", err);
