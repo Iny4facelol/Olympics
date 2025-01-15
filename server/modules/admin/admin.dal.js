@@ -1,8 +1,8 @@
-import { executeQuery } from '../../config/db.js';
+import { executeQuery } from "../../config/db.js";
 import { dbPool } from "../../config/db.js";
 
 class AdminDal {
-  addOlympics = async (data) => {
+  addOlympics = async (olympicsData) => {
     const {
       olympics_name,
       olympics_host_name,
@@ -11,7 +11,7 @@ class AdminDal {
       olympics_start_date,
       olympics_end_date,
       olimpics_description,
-    } = data;
+    } = olympicsData;
 
 
     const connection = await dbPool.getConnection();
@@ -29,10 +29,8 @@ class AdminDal {
         olimpics_description,
       ];
       const result = await connection.execute(sql, values);
-
-      const olympics_id = result[0].insertId;
       connection.commit();
-      return olympics_id;
+      return result;
     } catch (error) {
       await connection.rollback();
       console.log("Error en insert olympics", error);
@@ -43,6 +41,7 @@ class AdminDal {
   };
 
   createCenter = async (centerData) => {
+
     const { center_name, center_email } = centerData;
 
     try {
