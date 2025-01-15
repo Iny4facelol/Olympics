@@ -1,4 +1,3 @@
-import { createCenter } from './admin.dal.js';
 import adminDal from "./admin.dal.js";
 
 
@@ -14,9 +13,10 @@ class AdminController {
         olympics_start_date,
         olympics_end_date,
         olimpics_description
-      } = JSON.parse(req.body.data);
+      } = req.body;
 
-      dataToDal = {
+
+      const dataToDal = {
         olympics_name,
         olympics_host_name,
         olympics_host_city,
@@ -30,8 +30,7 @@ class AdminController {
 
       res.status(200).json({ olympics_id });
     } catch (error) {
-      console.log("************error", error);
-      res.status(500).json(error);
+      res.status(500).json({msg: "Error al crear las olimpiadas"});
     }
   };
 
@@ -39,7 +38,7 @@ class AdminController {
     const centerData = req.body;
   
     try {
-      const result = await createCenter(centerData);
+      const result = await adminDal.createCenter(centerData);
       
       return res.status(201).json({
         message: 'Centro creado con éxito',
