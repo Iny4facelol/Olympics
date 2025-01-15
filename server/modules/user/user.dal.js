@@ -4,8 +4,8 @@ class UserDal {
   
   getCenter = async () => {
     try {
-      const sql = `SELECT center_name, center_id FROM center WHERE center_is_deleted = 0`;
-      const result = await executeQuery(sql);
+      let sql = `SELECT center_name, center_id FROM center WHERE center_is_deleted = 0`;
+      let result = await executeQuery(sql);
       return result;
       
     } catch (error) {
@@ -16,7 +16,7 @@ class UserDal {
   
   register = async (values) => {
     try {
-      const sql = `
+      let sql = `
         INSERT INTO user (
           user_name,
           user_lastname,
@@ -33,6 +33,17 @@ class UserDal {
           user_center_id
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) `;
       await executeQuery(sql, values);
+      
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  getUserByEmail = async (email) => {
+    try {
+      let sql = `SELECT * FROM user WHERE user_email = ? AND user_is_deleted = 0`;
+      let result = await executeQuery(sql, [email]);
+      return result;
       
     } catch (error) {
       throw error;
