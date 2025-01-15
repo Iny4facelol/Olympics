@@ -6,6 +6,9 @@ const router = express.Router();
 router.post('/addCenter', adminController.addCenter);
 router.post('/addOlympics', adminController.addOlympics);
 
+router.post('/responsible/register', adminController.addResponsible);
+router.get('/responsibles', adminController.getResponsibles);
+
 
 
 
