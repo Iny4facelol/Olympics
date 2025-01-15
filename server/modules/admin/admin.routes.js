@@ -1,8 +1,12 @@
 import express from 'express';
-import { addCenter } from './admin.controller.js';
+import adminController from './admin.controller.js'
 
 const router = express.Router();
 
-router.post('/addCenter', addCenter);
+router.post('/addCenter', adminController.addCenter);
+router.post('/addOlympics', adminController.addOlympics);
+
+
+
 
 export default router;
