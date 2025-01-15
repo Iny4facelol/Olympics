@@ -2,10 +2,10 @@ import { executeQuery } from '../../config/db.js';
 
 class UserDal {
   
-  getCenterByName = async (center_name) => {
+  getCenter = async () => {
     try {
-      const sql = `SELECT center_id FROM center WHERE center_name = ? AND center_is_deleted = 0`;
-      const [result] = await executeQuery(sql, [center_name]);
+      let sql = `SELECT center_name, center_id FROM center WHERE center_is_deleted = 0`;
+      let result = await executeQuery(sql);
       return result;
       
     } catch (error) {
@@ -16,7 +16,7 @@ class UserDal {
   
   register = async (values) => {
     try {
-      const sql = `
+      let sql = `
         INSERT INTO user (
           user_name,
           user_lastname,
@@ -38,6 +38,53 @@ class UserDal {
       throw error;
     }
   }
+
+  getUserByEmail = async (email) => {
+    try {
+      let sql = `SELECT * FROM user WHERE user_email = ? AND user_is_deleted = 0`;
+      let result = await executeQuery(sql, [email]);
+      return result;
+      
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  completeCenter = async (centerData) => {
+    const { 
+      center_city, 
+      center_province, 
+      center_address, 
+      center_phone, 
+      center_auth_doc, 
+      center_id
+    } = centerData;
+
+    try {
+      const sql = `
+        UPDATE center
+        SET 
+          center_city = ?, 
+          center_province = ?, 
+          center_address = ?, 
+          center_phone = ?, 
+          center_auth_doc = ?
+        WHERE center_id = ?
+      `;
+      const result = await executeQuery(sql, [
+        center_city, 
+        center_province, 
+        center_address, 
+        center_phone, 
+        center_auth_doc,
+        center_id
+      ]);
+      return result;
+    } catch (error) {
+      console.log("Error al completar el centro:", error);
+      throw new Error("Error al completar el centro");
+    }
+  };
 }
 
 export default new UserDal();
