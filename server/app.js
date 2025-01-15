@@ -5,8 +5,12 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
+<<<<<<< Updated upstream
 import adminRoutes from './modules/admin/admin.routes.js';
 import userRoutes from './modules/user/user.routes.js';
+=======
+import adminRouter from './modules/admin/admin.routes.js'
+>>>>>>> Stashed changes
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,6 +22,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/api/admin', adminRouter)
 
 
 app.use('/api/admin', adminRoutes);
