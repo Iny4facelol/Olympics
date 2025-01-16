@@ -66,6 +66,24 @@ class AdminController {
     }
   };
 
+  allOlympics = async (req, res) => {
+    try {
+      let result = await adminDal.allOlympics()    
+      return res.status(200).json(result)
+           
+    } catch (error) {
+      res.status(500).json(error)
+    } 
+  }
+
+  allActivity = async (req,res) => {
+    try {
+      let result = await adminDal.allActivity()
+      return res.status(200).json(result)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  }
   
 }
 

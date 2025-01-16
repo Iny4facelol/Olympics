@@ -8,7 +8,8 @@ router.post('/addOlympics', adminController.addOlympics);
 router.post('/addActivity', adminController.addActivity);
 router.post('/responsible/register', adminController.addResponsible);
 router.get('/responsibles', adminController.getResponsibles);
-
+router.get('/allOlympics', adminController.allOlympics);
+router.get('/allActivity', adminController.allActivity);
 
 
 
