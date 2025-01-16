@@ -67,7 +67,7 @@ class AdminDal {
 
     try {
       const result = await executeQuery(
-        `INSERT INTO user (user_name, user_email, center_id, type=2)
+        `INSERT INTO user (user_name, user_email, center_id, user_type)
         VALUES (?, ?, ?, ?)`,
         [user_name, user_email, center_id, 2]
       );
@@ -81,7 +81,7 @@ class AdminDal {
   getAllResponsibles = async () => {
     try {
       const result = await executeQuery(
-        `SELECT * FROM user WHERE type=2`
+        `SELECT * FROM user WHERE user_type=2`
       );
       return result;
     } catch (err) {
