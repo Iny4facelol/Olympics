@@ -57,24 +57,38 @@ class AdminDal {
       throw new Error("Error al crear el centro");
     }
   };
-  addResponsible = async (req, res) => {
+  
+  addResponsible = async (userData) => {
+    const {
+      user_name,
+      user_email,
+      center_id
+    } = userData;
+
     try {
-      const { name, email, password } = req.body;
-      const values = { name, email, password };
-      const result = await adminDal.register(values);
-      res.status(200).json({ msg: "Responsable registrado con éxito", result });
-    } catch (error) {
-      res.status(500).json({ msg: "Error al registrar responsable", error });
+      const result = await executeQuery(
+        `INSERT INTO user (user_name, user_email, center_id, type=2)
+        VALUES (?, ?, ?, ?)`,
+        [user_name, user_email, center_id, 2]
+      );
+      return result;
+    } catch (err) {
+      console.log("Error al registrar responsable:", err);
+      throw new Error("Error al registrar responsable");
     }
   };
 
-  getResponsibles = async (req, res) => {
+  getAllResponsibles = async () => {
     try {
-      const responsibles = await adminDal.getAll();
-      res.status(200).json(responsibles);
-    } catch (error) {
-      res.status(500).json({ msg: "Error al obtener responsables", error });
+      const result = await executeQuery(
+        `SELECT * FROM user WHERE type=2`
+      );
+      return result;
+    } catch (err) {
+      console.log("Error al obtener responsables:", err);
+      throw new Error("Error al obtener responsables");
     }
+
   };  
 
   addActivity = async (data, file) => {
@@ -95,6 +109,7 @@ class AdminDal {
       throw error;
     }
   }
+
 }
 
 export default new AdminDal();
