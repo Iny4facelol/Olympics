@@ -60,16 +60,16 @@ class AdminDal {
   
   addResponsible = async (userData) => {
     const {
-      name,
-      email,
-      password
+      user_name,
+      user_email,
+      center_id
     } = userData;
 
     try {
       const result = await executeQuery(
-        `INSERT INTO user (name, email, password)
-        VALUES (?, ?, ?)`,
-        [name, email, password, 2]
+        `INSERT INTO user (user_name, user_email, center_id, type=2)
+        VALUES (?, ?, ?, ?)`,
+        [user_name, user_email, center_id, 2]
       );
       return result;
     } catch (err) {
