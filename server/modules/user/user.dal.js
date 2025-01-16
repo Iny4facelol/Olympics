@@ -123,6 +123,27 @@ class UserDal {
       throw new Error("Error al completar responsable");
     }
   };
+
+  updateResponsible = async (id, userData) => {
+    const { user_name, user_lastname, user_phone, user_dni } = userData;
+
+    try {
+      const result = await executeQuery(
+        `UPDATE user SET
+         user_name = ?,
+         user_lastname = ?,
+          user_phone = ?,
+          user_dni
+         WHERE id = ? 
+         AND type = 2`,
+        [user_name, user_lastname, user_phone, user_dni, id]
+      );
+      return result;
+    } catch (err) {
+      console.log("Error al actualizar responsable:", err);
+      throw new Error("Error al actualizar responsable");
+    }
+  };
 }
 
 export default new UserDal();

@@ -145,6 +145,24 @@ login = async (req, res) =>{
     return res.status(400).json({ message: error.message });
   }
 };
+
+editResponsible = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { user_name, user_lastname, user_dni, user_phone } = req.body;
+
+    if ( !user_id || !user_name || !user_lastname || !user_dni || !user_phone) {
+      throw new Error("Todos los campos son requeridos para editar el responsable.");
+    }
+
+    const result = await userDal.updateResponsible(id, { user_name, user_lastname, user_dni, user_phone });
+
+    return res.status(200).json({ message: "Responsable actualizado con éxito.", result });
+  } catch (error) {
+    return res.status(500).json({ message: "Error al actualizar responsable.", error });
+  }
+};
+
 }
 
 export default new UserController();
