@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { postCenter } from "../../center-form/api/postCenter";
 
 const initialValues = {
   centerName: "",
@@ -16,7 +15,6 @@ export default function CenterClientFormComp() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    postCenter(formData);
   };
 
   return (
