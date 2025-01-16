@@ -88,7 +88,27 @@ class AdminDal {
       console.log("Error al obtener responsables:", err);
       throw new Error("Error al obtener responsables");
     }
-  };
+
+  };  
+
+  addActivity = async (data, file) => {
+    const { activity_name, activity_description, max_participants, activity_image } = data;
+    
+    try {      
+      console.log("log en dal", data);
+      let sql = 'INSERT INTO activity (activity_name, activity_description, max_participants) VALUES (?,?,?)';
+      let values = [activity_name, activity_description, max_participants]
+      if(file){
+        sql= 'INSERT INTO activity (activity_name, activity_description, max_participants, activity_image) VALUES (?,?,?,?)'
+        values = [activity_name, activity_description, max_participants, activity_image]
+      }
+      const result = await executeQuery(sql, values);
+      return result;
+    } catch (error) {
+      console.log("*******Error al crear actividad en dal", error);
+      throw error;
+    }
+  }
 
 }
 
