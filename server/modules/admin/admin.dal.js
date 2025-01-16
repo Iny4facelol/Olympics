@@ -58,7 +58,37 @@ class AdminDal {
     }
   };
   
-  
+  addResponsible = async (userData) => {
+    const {
+      name,
+      email,
+      password
+    } = userData;
+
+    try {
+      const result = await executeQuery(
+        `INSERT INTO user (name, email, password)
+        VALUES (?, ?, ?)`,
+        [name, email, password, 2]
+      );
+      return result;
+    } catch (err) {
+      console.log("Error al registrar responsable:", err);
+      throw new Error("Error al registrar responsable");
+    }
+  };
+
+  getAllResponsibles = async () => {
+    try {
+      const result = await executeQuery(
+        `SELECT * FROM user WHERE type=2`
+      );
+      return result;
+    } catch (err) {
+      console.log("Error al obtener responsables:", err);
+      throw new Error("Error al obtener responsables");
+    }
+  };
 
 }
 
