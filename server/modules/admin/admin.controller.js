@@ -1,20 +1,16 @@
-
 import adminDal from "./admin.dal.js";
 
 class AdminController {
   addOlympics = async (req, res) => {
     const olympicsData = req.body;
     try {
-
       const result = await adminDal.addOlympics(olympicsData);
-
-
       return res.status(201).json({
         message: "olimpiada creada con éxito",
         olympics_id: result.insertId,
       });
     } catch (error) {
-      res.status(500).json({msg: "Error al crear las olimpiadas"});
+      res.status(500).json({ msg: "Error al crear las olimpiadas" });
     }
   };
 
@@ -22,8 +18,7 @@ class AdminController {
     const centerData = req.body;
 
     try {
-
-      const result = await adminDal.createCenter(centerData);    
+      const result = await adminDal.createCenter(centerData);
 
       return res.status(201).json({
         message: "Centro creado con éxito",
@@ -54,6 +49,23 @@ class AdminController {
       res.status(500).json({ msg: "Error al obtener responsables", error });
     }
   };
+
+  addActivity = async (req, res) => {
+    try {
+      const data = req.body; 
+      console.log("log en controller", data);
+      
+      const file = req.file;
+      const result = await adminDal.addActivity(data, file)
+      return res.status(201).json({
+        message: "actividad creada",
+        activity_id: result.insertId,
+      });
+    } catch (error) {
+      res.status(500).json({ msg: "Error al crear actividad" });
+    }
+  };
+
   
 }
 
