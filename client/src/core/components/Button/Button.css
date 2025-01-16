@@ -1,0 +1,19 @@
+.button-custom-white {
+  background-color: white;
+  color: #ee531e;
+  border-radius: 1rem;
+  border: 2px solid #ee531e;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px #6b6a6a;
+}
+
+.button-custom-orange {
+  background-color: #ee531e;
+  color: white;
+  border-radius: 1rem;
+  border: 2px solid #ee531e;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px #868585;
+}

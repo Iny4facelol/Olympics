@@ -1,0 +1,18 @@
+main {
+  background-color: #EAEAEA;
+  display: flex;
+  height: 80vh;
+  padding-top: 5rem;
+}
+.dashboard-header {
+  background-color: #EAEAEA;
+  nav {
+    article {
+      img {
+        width: 200px;
+        pointer-events: none;
+        user-select: none;
+      }
+    }
+  }
+}

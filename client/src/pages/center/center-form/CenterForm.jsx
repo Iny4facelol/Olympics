@@ -1,15 +1,14 @@
-import HeaderDashboard from "../../../core/components/HeaderDashboard";
-import AppLayout from "../../../core/layout/AppLayout";
-import Form from "./components/CenterFormComp";
+import { Container } from "react-bootstrap";
+import FormComp from "./components/CenterFormComp";
+import DashboardLayout from "../../../core/layout/DashboardLayout";
 
 export default function CenterForm() {
   return (
-    <AppLayout>
-      <HeaderDashboard />
-      <div className="bg-blue-200 py-4 text-center flex flex-col items-center">
-        <h2>Crear nuevo centro</h2>
-        <Form />
-      </div>
-    </AppLayout>
+    <DashboardLayout>
+      <Container className="d-flex flex-column gap-5">
+        <h2 className="fs-1">Crear nuevo centro</h2>
+        <FormComp />
+      </Container>
+    </DashboardLayout>
   );
 }

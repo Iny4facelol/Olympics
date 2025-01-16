@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { postCenter } from "../api/postCenter";
+import { Form, Row, Col } from "react-bootstrap";
+import ButtonCustom from "../../../../core/components/Button/Button";
+import { fetchData } from "../../../../utils/axios/axiosHelper";
 
 const initialValues = {
-  centerName: "",
-  centerEmail: "",
+  center_name: "",
+  center_email: "",
 };
 
-export default function Form() {
+export default function FormComp() {
   const [formData, setFormData] = useState(initialValues);
 
   const handleChange = (e) => {
@@ -14,32 +16,51 @@ export default function Form() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    postCenter(formData);
+  const onSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      await fetchData(`api/admin/addCenter`, "post", formData);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <form className="flex items-center">
-      <label>
-        Center Name:
-        <input
-          onChange={handleChange}
-          value={formData.centerName}
-          type="text"
-          name="center_name"
-        />
-      </label>
-      <label>
-        Center Email:
-        <input
-          onChange={handleChange}
-          value={formData.centerEmail}
-          type="email"
-          name="center_email"
-        />
-      </label>
-      <button onClick={onSubmit}>Enviar</button>
-    </form>
+    <Form className="d-flex gap-4 flex-column justify-content-center align-content-center">
+      <Row>
+        <Col md={6} sm={12}>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Nombre del centro</Form.Label>
+            <Form.Control
+              onChange={handleChange}
+              type="email"
+              name="center_name"
+              value={formData.center_name}
+              placeholder="IES Ribalta"
+            />
+            <Form.Text className="text-muted">
+              We'll never share your email with anyone else.
+            </Form.Text>
+          </Form.Group>
+        </Col>
+        <Col md={6} sm={12}>
+          <Form.Group controlId="formBasicPassword">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              onChange={handleChange}
+              value={formData.center_email}
+              type="email"
+              name="center_email"
+              placeholder="Email del centro"
+            />
+          </Form.Group>
+        </Col>
+      </Row>
+      <div>
+        <ButtonCustom onClick={onSubmit} bgColor={"orange"}>
+          Crear
+        </ButtonCustom>
+      </div>
+    </Form>
   );
 }
