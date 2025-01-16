@@ -57,25 +57,59 @@ class AdminDal {
       throw new Error("Error al crear el centro");
     }
   };
-  addResponsible = async (req, res) => {
+  
+  addResponsible = async (userData) => {
+    const {
+      user_name,
+      user_email,
+      center_id
+    } = userData;
+
     try {
-      const { name, email, password } = req.body;
-      const values = { name, email, password };
-      const result = await adminDal.register(values);
-      res.status(200).json({ msg: "Responsable registrado con éxito", result });
-    } catch (error) {
-      res.status(500).json({ msg: "Error al registrar responsable", error });
+      const result = await executeQuery(
+        `INSERT INTO user (user_name, user_email, center_id, user_type)
+        VALUES (?, ?, ?, ?)`,
+        [user_name, user_email, center_id, 2]
+      );
+      return result;
+    } catch (err) {
+      console.log("Error al registrar responsable:", err);
+      throw new Error("Error al registrar responsable");
     }
   };
 
-  getResponsibles = async (req, res) => {
+  getAllResponsibles = async () => {
     try {
-      const responsibles = await adminDal.getAll();
-      res.status(200).json(responsibles);
-    } catch (error) {
-      res.status(500).json({ msg: "Error al obtener responsables", error });
+      const result = await executeQuery(
+        `SELECT * FROM user WHERE user_type=2`
+      );
+      return result;
+    } catch (err) {
+      console.log("Error al obtener responsables:", err);
+      throw new Error("Error al obtener responsables");
     }
-  };
+
+  };  
+
+  addActivity = async (data, file) => {
+    const { activity_name, activity_description, max_participants, activity_image } = data;
+    
+    try {      
+      console.log("log en dal", data);
+      let sql = 'INSERT INTO activity (activity_name, activity_description, max_participants) VALUES (?,?,?)';
+      let values = [activity_name, activity_description, max_participants]
+      if(file){
+        sql= 'INSERT INTO activity (activity_name, activity_description, max_participants, activity_image) VALUES (?,?,?,?)'
+        values = [activity_name, activity_description, max_participants, activity_image]
+      }
+      const result = await executeQuery(sql, values);
+      return result;
+    } catch (error) {
+      console.log("*******Error al crear actividad en dal", error);
+      throw error;
+    }
+  }
+
 }
 
 export default new AdminDal();

@@ -85,6 +85,44 @@ class UserDal {
       throw new Error("Error al completar el centro");
     }
   };
+
+  completeResponsible = async (userData) => {
+    const { 
+      user_name, 
+      user_lastname, 
+      user_dni, 
+      user_phone, 
+      user_password, 
+      user_id,
+      user_type
+    } = userData;
+
+    try {
+      const sql = `
+        UPDATE user SET 
+          user_name = ?, 
+          user_lastname = ?, 
+          user_dni = ?, 
+          user_phone = ?, 
+          user_password = ?,
+          user_type = ?
+        WHERE user_id = ?
+      `;
+      const result = await executeQuery(sql, [
+        user_name, 
+        user_lastname, 
+        user_dni, 
+        user_phone, 
+        user_password,
+        user_id,
+        user_type
+      ]);
+      return result;
+    } catch (error) {
+      console.log("Error al completar responsable:", error);
+      throw new Error("Error al completar responsable");
+    }
+  };
 }
 
 export default new UserDal();

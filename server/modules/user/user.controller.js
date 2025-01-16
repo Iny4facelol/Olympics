@@ -133,7 +133,30 @@ class UserController {
     }
   };
 
-  
+
+  completeResponsible = async (req, res) => {
+    try {
+    const { user_id, user_name, user_lastname, user_dni, user_phone, user_password } = req.body;
+    
+    if (!user_id || !user_name || !user_lastname || !user_dni || !user_phone || !user_password ) {
+      throw new Error("Todos los campos son requeridos para completar  responsable.");
+    }
+
+    const result = await userDal.completeResponsible({
+      user_id,
+      user_name,
+      user_lastname,
+      user_dni,
+      user_phone,
+      user_password
+    });
+
+    return res.status(200).json({ message: "Responsable completado con éxito." });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: error.message });
+  }
+};
 }
 
 export default new UserController();
