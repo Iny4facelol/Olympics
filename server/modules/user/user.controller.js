@@ -6,61 +6,41 @@ class UserController {
   register = async (req, res) => {
     try {
       const {
-        name,
-        lastname,
-        email,
-        tutor_name,
-        tutor_lastname,
-        dni,
-        address,
-        city,
-        phone,
-        password,
-        repPassword,
-        bdate,
-        auth,
-        center_name,
+        user_name,
+        user_lastname,
+        user_tutor_name,
+        user_tutor_lastname,
+        user_dni,
+        user_city,
+        user_address,
+        user_phone,
+        user_birth_date,
+        user_email,
+        user_password,
+        user_permission_file,
+        user_center_id,
       } = req.body;
+
+      console.log("Body:", req.body);
       // Validación de campos
-      if (
-        !name ||
-        !lastname ||
-        !email ||
-        !tutor_name ||
-        !tutor_lastname ||
-        !dni ||
-        !address ||
-        !city ||
-        !phone ||
-        !password ||
-        !repPassword ||
-        !bdate ||
-        !auth ||
-        !center_name
-      ) {
-        throw new Error("Debes rellenar todos los campos");
-      }
+    
 
-      if (password !== repPassword) {
-        throw new Error("Las contraseñas no coinciden");
-      }
-
-      const hash = await hashPassword(password);
+      const hash = await hashPassword(user_password);
 
       const values = [
-        name,
-        lastname,
-        tutor_name,
-        tutor_lastname,
-        dni,
-        city,
-        address,
-        phone,
-        bdate,
-        email,
-        hash,
-        auth,
-        center_name,
+        user_name,
+        user_lastname,
+        user_tutor_name,
+        user_tutor_lastname,
+        user_dni,
+        user_city,
+        user_address,
+        user_phone,
+        user_birth_date,
+        user_email,
+        user_password,
+        user_permission_file,
+        user_center_id,
       ];
 
       await userDal.register(values);

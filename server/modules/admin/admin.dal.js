@@ -195,6 +195,29 @@ class AdminDal {
     }
   };
 
+  updateUser = async (id, userData) => {
+    const { user_name, user_lastname, user_type, center_id, user_dni, activity, olympics_id } = userData;
+
+    try {
+      const result = await executeQuery(
+        `UPDATE user SET
+         user_name = ?,
+         user_lastname = ?,
+         user_type = ?,
+         center_id = ?,
+         user_dni = ?,
+         activity = ?,
+         olympics_id = ?
+         WHERE id = ?`,
+        [user_name, user_lastname, user_type, center_id, user_dni, activity, olympics_id, id]
+      );
+      return result;
+    } catch (err) {
+      console.error("Error al actualizar usuario:", err);
+      throw new Error("Error al actualizar usuario");
+    }
+  };
+
 }
 
 export default new AdminDal();
