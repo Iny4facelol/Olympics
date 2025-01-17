@@ -57,13 +57,17 @@ class AdminDal {
   };
 
   addResponsible = async (userData) => {
+
     const { user_name, user_email, center_id } = userData;
 
+
+   
+   console.log("userData", userData);
     try {
       const result = await executeQuery(
-        `INSERT INTO user (user_name, user_email, center_id, user_type)
-        VALUES (?, ?, ?, ?)`,
-        [user_name, user_email, center_id, 2]
+        `INSERT INTO user (user_name, user_email, user_center_id, user_type, user_password)
+        VALUES (?, ?, ?, ?, ?)`,
+        [user_name, user_email, user_center_id, user_type, user_password]  // 2 indica que es un responsable
       );
       return result;
     } catch (err) {
