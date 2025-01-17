@@ -158,23 +158,49 @@ class UserController {
         );
       }
 
-      const result = await userDal.completeResponsible({
-        user_id,
-        user_name,
-        user_lastname,
-        user_dni,
-        user_phone,
-        user_password,
-      });
+    const result = await userDal.completeResponsible({
+      user_id,
+      user_name,
+      user_lastname,
+      user_dni,
+      user_phone,
+      user_password
+    });
 
-      return res
-        .status(200)
-        .json({ message: "Responsable completado con éxito." });
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json({ message: error.message });
-    }
-  };
+    return res.status(200).json({ message: "Responsable completado con éxito." });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: error.message });
+  }
+};
+
+editResponsible = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { user_name, user_lastname, user_phone, user_dni } = req.body;
+
+
+    console.log("Body:", req.body);
+    console.log("Params:", user_id);
+
+    const result = await userDal.updateResponsible(user_id, {
+      user_name,
+      user_lastname,
+      user_phone,
+      user_dni,
+    });
+
+    return res.status(200).json({
+      message: "Responsable actualizado con éxito.",
+      result,
+    });
+  } catch (error) {
+    console.error("Error en editResponsible:", error);
+    return res.status(500).json({ message: "Error al actualizar responsable.", error: error.message });
+  }
+};
+
+
 }
 
 export default new UserController();

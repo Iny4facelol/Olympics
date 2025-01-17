@@ -44,9 +44,11 @@ class AdminController {
 
   addResponsible = async (req, res) => {
     try {
-      const { user_name, user_email, user_password } = req.body;
-      const values = { user_name, user_email, user_password };
-      const result = await adminDal.register(values);
+
+      const { user_name, user_email, user_center_id, user_type, user_password } = req.body;
+      const values = { user_name, user_email, user_center_id, user_type, user_password};
+      const result = await adminDal.addResponsible(values);
+
       res.status(200).json({ msg: "Responsable registrado con éxito", result });
     } catch (error) {
       res.status(500).json({ msg: "Error al registrar responsable", error });
@@ -78,6 +80,7 @@ class AdminController {
     }
   };
 
+
   verifyToken = async (req, res) => {
     try {
       const { token } = req.params;
@@ -95,6 +98,46 @@ class AdminController {
       res.status(500).json({ message: "Error al buscar el centro" });
     }
   };
+
+  allOlympics = async (req, res) => {
+    try {
+      let result = await adminDal.allOlympics()    
+      return res.status(200).json(result)
+           
+    } catch (error) {
+      res.status(500).json(error)
+    } 
+  }
+
+  allActivity = async (req,res) => {
+    try {
+      let result = await adminDal.allActivity()
+      return res.status(200).json(result)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  }
+
+  allUser = async (req, res) => {
+    try {
+      let result = await adminDal.allUser()
+      return res.status(200).json(result)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  }
+
+  editOlympics = async (req, res) => {
+    try {
+      const result = await adminDal.editOlympics(req.body)
+      
+      res.status(200).json(result)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  }
+  
+
 }
 
 export default new AdminController();
