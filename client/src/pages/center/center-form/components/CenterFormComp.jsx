@@ -33,7 +33,7 @@ export default function FormComp() {
             <Form.Label>Nombre del centro</Form.Label>
             <Form.Control
               onChange={handleChange}
-              type="email"
+              type="text"
               name="center_name"
               value={formData.center_name}
               placeholder="IES Ribalta"

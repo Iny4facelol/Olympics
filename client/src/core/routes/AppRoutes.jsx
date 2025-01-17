@@ -9,7 +9,7 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin/createNewCenter" element={<CenterForm />} />
-        <Route path="/center/completeCenter" element={<CenterClientForm />} />
+        <Route path="/center/completeCenter/:registerToken" element={<CenterClientForm />} />
       </Routes>
     </BrowserRouter>
   );

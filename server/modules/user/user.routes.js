@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/register', userController.register);
 router.post('/login', userController.login);
-router.post('/completeCenter', userController.completeCenter);
+router.put('/completeCenter/:center_id', userController.completeCenter);
 router.post('/completeResponsible', userController.completeResponsible);
 
 

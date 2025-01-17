@@ -1,4 +1,8 @@
 import adminDal from "./admin.dal.js";
+import jwt from "jsonwebtoken";
+import emailService from "../../utils/emailUtils/emailService.js";
+
+console.log(process.env.EMAIL_PASSWORD);
 
 class AdminController {
   addOlympics = async (req, res) => {
@@ -20,6 +24,14 @@ class AdminController {
     try {
       const result = await adminDal.createCenter(centerData);
 
+      const token = jwt.sign(
+        { center_id: result.insertId },
+        process.env.TOKEN_KEY,
+        { expiresIn: "24h" }
+      );
+
+      await emailService.sendRegistrationEmail(centerData, token);
+
       return res.status(201).json({
         message: "Centro creado con éxito",
         centerId: result.insertId,
@@ -33,7 +45,7 @@ class AdminController {
   addResponsible = async (req, res) => {
     try {
       const { user_name, user_email, user_password } = req.body;
-      const values = { user_name, user_email, user_password};
+      const values = { user_name, user_email, user_password };
       const result = await adminDal.register(values);
       res.status(200).json({ msg: "Responsable registrado con éxito", result });
     } catch (error) {
@@ -52,11 +64,11 @@ class AdminController {
 
   addActivity = async (req, res) => {
     try {
-      const data = req.body; 
+      const data = req.body;
       console.log("log en controller", data);
-      
+
       const file = req.file;
-      const result = await adminDal.addActivity(data, file)
+      const result = await adminDal.addActivity(data, file);
       return res.status(201).json({
         message: "actividad creada",
         activity_id: result.insertId,
@@ -66,7 +78,23 @@ class AdminController {
     }
   };
 
-  
+  verifyToken = async (req, res) => {
+    try {
+      const { token } = req.params;
+      const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+      const center = await adminDal.getCenterById(decoded.center_id);
+      if (!center) {
+        return res.status(404).json({ message: "Centro no encontrado" });
+      }
+
+      console.log("EL CENTER ID EN EL CONTROLLER", center[0].center_id);
+
+      res.status(200).json({ center_id: center[0].center_id });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error al buscar el centro" });
+    }
+  };
 }
 
 export default new AdminController();

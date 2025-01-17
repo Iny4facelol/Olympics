@@ -110,6 +110,19 @@ class AdminDal {
     }
   }
 
+  getCenterById = async (centerId) => {
+    try {
+      const result = await executeQuery(
+        `SELECT * FROM center WHERE center_id = ?`,
+        [centerId]
+      );
+      return result;
+    } catch (err) {
+      console.log("Error al obtener centro por id:", err);
+      throw new Error("Error al obtener centro por id");
+    }
+  }
+
 }
 
 export default new AdminDal();

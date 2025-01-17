@@ -8,6 +8,7 @@ router.post('/addOlympics', adminController.addOlympics);
 router.post('/addActivity', adminController.addActivity);
 router.post('/responsible/register', adminController.addResponsible);
 router.get('/responsibles', adminController.getResponsibles);
+router.get('/centers/verifyToken/:token', adminController.verifyToken);
 
 
 
