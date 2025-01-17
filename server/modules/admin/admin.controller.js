@@ -32,9 +32,9 @@ class AdminController {
 
   addResponsible = async (req, res) => {
     try {
-      const { user_name, user_email, user_password } = req.body;
-      const values = { user_name, user_email, user_password};
-      const result = await adminDal.register(values);
+      const { user_name, user_email, user_center_id, user_type, user_password } = req.body;
+      const values = { user_name, user_email, user_center_id, user_type, user_password};
+      const result = await adminDal.addResponsible(values);
       res.status(200).json({ msg: "Responsable registrado con éxito", result });
     } catch (error) {
       res.status(500).json({ msg: "Error al registrar responsable", error });

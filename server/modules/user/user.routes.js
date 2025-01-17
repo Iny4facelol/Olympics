@@ -7,6 +7,6 @@ router.post('/register', userController.register);
 router.post('/login', userController.login);
 router.post('/completeCenter', userController.completeCenter);
 router.post('/completeResponsible', userController.completeResponsible);
-router.put('/responsible/:id', userController.editResponsible);
+router.put('/responsible/:user_id', userController.editResponsible);
 
 export default router;
