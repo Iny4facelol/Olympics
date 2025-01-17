@@ -11,7 +11,7 @@ export default function HeaderDashboard() {
           </article>
           <article className="d-flex justify-content-between align-items-center gap-2">
             <ButtonCustom bgColor={"white"}>Volver al Panel Admin</ButtonCustom>
-            <ButtonCustom bgColor={"orange"}>Volver al Panel Admin</ButtonCustom>
+            <ButtonCustom bgColor={"orange"}>Cerrar sesión</ButtonCustom>
           </article>
         </nav>
       </Container>

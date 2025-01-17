@@ -96,7 +96,6 @@ class UserController {
   completeCenter = async (req, res) => {
     try {
       const {
-        center_id,
         center_city,
         center_province,
         center_address,
@@ -104,8 +103,10 @@ class UserController {
         center_auth_doc,
       } = req.body;
 
+      const { center_id } = req.params;
+      console.log("EL CENTER ID EN EL CONTROLLER",center_id);
+      
       if (
-        !center_id ||
         !center_city ||
         !center_province ||
         !center_address ||
@@ -133,14 +134,29 @@ class UserController {
     }
   };
 
-
   completeResponsible = async (req, res) => {
     try {
-    const { user_id, user_name, user_lastname, user_dni, user_phone, user_password } = req.body;
-    
-    if (!user_id || !user_name || !user_lastname || !user_dni || !user_phone || !user_password ) {
-      throw new Error("Todos los campos son requeridos para completar  responsable.");
-    }
+      const {
+        user_id,
+        user_name,
+        user_lastname,
+        user_dni,
+        user_phone,
+        user_password,
+      } = req.body;
+
+      if (
+        !user_id ||
+        !user_name ||
+        !user_lastname ||
+        !user_dni ||
+        !user_phone ||
+        !user_password
+      ) {
+        throw new Error(
+          "Todos los campos son requeridos para completar  responsable."
+        );
+      }
 
     const result = await userDal.completeResponsible({
       user_id,
@@ -183,6 +199,7 @@ editResponsible = async (req, res) => {
     return res.status(500).json({ message: "Error al actualizar responsable.", error: error.message });
   }
 };
+
 
 }
 

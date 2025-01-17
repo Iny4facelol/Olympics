@@ -52,12 +52,12 @@ class UserDal {
 
   completeCenter = async (centerData) => {
     const { 
+      center_id,
       center_city, 
       center_province, 
       center_address, 
       center_phone, 
       center_auth_doc, 
-      center_id
     } = centerData;
 
     try {
