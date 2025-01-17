@@ -1,14 +1,15 @@
 import React from "react";
-import AppLayout from "../../../core/layout/AppLayout";
+import DashboardLayout from "../../../core/layout/DashboardLayout";
+import { Container } from "react-bootstrap";
 import CenterClientFormComp from "./components/CenterClienteFormComp";
-import HeaderDashboard from "../../../core/components/HeaderDashboard";
 
 export default function CenterClientForm() {
   return (
-    <AppLayout>
-      <HeaderDashboard />
-      <h2>Center Client Form</h2>
-      <CenterClientFormComp />
-    </AppLayout>
+    <DashboardLayout>
+      <Container className="d-flex flex-column gap-5">
+        <h2 className="fs-1">Completar registro del centro</h2>
+        <CenterClientFormComp />
+      </Container>
+    </DashboardLayout>
   );
 }

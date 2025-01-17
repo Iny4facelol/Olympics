@@ -1,0 +1,5 @@
+.custom-input:focus {
+  outline: none; /* Elimina el contorno azul */
+  box-shadow: 0 0 5px 2px orange; /* Añade un efecto visual */
+  border-color: orange; /* Cambia el color del borde */
+}

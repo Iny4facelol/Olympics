@@ -52,12 +52,12 @@ class UserDal {
 
   completeCenter = async (centerData) => {
     const { 
+      center_id,
       center_city, 
       center_province, 
       center_address, 
       center_phone, 
       center_auth_doc, 
-      center_id
     } = centerData;
 
     try {
@@ -124,23 +124,26 @@ class UserDal {
     }
   };
 
-  updateResponsible = async (id, userData) => {
+  updateResponsible = async (user_id, userData) => {
     const { user_name, user_lastname, user_phone, user_dni } = userData;
-
+    
+    console.log("userData:", userData);
+    console.log("user_id:", user_id);
+  
     try {
       const result = await executeQuery(
         `UPDATE user SET
-         user_name = ?,
-         user_lastname = ?,
-          user_phone = ?,
-          user_dni
-         WHERE id = ? 
-         AND type = 2`,
-        [user_name, user_lastname, user_phone, user_dni, id]
+           user_name = ?,
+           user_lastname = ?,
+           user_phone = ?,
+           user_dni = ?
+         WHERE user_id = ? 
+         AND user_type = 2`,
+        [user_name, user_lastname, user_phone, user_dni, user_id]
       );
       return result;
     } catch (err) {
-      console.log("Error al actualizar responsable:", err);
+      console.error("Error al actualizar responsable:", err);
       throw new Error("Error al actualizar responsable");
     }
   };

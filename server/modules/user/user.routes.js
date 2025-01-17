@@ -5,9 +5,11 @@ const router = express.Router();
 
 router.post('/register', userController.register);
 router.post('/login', userController.login);
-router.post('/completeCenter', userController.completeCenter);
+router.put('/completeCenter/:center_id', userController.completeCenter);
 router.post('/completeResponsible', userController.completeResponsible);
-router.put('/responsible/:id', userController.editResponsible);
 router.put('/center/:center_id', userController.editCenter);
+
+router.put('/responsible/:user_id', userController.editResponsible);
+
 
 export default router;

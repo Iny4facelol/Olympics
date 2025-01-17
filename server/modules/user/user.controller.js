@@ -96,7 +96,6 @@ class UserController {
   completeCenter = async (req, res) => {
     try {
       const {
-        center_id,
         center_city,
         center_province,
         center_address,
@@ -104,8 +103,10 @@ class UserController {
         center_auth_doc,
       } = req.body;
 
+      const { center_id } = req.params;
+      console.log("EL CENTER ID EN EL CONTROLLER",center_id);
+      
       if (
-        !center_id ||
         !center_city ||
         !center_province ||
         !center_address ||
@@ -133,14 +134,29 @@ class UserController {
     }
   };
 
-
   completeResponsible = async (req, res) => {
     try {
-    const { user_id, user_name, user_lastname, user_dni, user_phone, user_password } = req.body;
-    
-    if (!user_id || !user_name || !user_lastname || !user_dni || !user_phone || !user_password ) {
-      throw new Error("Todos los campos son requeridos para completar  responsable.");
-    }
+      const {
+        user_id,
+        user_name,
+        user_lastname,
+        user_dni,
+        user_phone,
+        user_password,
+      } = req.body;
+
+      if (
+        !user_id ||
+        !user_name ||
+        !user_lastname ||
+        !user_dni ||
+        !user_phone ||
+        !user_password
+      ) {
+        throw new Error(
+          "Todos los campos son requeridos para completar  responsable."
+        );
+      }
 
     const result = await userDal.completeResponsible({
       user_id,
@@ -160,20 +176,30 @@ class UserController {
 
 editResponsible = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { user_name, user_lastname, user_dni, user_phone } = req.body;
+    const { user_id } = req.params;
+    const { user_name, user_lastname, user_phone, user_dni } = req.body;
 
-    if ( !user_id || !user_name || !user_lastname || !user_dni || !user_phone) {
-      throw new Error("Todos los campos son requeridos para editar el responsable.");
-    }
 
-    const result = await userDal.updateResponsible(id, { user_name, user_lastname, user_dni, user_phone });
+    console.log("Body:", req.body);
+    console.log("Params:", user_id);
 
-    return res.status(200).json({ message: "Responsable actualizado con éxito.", result });
+    const result = await userDal.updateResponsible(user_id, {
+      user_name,
+      user_lastname,
+      user_phone,
+      user_dni,
+    });
+
+    return res.status(200).json({
+      message: "Responsable actualizado con éxito.",
+      result,
+    });
   } catch (error) {
-    return res.status(500).json({ message: "Error al actualizar responsable.", error });
+    console.error("Error en editResponsible:", error);
+    return res.status(500).json({ message: "Error al actualizar responsable.", error: error.message });
   }
 };
+
 
 editCenter = async (req, res) => {
   try {
@@ -213,6 +239,7 @@ editCenter = async (req, res) => {
       .status(500).json({ message: "Error al actualizar", error });
   }
 };
+
 
 }
 
