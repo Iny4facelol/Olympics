@@ -57,17 +57,14 @@ class AdminDal {
   };
 
   addResponsible = async (userData) => {
-
     const { user_name, user_email, center_id } = userData;
 
-
-   
-   console.log("userData", userData);
+    console.log("userData", userData);
     try {
       const result = await executeQuery(
         `INSERT INTO user (user_name, user_email, user_center_id, user_type, user_password)
         VALUES (?, ?, ?, ?, ?)`,
-        [user_name, user_email, user_center_id, user_type, user_password]  // 2 indica que es un responsable
+        [user_name, user_email, user_center_id, user_type, user_password] // 2 indica que es un responsable
       );
       return result;
     } catch (err) {
@@ -158,8 +155,7 @@ class AdminDal {
       console.log("Error al obtener centro por id:", err);
       throw new Error("Error al obtener centro por id");
     }
-  }
-
+  };
 
   editOlympics = async (data) => {
     try {
@@ -171,9 +167,9 @@ class AdminDal {
         olympics_start_date,
         olympics_end_date,
         olimpics_description,
-        olympics_id
-      } = data;      
-      
+        olympics_id,
+      } = data;
+
       let sql =
         "UPDATE olympics SET olympics_name=?, olympics_host_name=?, olympics_host_city=?, olympics_host_address=?, olympics_start_date=?, olympics_end_date=?, olimpics_description=? WHERE olympics_id=?";
       let values = [
@@ -184,11 +180,27 @@ class AdminDal {
         olympics_start_date,
         olympics_end_date,
         olimpics_description,
-        olympics_id
+        olympics_id,
       ];
       const result = await executeQuery(sql, values);
       console.log(data);
-      
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  editActivity = async (data, file) => {
+    const {activity_name, activity_description, max_participants, activity_id} = data;
+    try {
+      let sql = "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ? WHERE activity_id = ?";
+      let values = [activity_name, activity_description, max_participants, activity_id];
+      if(file){
+        sql = "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
+        values = [activity_name, activity_description, max_participants, file, activity_id];
+      }
+      const result = await executeQuery(sql, values);
       return result
     } catch (error) {
       throw error
@@ -256,8 +268,6 @@ class AdminDal {
       throw new Error("Error al actualizar usuario. Detalles: " + err.message);
     }
   };
-  
-  
 
 }
 
