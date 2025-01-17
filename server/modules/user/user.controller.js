@@ -6,61 +6,41 @@ class UserController {
   register = async (req, res) => {
     try {
       const {
-        name,
-        lastname,
-        email,
-        tutor_name,
-        tutor_lastname,
-        dni,
-        address,
-        city,
-        phone,
-        password,
-        repPassword,
-        bdate,
-        auth,
-        center_name,
+        user_name,
+        user_lastname,
+        user_tutor_name,
+        user_tutor_lastname,
+        user_dni,
+        user_city,
+        user_address,
+        user_phone,
+        user_birth_date,
+        user_email,
+        user_password,
+        user_permission_file,
+        user_center_id,
       } = req.body;
+
+      console.log("Body:", req.body);
       // Validación de campos
-      if (
-        !name ||
-        !lastname ||
-        !email ||
-        !tutor_name ||
-        !tutor_lastname ||
-        !dni ||
-        !address ||
-        !city ||
-        !phone ||
-        !password ||
-        !repPassword ||
-        !bdate ||
-        !auth ||
-        !center_name
-      ) {
-        throw new Error("Debes rellenar todos los campos");
-      }
+    
 
-      if (password !== repPassword) {
-        throw new Error("Las contraseñas no coinciden");
-      }
-
-      const hash = await hashPassword(password);
+      const hash = await hashPassword(user_password);
 
       const values = [
-        name,
-        lastname,
-        tutor_name,
-        tutor_lastname,
-        dni,
-        city,
-        address,
-        phone,
-        bdate,
-        email,
-        hash,
-        auth,
-        center_name,
+        user_name,
+        user_lastname,
+        user_tutor_name,
+        user_tutor_lastname,
+        user_dni,
+        user_city,
+        user_address,
+        user_phone,
+        user_birth_date,
+        user_email,
+        user_password,
+        user_permission_file,
+        user_center_id,
       ];
 
       await userDal.register(values);
@@ -158,23 +138,85 @@ class UserController {
         );
       }
 
-      const result = await userDal.completeResponsible({
-        user_id,
-        user_name,
-        user_lastname,
-        user_dni,
-        user_phone,
-        user_password,
-      });
+    const result = await userDal.completeResponsible({
+      user_id,
+      user_name,
+      user_lastname,
+      user_dni,
+      user_phone,
+      user_password
+    });
 
-      return res
-        .status(200)
-        .json({ message: "Responsable completado con éxito." });
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json({ message: error.message });
+    return res.status(200).json({ message: "Responsable completado con éxito." });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: error.message });
+  }
+};
+
+editResponsible = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { user_name, user_lastname, user_phone, user_dni } = req.body;
+
+
+    console.log("Body:", req.body);
+    console.log("Params:", user_id);
+
+    const result = await userDal.updateResponsible(user_id, {
+      user_name,
+      user_lastname,
+      user_phone,
+      user_dni,
+    });
+
+    return res.status(200).json({
+      message: "Responsable actualizado con éxito.",
+      result,
+    });
+  } catch (error) {
+    console.error("Error en editResponsible:", error);
+    return res.status(500).json({ message: "Error al actualizar responsable.", error: error.message });
+  }
+};
+
+
+editCenter = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { center_city, center_province, center_address, center_phone, center_auth_doc } = req.body;
+
+    console.log("Edit Center - Params ID:", id);
+    console.log("Edit Center - Body Data:", {
+      center_city,
+      center_province,
+      center_address,
+      center_phone,
+      center_auth_doc,
+    });
+
+    if (!center_city || !center_province || !center_address || !center_phone || !center_auth_doc) {
+      console.log("Faltan campos para editar el centro.");
+      throw new Error("Todos los campos son requeridos para editar el centro.");
     }
-  };
+
+    const result = await userDal.updateCenter(id, {
+      center_city,
+      center_province,
+      center_address,
+      center_phone,
+      center_auth_doc,
+    });
+
+    console.log("Edit Center - Result from DAL:", result);
+
+    return res.status(200).json({ message: "Centro actualizado con éxito.", result });
+  } catch (error) {
+    return res.status(500).json({ message: "Error al actualizar", error: error.message || error });
+  }
+};
+
+
 }
 
 export default new UserController();
