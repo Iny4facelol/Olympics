@@ -208,27 +208,67 @@ class AdminDal {
   };
 
   updateUser = async (id, userData) => {
-    const { user_name, user_lastname, user_type, center_id, user_dni, activity, olympics_id } = userData;
-
+    const { 
+      user_name, 
+      user_lastname, 
+      user_tutor_name,
+      user_tutor_lastname,
+      user_dni,
+      user_city,
+      user_address,
+      user_birth_date,
+      user_phone,
+      user_type,
+      user_center_id,
+      user_olympics_id
+    } = userData;
+  
     try {
       const result = await executeQuery(
         `UPDATE user SET
-         user_name = ?,
-         user_lastname = ?,
-         user_type = ?,
-         center_id = ?,
-         user_dni = ?,
-         activity = ?,
-         olympics_id = ?
-         WHERE id = ?`,
-        [user_name, user_lastname, user_type, center_id, user_dni, activity, olympics_id, id]
+          user_name = ?, 
+          user_lastname = ?, 
+          user_tutor_name = ?,
+          user_tutor_lastname = ?,
+          user_dni = ?,
+          user_city = ?,
+          user_address = ?,
+          user_birth_date = ?,
+          user_phone = ?,
+          user_type = ?,
+          user_center_id = ?, 
+          user_olympics_id = ?
+        WHERE user_id = ?`,
+        [
+          user_name, 
+          user_lastname, 
+          user_tutor_name,
+          user_tutor_lastname,
+          user_dni,
+          user_city,
+          user_address,
+          user_birth_date,
+          user_phone,
+          user_type,
+          user_center_id,
+          user_olympics_id, 
+          id,
+        ]
       );
+  
+      console.log("Resultado de la consulta:", result);
+  
+      if (result.affectedRows === 0) {
+        throw new Error("No se encontró el usuario con el ID proporcionado.");
+      }
+  
       return result;
     } catch (err) {
-      console.error("Error al actualizar usuario:", err);
-      throw new Error("Error al actualizar usuario");
+      console.error("Error al actualizar usuario:", err.message);
+      throw new Error("Error al actualizar usuario. Detalles: " + err.message);
     }
   };
+
 }
 
 export default new AdminDal();
