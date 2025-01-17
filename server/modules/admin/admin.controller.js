@@ -151,6 +151,25 @@ class AdminController {
     }
   } 
 
+  
+  editUser = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { user_name, user_lastname, user_type, center_id, user_dni, activity, olympics_id } = req.body;
+
+      if (!id || !user_name || !user_lastname || !user_type || !center_id || !user_dni || !activity || !olympics_id) {
+        return res.status(400).json({ message: "Todos los campos son requeridos para editar el usuario." });
+      }
+
+      const result = await adminDal.updateUser(id, { user_name, user_lastname, user_type, center_id, user_dni, activity, olympics_id });
+
+      return res.status(200).json({ message: "Usuario actualizado con éxito.", result });
+    } catch (error) {
+      console.error("Error al actualizar usuario:", error);
+      return res.status(500).json({ message: "Error al actualizar usuario.", error });
+    }
+  };
+
 }
 
 export default new AdminController();
