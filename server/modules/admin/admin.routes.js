@@ -10,7 +10,8 @@ router.post('/addResponsible', adminController.addResponsible);
 router.get('/responsibles', adminController.getResponsibles);
 router.get('/allOlympics', adminController.allOlympics);
 router.get('/allActivity', adminController.allActivity);
-
+router.get('/allUser', adminController.allUser);
+router.post('/editOlympics', adminController.editOlympics)
 
 
 export default router;
