@@ -110,6 +110,26 @@ class AdminDal {
     }
   }
 
+  allOlympics = async () => {
+    try {
+      let sql = 'SELECT * FROM olympics WHERE olympics_is_deleted = 0'
+      let result = await executeQuery(sql)
+      return result
+    } catch (error) {
+      throw (error);      
+    }
+  }
+
+  allActivity = async () => {
+    try {
+      let sql = 'SELECT * FROM activity WHERE activity_is_deleted = 0'
+      let result = await executeQuery(sql)
+      return result
+    } catch (error) {
+      throw (error)
+    }
+  }
+
 }
 
 export default new AdminDal();
