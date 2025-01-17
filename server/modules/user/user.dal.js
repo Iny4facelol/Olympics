@@ -147,6 +147,31 @@ class UserDal {
       throw new Error("Error al actualizar responsable");
     }
   };
+
+  updateCenter = async (center_id, centerData) => {
+    const { center_city, center_province, center_address, center_phone, center_auth_doc } = centerData;
+  
+    const query = `
+      UPDATE center
+      SET
+        center_city = ?,
+        center_province = ?,
+        center_address = ?,
+        center_phone = ?,
+        center_auth_doc = ?
+      WHERE center_id = ?
+    `;
+  
+    const values = [center_city, center_province, center_address, center_phone, center_auth_doc, center_id];
+  
+    try {
+      const [result] = await executeQuery(query, values);
+      return result;
+    } catch (error) {
+      console.error("Error al actualizar centro:", error);
+      throw new Error("Error al actualizar centro");
+    }
+  };  
 }
 
 export default new UserDal();
