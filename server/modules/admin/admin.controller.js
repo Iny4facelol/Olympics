@@ -136,7 +136,20 @@ class AdminController {
       res.status(500).json(error)
     }
   }
-  
+
+  editActivity = async (req, res) => {    
+    try {
+      let data = req.body;      
+      let img = null;
+      if(req.file){
+        img= req.file.filename
+      }
+      const result = await adminDal.editActivity(data, img);
+      res.status(200).json(result)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  } 
 
 }
 

@@ -1,5 +1,6 @@
 import express from 'express';
 import adminController from './admin.controller.js'
+import multer from '../../middleware/multerImg.js';
 
 const router = express.Router();
 
@@ -14,7 +15,8 @@ router.get('/centers/verifyToken/:token', adminController.verifyToken);
 router.get('/allOlympics', adminController.allOlympics);
 router.get('/allActivity', adminController.allActivity);
 router.get('/allUser', adminController.allUser);
-router.post('/editOlympics', adminController.editOlympics)
+router.put('/editOlympics', adminController.editOlympics);
+router.put('/editActivity', multer("activity"), adminController.editActivity)
 
 
 
