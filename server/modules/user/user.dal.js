@@ -148,30 +148,33 @@ class UserDal {
     }
   };
 
-  updateCenter = async (center_id, centerData) => {
-    const { center_city, center_province, center_address, center_phone, center_auth_doc } = centerData;
-  
-    const query = `
-      UPDATE center
-      SET
-        center_city = ?,
-        center_province = ?,
-        center_address = ?,
-        center_phone = ?,
-        center_auth_doc = ?
-      WHERE center_id = ?
-    `;
-  
-    const values = [center_city, center_province, center_address, center_phone, center_auth_doc, center_id];
+  updateCenter = async (id, data) => {
+    const { center_city, center_province, center_address, center_phone, center_auth_doc } = data;
   
     try {
-      const [result] = await executeQuery(query, values);
+      const query = `
+        UPDATE center
+        SET 
+          center_city = ?,
+          center_province = ?,
+          center_address = ?,
+          center_phone = ?,
+          center_auth_doc = ?
+        WHERE center_id = ?;
+      `;
+      const result = await executeQuery(query, [
+        center_city,
+        center_province,
+        center_address,
+        center_phone,
+        center_auth_doc,
+        id,
+      ]);
       return result;
     } catch (error) {
-      console.error("Error al actualizar centro:", error);
-      throw new Error("Error al actualizar centro");
+      throw new Error("Error en la base de datos");
     }
-  };  
+  };
 }
 
 export default new UserDal();

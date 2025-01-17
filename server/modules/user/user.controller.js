@@ -183,27 +183,11 @@ editResponsible = async (req, res) => {
 
 editCenter = async (req, res) => {
   try {
-    const { center_id } = req.params;
-    const {
-      center_city,
-      center_province,
-      center_address,
-      center_phone,
-      center_auth_doc,
-    } = req.body;
+    const { id } = req.params;
+    const { center_city, center_province, center_address, center_phone, center_auth_doc } = req.body;
 
-    if (
-      !center_id ||
-      !center_city ||
-      !center_province ||
-      !center_address ||
-      !center_phone ||
-      !center_auth_doc
-    ) {
-      throw new Error("Todos los campos son requeridos para editar el centro.");
-    }
-
-    const result = await userDal.updateCenter(center_id, {
+    console.log("Edit Center - Params ID:", id);
+    console.log("Edit Center - Body Data:", {
       center_city,
       center_province,
       center_address,
@@ -211,12 +195,24 @@ editCenter = async (req, res) => {
       center_auth_doc,
     });
 
-    return res
-      .status(200).json({ message: "Centro actualizado", result });
+    if (!center_city || !center_province || !center_address || !center_phone || !center_auth_doc) {
+      console.log("Faltan campos para editar el centro.");
+      throw new Error("Todos los campos son requeridos para editar el centro.");
+    }
+
+    const result = await userDal.updateCenter(id, {
+      center_city,
+      center_province,
+      center_address,
+      center_phone,
+      center_auth_doc,
+    });
+
+    console.log("Edit Center - Result from DAL:", result);
+
+    return res.status(200).json({ message: "Centro actualizado con éxito.", result });
   } catch (error) {
-    console.error(error);
-    return res
-      .status(500).json({ message: "Error al actualizar", error });
+    return res.status(500).json({ message: "Error al actualizar", error: error.message || error });
   }
 };
 
