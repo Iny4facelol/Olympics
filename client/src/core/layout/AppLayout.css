@@ -1,11 +1,11 @@
-.main-admin {
-  background-color: #EAEAEA;
+.main-user {
+  background-color: #FDFDFD;
   display: flex;
   padding-block: 6rem;
-
 }
-.dashboard-header {
-  background-color: #EAEAEA;
+
+.header-user {
+  background-color: #FDFDFD;
   nav {
     article {
       img {

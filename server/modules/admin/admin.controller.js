@@ -2,7 +2,6 @@ import adminDal from "./admin.dal.js";
 import jwt from "jsonwebtoken";
 import emailService from "../../utils/emailUtils/emailService.js";
 
-console.log(process.env.EMAIL_PASSWORD);
 
 class AdminController {
   addOlympics = async (req, res) => {
