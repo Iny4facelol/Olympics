@@ -1,5 +1,6 @@
 import { executeQuery } from '../../config/db.js';
 
+
 class UserDal {
   
   getCenter = async () => {
@@ -175,6 +176,64 @@ class UserDal {
       throw new Error("Error en la base de datos");
     }
   };
+
+  updateUserUser = async (id, userData) => {
+    const { 
+      user_name, 
+      user_lastname, 
+      user_tutor_name, user_tutor_lastname,
+      user_dni, user_city, 
+      user_address, 
+      user_phone, 
+      user_birth_date
+     } = userData;
+
+    try {
+      const result = await executeQuery(
+        `UPDATE user SET
+         user_name = ?,
+         user_lastname = ?,
+         user_tutor_name = ?,
+         user_tutor_lastname = ?,
+         user_dni = ?,
+         user_city = ?,
+         user_address = ?,
+         user_phone = ?,
+         user_birth_date = ?
+         WHERE user_id = ?`,
+        [user_name, 
+          user_lastname, 
+          user_tutor_name,user_tutor_lastname, 
+          user_dni, 
+          user_city, 
+          user_address, 
+          user_phone, user_birth_date,
+           id]
+      );
+      return result;
+    } catch (err) {
+      console.error("Error al actualizar usuario:", err);
+      throw new Error("Error al actualizar usuario");
+    }
+  };
+
+  updateDocumentValidation = async (user_id, user_is_validated) => {
+    try {
+      const result = await executeQuery(
+        `UPDATE user SET user_is_validated = ? WHERE user_id = ?`,
+        [user_is_validated, 
+          user_id]
+      );
+
+      console.log("result:", result);
+      
+      return result;
+    } catch (err) {
+      console.error("Error al validar documento:", err);
+      throw new Error("Error al validar documento");
+    }
+  };
+
 }
 
 export default new UserDal();
