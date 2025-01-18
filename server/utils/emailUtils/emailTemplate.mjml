@@ -15,11 +15,11 @@
     <mj-section background-color="#ffffff" padding="0 20px">
       <mj-column>
         <mj-text font-size="24px" color="#1B2733" align="center">
-          ¡Bienvenido {{centerName}}!
+          Completa tu registro {{centerName}}
         </mj-text>
         <mj-text font-size="16px" color="#4a5568" line-height="24px">
           Gracias por registrar su centro con nosotros. Para completar el proceso
-          de registro, por favor haga clic en el botón de abajo.
+          de registro, por favor haga clic en el botón de abajo.  
         </mj-text>
         <mj-button 
           background-color="#ee531e" 

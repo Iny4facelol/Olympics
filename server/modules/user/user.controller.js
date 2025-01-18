@@ -17,7 +17,7 @@ class UserController {
         user_birth_date,
         user_email,
         user_password,
-        user_permission_file,
+        user_confirm_password,
         user_center_id,
       } = req.body;
 
@@ -39,9 +39,12 @@ class UserController {
         user_birth_date,
         user_email,
         user_password,
-        user_permission_file,
         user_center_id,
       ];
+
+      if(user_password !== user_confirm_password) {
+        throw new Error("Las contraseñas no coinciden");
+      }
 
       await userDal.register(values);
 

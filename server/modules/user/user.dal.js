@@ -29,9 +29,8 @@ class UserDal {
           user_birth_date,
           user_email,
           user_password,
-          user_permission_file,
           user_center_id
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) `;
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) `;
       await executeQuery(sql, values);
       
     } catch (error) {
