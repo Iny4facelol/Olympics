@@ -192,25 +192,43 @@ class AdminDal {
   };
 
   editActivity = async (data, file) => {
-    const {activity_name, activity_description, max_participants, activity_id} = data;
+    const {
+      activity_name,
+      activity_description,
+      max_participants,
+      activity_id,
+    } = data;
     try {
-      let sql = "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ? WHERE activity_id = ?";
-      let values = [activity_name, activity_description, max_participants, activity_id];
-      if(file){
-        sql = "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
-        values = [activity_name, activity_description, max_participants, file, activity_id];
+      let sql =
+        "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ? WHERE activity_id = ?";
+      let values = [
+        activity_name,
+        activity_description,
+        max_participants,
+        activity_id,
+      ];
+      if (file) {
+        sql =
+          "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
+        values = [
+          activity_name,
+          activity_description,
+          max_participants,
+          file,
+          activity_id,
+        ];
       }
       const result = await executeQuery(sql, values);
-      return result
+      return result;
     } catch (error) {
-      throw error
+      throw error;
     }
   };
 
   updateUser = async (id, userData) => {
-    const { 
-      user_name, 
-      user_lastname, 
+    const {
+      user_name,
+      user_lastname,
       user_tutor_name,
       user_tutor_lastname,
       user_dni,
@@ -220,9 +238,9 @@ class AdminDal {
       user_phone,
       user_type,
       user_center_id,
-      user_olympics_id
+      user_olympics_id,
     } = userData;
-  
+
     try {
       const result = await executeQuery(
         `UPDATE user SET
@@ -240,8 +258,8 @@ class AdminDal {
           user_olympics_id = ?
         WHERE user_id = ?`,
         [
-          user_name, 
-          user_lastname, 
+          user_name,
+          user_lastname,
           user_tutor_name,
           user_tutor_lastname,
           user_dni,
@@ -251,17 +269,17 @@ class AdminDal {
           user_phone,
           user_type,
           user_center_id,
-          user_olympics_id, 
+          user_olympics_id,
           id,
         ]
       );
-  
+
       console.log("Resultado de la consulta:", result);
-  
+
       if (result.affectedRows === 0) {
         throw new Error("No se encontró el usuario con el ID proporcionado.");
       }
-  
+
       return result;
     } catch (err) {
       console.error("Error al actualizar usuario:", err.message);
@@ -269,6 +287,29 @@ class AdminDal {
     }
   };
 
+  editCenter = async (data, file) => {
+    const {
+      center_id,
+      center_name,
+      center_city,
+      center_province,
+      center_address,
+      center_phone,
+      center_email,
+    } = data;
+    try {
+      let sql = "UPDATE center SET center_name = ?, center_city = ?, center_province = ?, center_address = ?, center_phone = ?, center_email = ? WHERE center_id = ?";
+      let values = [center_name, center_city, center_province, center_address, center_phone, center_email, center_id];
+      if(file) {
+        sql = "UPDATE center SET center_name = ?, center_city = ?, center_province = ?, center_address = ?, center_phone = ?, center_email = ?, center_auth_doc = ? WHERE center_id = ?";
+        values = [center_name, center_city, center_province, center_address, center_phone, center_email, file, center_id]
+      }
+      const result = await executeQuery(sql, values);
+      return result;
+    } catch (error) {
+      throw error
+    }
+  };
 }
 
 export default new AdminDal();
