@@ -6,6 +6,11 @@
   padding: 0.5rem 1rem;
   font-weight: bold;
   box-shadow: 0 2px 4px #6b6a6a;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #e2e0e0;
+  }
 }
 
 .button-custom-orange {
@@ -16,4 +21,9 @@
   padding: 0.5rem 1rem;
   font-weight: bold;
   box-shadow: 0 2px 4px #868585;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #eb754e;
+  }
 }
