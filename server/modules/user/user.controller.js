@@ -216,6 +216,68 @@ editCenter = async (req, res) => {
   }
 };
 
+editUserUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { 
+      user_name, 
+      user_lastname, 
+      user_tutor_name, user_tutor_lastname,
+      user_dni, 
+      user_city, 
+      user_address, 
+      user_phone, 
+      user_birth_date
+     } = req.body;
+
+    if (!id || 
+      !user_name || 
+      !user_lastname || 
+      !user_tutor_name || 
+      !user_tutor_lastname|| 
+      !user_dni || 
+      !user_city || 
+      !user_address || 
+      !user_phone || 
+      !user_birth_date) {
+      return res.status(400).json({ message: "Todos los campos son requeridos para editar el usuario." });
+    }
+
+    const result = await userDal.updateUserUser(id, { 
+      user_name, user_lastname, user_tutor_name, user_tutor_lastname,user_dni, user_city, user_address, user_phone, user_birth_date });
+
+    return res.status(200).json({ message: "Usuario actualizado con éxito.", result });
+  } catch (error) {
+    console.error("Error al actualizar usuario:", error);
+    return res.status(500).json({ message: "Error al actualizar usuario.", error });
+  }
+};
+
+ResponsibleValidateDocument = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { user_is_validated } = req.body;
+    const documento = req.file; // Archivo subido
+
+    if (!user_id || user_is_validated === undefined) {
+      return res.status(400).json({ message: "El ID del usuario y el estado de validación son requeridos." });
+    }
+
+    if (!documento) {
+      return res.status(400).json({ message: "El documento es requerido." });
+    }
+
+    console.log("Archivo subido:", documento);
+
+    const result = await userDal.updateDocumentValidation(user_id, user_is_validated);
+
+    return res.status(200).json({ message: "Documento validado con éxito.", result });
+  } catch (error) {
+    console.log("Error al validar documento:", error);
+    return res.status(500).json({ message: "Error al validar documento.", error });
+  }
+};
+
 
 }
 
