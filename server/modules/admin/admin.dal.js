@@ -310,6 +310,27 @@ class AdminDal {
       throw error
     }
   };
+
+  getAllCenters = async () => {
+    const query = `
+      SELECT 
+        center_id, 
+        center_name, 
+        center_city, 
+        center_province, 
+        center_address, 
+        center_phone, 
+        center_auth_doc 
+      FROM center
+    `;
+    try {
+      const results = await executeQuery(query);
+      return results;
+    } catch (error) {
+      console.error("Error en getAllCenters:", error);
+      throw new Error("Error al obtener los centros.");
+    }
+  };
 }
 
 export default new AdminDal();

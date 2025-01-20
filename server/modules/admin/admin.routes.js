@@ -18,6 +18,7 @@ router.put('/editOlympics', adminController.editOlympics);
 router.put('/editActivity', multer("activity"), adminController.editActivity);
 router.put('/editCenter', multerFile("file"), adminController.editCenter);
 router.put('/user/:id', adminController.editUser); //  revisar (no hace falta id por params)
+router.get("/allCenters", adminController.allCenters);
 
 
 export default router;
