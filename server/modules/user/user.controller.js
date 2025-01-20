@@ -84,10 +84,13 @@ class UserController {
         center_province,
         center_address,
         center_phone,
-        center_auth_doc,
       } = req.body;
 
+      const { filename } = req.file;
+      const center_auth_doc = filename;
+
       const { center_id } = req.params;
+
       console.log("EL CENTER ID EN EL CONTROLLER", center_id);
 
       if (
@@ -102,6 +105,8 @@ class UserController {
         );
       }
 
+
+      
       const result = await userDal.completeCenter({
         center_id,
         center_city,

@@ -13,6 +13,23 @@ export const ContextProvider = ({ children }) => {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user",JSON.stringify(user));
+    }
+  }, [user]);
+
+    useEffect(() => {
+      if (!user) {
+        const user = localStorage.getItem("user");
+        if (user) {
+          setUser(JSON.parse(user));
+        }
+      }
+    }, [user]);
+
+
+
   return (
     <AppContext.Provider value={{ token, setToken, user, setUser }}>{children}</AppContext.Provider>
   );

@@ -10,7 +10,7 @@ function uploadImage(folder) {
   });
 
   const fileFilter = (req, file, callback) => {
-    const filetypes = /jpeg|jpg|png|gif/;
+    const filetypes = /jpeg|jpg|png|gif|webp/;
     const mimetype = filetypes.test(file.mimetype);
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
