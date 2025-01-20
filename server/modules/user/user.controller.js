@@ -8,7 +8,7 @@ import userDal from "./user.dal.js";
 class UserController {
   register = async (req, res) => {
     const parsedData = registerSchema.parse(req.body);
-    console.log("Datos validados:", parsedData);
+
     try {
       const {
         user_name,
@@ -25,7 +25,6 @@ class UserController {
         user_center_id,
       } = parsedData;
 
-      console.log("Body:", parsedData);
       // Validación de campos
 
       const hash = await hashPassword(user_password);
@@ -44,34 +43,38 @@ class UserController {
         hash,
         user_center_id,
       ];
+
       await userDal.register(values);
       res.status(200).json({ msg: "Usuario registrado correctamente" });
     } catch (error) {
-      console.error(error);
+
       if (error instanceof z.ZodError) {
         res.status(400).json({ error: error.errors });
       } else {
         res.status(400).json({ error: error.message });
-      }
-    }
+      };
+    };
   };
 
   login = async (req, res) => {
     const { user_email, user_password } = req.body;
+
     try {
       const result = await userDal.getUserByEmail(user_email);
+
       if (result.length === 0) {
         res.status(401).json({ message: "datos incorrectos" });
       } else {
         const user = result[0];
         const match = await comparePassword(user_password, user.user_password);
+
         if (match) {
           const token = generateToken(user.user_id);
           res.status(200).json({ token, user });
         } else {
           res.status(401).json({ message: "datos incorrectos" });
-        }
-      }
+        };
+      };
     } catch (error) {
       res.status(500).json({ message: "Error en el servidor" });
     }
@@ -91,8 +94,6 @@ class UserController {
 
       const { center_id } = req.params;
 
-      console.log("EL CENTER ID EN EL CONTROLLER", center_id);
-
       if (
         !center_city ||
         !center_province ||
@@ -105,8 +106,6 @@ class UserController {
         );
       }
 
-
-      
       const result = await userDal.completeCenter({
         center_id,
         center_city,
@@ -125,7 +124,6 @@ class UserController {
 
   completeResponsible = async (req, res) => {
     const parsedData = completeResponsibleSchema.parse(req.body);
-    console.log("Datos responsable validados:", parsedData);
 
     try {
       const {
@@ -138,30 +136,26 @@ class UserController {
 
       const { user_id } = req.params;
 
-      console.log("Body:", parsedData);
-
       const hash = await hashPassword(user_password);
 
       const values = [user_name, user_lastname, user_dni, user_phone, hash, user_id];
+
       await userDal.completeResponsible(values);      
       res.status(200).json({ msg: "Responsable completado con éxito." });
     } catch (error) {
-      console.log(error);
+
       if (error instanceof z.ZodError){
         res.status(400).json({ error: error.errors });
       } else {
         res.status(400).json({ message: error.message });
-      }
-    }
+      };
+    };
   };
 
   editResponsible = async (req, res) => {
     try {
       const { user_id } = req.params;
       const { user_name, user_lastname, user_phone, user_dni } = req.body;
-
-      console.log("Body:", req.body);
-      console.log("Params:", user_id);
 
       const result = await userDal.updateResponsible(user_id, {
         user_name,
@@ -196,15 +190,6 @@ class UserController {
         center_auth_doc,
       } = req.body;
 
-      console.log("Edit Center - Params ID:", id);
-      console.log("Edit Center - Body Data:", {
-        center_city,
-        center_province,
-        center_address,
-        center_phone,
-        center_auth_doc,
-      });
-
       if (
         !center_city ||
         !center_province ||
@@ -212,7 +197,6 @@ class UserController {
         !center_phone ||
         !center_auth_doc
       ) {
-        console.log("Faltan campos para editar el centro.");
         throw new Error(
           "Todos los campos son requeridos para editar el centro."
         );
@@ -225,8 +209,6 @@ class UserController {
         center_phone,
         center_auth_doc,
       });
-
-      console.log("Edit Center - Result from DAL:", result);
 
       return res
         .status(200)
@@ -291,7 +273,6 @@ class UserController {
         .status(200)
         .json({ message: "Usuario actualizado con éxito.", result });
     } catch (error) {
-      console.error("Error al actualizar usuario:", error);
       return res
         .status(500)
         .json({ message: "Error al actualizar usuario.", error });
@@ -317,38 +298,38 @@ class UserController {
         return res.status(400).json({ message: "El documento es requerido." });
       }
 
-      console.log("Archivo subido:", documento);
-
-
       const result = await userDal.updateDocumentValidation(
         user_id,
         user_is_validated
       );
-///REVISAR CON LOS PROFES
-addActivityToUser = (req, res) => {
-  const { user_id } = req.params;
-  const { activity_id, center_id, olympics_id } = req.body;
-console.log("Body:", req.body);
-console.log("Params:", req.params);
-  // Validar los datos recibidos
-  if (!user_id || !activity_id || !center_id || !olympics_id) {
-    return res.status(400).json({
-      message: 'Todos los campos son requeridos: user_id, activity_id, center_id, olympics_id',
-    });
-  }
 
-  // Simulación de inserción en la base de datos
-  const result = {
-    user_id,
-    activity_id,
-    center_id,
-    olympics_id,
-    message: 'Actividad añadida al usuario con éxito.',
+    ///REVISAR CON LOS PROFES
+
+    addActivityToUser = (req, res) => {
+    const { user_id } = req.params;
+    const { activity_id, center_id, olympics_id } = req.body;
+
+    console.log("Body:", req.body);
+    console.log("Params:", req.params);
+
+    // Validar los datos recibidos
+    if (!user_id || !activity_id || !center_id || !olympics_id) {
+      return res.status(400).json({
+        message: 'Todos los campos son requeridos: user_id, activity_id, center_id, olympics_id',
+      });
+    }
+
+    // Simulación de inserción en la base de datos
+    const result = {
+      user_id,
+      activity_id,
+      center_id,
+      olympics_id,
+      message: 'Actividad añadida al usuario con éxito.',
+    };
+
+    return res.status(200).json(result);
   };
-
-  return res.status(200).json(result);
-};
-
       return res
         .status(200)
         .json({ message: "Documento validado con éxito.", result });
