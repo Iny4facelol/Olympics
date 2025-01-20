@@ -8,9 +8,14 @@ import UserDashboard from "../../pages/user/dashboard/components/UserDashboard";
 import AdminDashboard from "../../pages/admin/adminDashboard/AdminDashboard";
 import { useAppContext } from "../context/AppContext";
 import ErrorPage from "../../pages/error/ErrorPage";
+import CreateOlympics from "../../pages/olympics/create-olympic/CreateOlympics";
+import CreateActivity from "../../pages/activity/create-activity/CreateActivity";
 
 export default function AppRoutes() {
   const { user } = useAppContext();
+  
+  console.log(user);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -19,6 +24,8 @@ export default function AppRoutes() {
           <>
             <Route path="/admin/createNewCenter" element={<CenterForm />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/createNewOlympics" element={<CreateOlympics />} />
+            <Route path="/admin/createNewActivity" element={<CreateActivity />} />
           </>
         )}
         <Route

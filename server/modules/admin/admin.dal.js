@@ -88,7 +88,6 @@ class AdminDal {
       activity_name,
       activity_description,
       max_participants,
-      activity_image,
     } = data;
 
     try {
@@ -103,7 +102,7 @@ class AdminDal {
           activity_name,
           activity_description,
           max_participants,
-          activity_image,
+          file
         ];
       }
       const result = await executeQuery(sql, values);
