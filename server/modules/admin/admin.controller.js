@@ -4,9 +4,12 @@ import emailService from "../../utils/emailUtils/emailService.js";
 import { regResponsibleSchema } from "../../utils/zodSchemas/regResponsibleSchema.js";
 
 class AdminController {
+  // 1º Apartado de Olimpiadas
+    // Añadir Olimpiada
+
   addOlympics = async (req, res) => {
     const olympicsData = req.body;
-    console.log("OLYMPICSDATA", olympicsData);
+
     try {
       const result = await adminDal.addOlympics(olympicsData);
       return res.status(201).json({
@@ -18,12 +21,38 @@ class AdminController {
     }
   };
 
+    // Ver todas las Olimpiadas
+
+  allOlympics = async (req, res) => {
+    try {
+      let result = await adminDal.allOlympics();
+
+      return res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  };
+
+    // Editar Olimpiada
+
+  editOlympics = async (req, res) => {
+    try {
+      const result = await adminDal.editOlympics(req.body);
+
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  };
+
+  // 2º Apartado de Centro
+    // Añadir un Centro
+
   addCenter = async (req, res) => {
     const centerData = req.body;
 
     try {
       const result = await adminDal.createCenter(centerData);
-
       const token = jwt.sign(
         { center_id: result.insertId },
         process.env.TOKEN_KEY,
@@ -42,14 +71,47 @@ class AdminController {
     }
   };
 
+    // Ver todos los Centros
+
+  allCenters = async (req, res) => {
+    try {
+      const centers = await adminDal.getAllCenters();
+
+      res.status(200).json(centers);
+    } catch (error) {
+      console.error("Error en allCenters:", error);
+      res.status(500).json({ message: "Error al obtener los centros." });
+    }
+  };
+
+    // Editar Centro
+    
+  editCenter = async (req, res) => {
+    try {
+      let data = req.body;
+      let file = null;
+      if (req.file) {
+        file = req.file.filename;
+      }
+
+      const result = await adminDal.editCenter(data, file);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  };
+
+  // 3º Apartado de Usuarios
+    // Añadir Responsable user_type = 2
+
   addResponsible = async (req, res) => {
     const parsedData = regResponsibleSchema.parse(req.body);
-    console.log("Datos responsable validados:", parsedData);    
-    try {
 
+    try {
       const { user_name, user_email, user_center_id } = parsedData;
       const values = { user_name, user_email, user_center_id };
       const result = await adminDal.addResponsible(values);
+
       res.status(200).json({ msg: "Responsable registrado con éxito", result });
     } catch (error) {
       if (error instanceof z.ZodError){
@@ -60,6 +122,8 @@ class AdminController {
     }
   };
 
+    // Ver los Responsables user_type = 2 (Recordar Duda)
+
   getResponsibles = async (req, res) => {
     try {
       const responsibles = await adminDal.getAll();
@@ -69,91 +133,7 @@ class AdminController {
     }
   };
 
-  addActivity = async (req, res) => {
-    try {
-      const data = req.body;
-      const activity_image = req.file.filename;
-      console.log(activity_image);
-      
-
-      const result = await adminDal.addActivity(data, activity_image);
-      return res.status(201).json({
-        message: "actividad creada",
-        activity_id: result.insertId,
-      });
-    } catch (error) {
-      res.status(500).json({ msg: "Error al crear actividad" });
-    }
-  };
-
-  verifyToken = async (req, res) => {
-    try {
-      const { token } = req.params;
-      const decoded = jwt.verify(token, process.env.TOKEN_KEY);
-      const center = await adminDal.getCenterById(decoded.center_id);
-      if (!center) {
-        return res.status(404).json({ message: "Centro no encontrado" });
-      }
-
-      console.log("EL CENTER ID EN EL CONTROLLER", center[0].center_id);
-
-      res.status(200).json({ center_id: center[0].center_id });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error al buscar el centro" });
-    }
-  };
-
-  allOlympics = async (req, res) => {
-    try {
-      let result = await adminDal.allOlympics();
-      return res.status(200).json(result);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  };
-
-  allActivity = async (req, res) => {
-    try {
-      let result = await adminDal.allActivity();
-      return res.status(200).json(result);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  };
-
-  allUser = async (req, res) => {
-    try {
-      let result = await adminDal.allUser();
-      return res.status(200).json(result);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  };
-
-  editOlympics = async (req, res) => {
-    try {
-      const result = await adminDal.editOlympics(req.body);
-
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  };
-
-  editActivity = async (req, res) => {
-    try {
-      let data = req.body;
-      let img = null;
-      if (req.file) {
-        img = req.file.filename;
-      }
-      const result = await adminDal.editActivity(data, img);
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  };
+    // Editar Usuario type_user = 1
 
   editUser = async (req, res) => {
     try {
@@ -172,9 +152,6 @@ class AdminController {
         user_center_id,
         user_olympics_id,
       } = req.body;
-
-      console.log("Body recibido:", req.body);
-      console.log("Params recibido:", req.params);
 
       const result = await adminDal.updateUser(id, {
         user_name,
@@ -203,34 +180,99 @@ class AdminController {
     }
   };
 
-  editCenter = async (req, res) => {
+    // Ver todos los Usuarios
+
+  allUser = async (req, res) => {
+    try {
+      let result = await adminDal.allUser();
+      return res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  };
+
+  // 4º Apartado de Actividades
+    // Añadir una Actividad
+
+  addActivity = async (req, res) => {
+    try {
+      const data = req.body;
+      const activity_image = req.file.filename;
+      const result = await adminDal.addActivity(data, activity_image);
+
+      return res.status(201).json({
+        message: "actividad creada",
+        activity_id: result.insertId,
+      });
+    } catch (error) {
+      res.status(500).json({ msg: "Error al crear actividad" });
+    }
+  };
+
+    // Ver todas las Actividades
+
+  allActivity = async (req, res) => {
+    try {
+      let result = await adminDal.allActivity();
+      return res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  };
+
+    // Editar Actividad
+
+  editActivity = async (req, res) => {
     try {
       let data = req.body;
-      let file = null;
+      let img = null;
+
       if (req.file) {
-        file = req.file.filename;
+        img = req.file.filename;
       }
 
-      const result = await adminDal.editCenter(data, file);
+      const result = await adminDal.editActivity(data, img);
       res.status(200).json(result);
     } catch (error) {
       res.status(500).json(error);
     }
-
   };
 
-  }
+  // TOKEN
 
-  allCenters = async (req, res) => {
+  verifyToken = async (req, res) => {
     try {
-      const centers = await adminDal.getAllCenters();
-      res.status(200).json(centers);
+      const { token } = req.params;
+      const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+      const center = await adminDal.getCenterById(decoded.center_id);
+
+      if (!center) {
+        return res.status(404).json({ message: "Centro no encontrado" });
+      }
+
+      res.status(200).json({ center_id: center[0].center_id });
     } catch (error) {
-      console.error("Error en allCenters:", error);
-      res.status(500).json({ message: "Error al obtener los centros." });
+      console.error(error);
+      res.status(500).json({ message: "Error al buscar el centro" });
     }
   };
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+};
+
 
 export default new AdminController();

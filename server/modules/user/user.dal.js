@@ -2,7 +2,6 @@ import { executeQuery } from '../../config/db.js';
 
 
 class UserDal {
-  
   getCenter = async () => {
     try {
       let sql = `SELECT center_name, center_id FROM center WHERE center_is_deleted = 0`;
@@ -14,7 +13,6 @@ class UserDal {
     }
   };
 
-  
   register = async (values) => {
     try {
       let sql = `
@@ -81,13 +79,11 @@ class UserDal {
       ]);
       return result;
     } catch (error) {
-      console.log("Error al completar el centro:", error);
       throw new Error("Error al completar el centro");
     }
   };
 
   completeResponsible = async (values) => {    
-    
     try {
       let sql = `
         UPDATE user SET 
@@ -99,19 +95,16 @@ class UserDal {
         WHERE user_id = ?
       `;
       const result = await executeQuery(sql, values);
+
       return result;
     } catch (error) {
-      console.log("Error al completar responsable:", error);
       throw new Error("Error al completar responsable");
     }
   };
 
   updateResponsible = async (user_id, userData) => {
     const { user_name, user_lastname, user_phone, user_dni } = userData;
-    
-    console.log("userData:", userData);
-    console.log("user_id:", user_id);
-  
+
     try {
       const result = await executeQuery(
         `UPDATE user SET
@@ -125,7 +118,6 @@ class UserDal {
       );
       return result;
     } catch (err) {
-      console.error("Error al actualizar responsable:", err);
       throw new Error("Error al actualizar responsable");
     }
   };
@@ -205,8 +197,6 @@ class UserDal {
         [user_is_validated, 
           user_id]
       );
-
-      console.log("result:", result);
       
       return result;
     } catch (err) {
@@ -233,7 +223,6 @@ class UserDal {
       throw new Error('Error al añadir actividad al usuario');
     }
   };
-
-}
+};
 
 export default new UserDal();

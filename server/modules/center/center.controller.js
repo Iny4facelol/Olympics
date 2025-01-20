@@ -1,6 +1,5 @@
 import centerDal from "./center.dal.js";
 
-
 class CenterController {
   getAllCenters = async (req, res) => {
     try {
