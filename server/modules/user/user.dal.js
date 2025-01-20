@@ -86,37 +86,19 @@ class UserDal {
     }
   };
 
-  completeResponsible = async (userData) => {
-    const { 
-      user_name, 
-      user_lastname, 
-      user_dni, 
-      user_phone, 
-      user_password, 
-      user_id,
-      user_type
-    } = userData;
-
+  completeResponsible = async (values) => {    
+    
     try {
-      const sql = `
+      let sql = `
         UPDATE user SET 
           user_name = ?, 
           user_lastname = ?, 
           user_dni = ?, 
           user_phone = ?, 
-          user_password = ?,
-          user_type = ?
+          user_password = ?          
         WHERE user_id = ?
       `;
-      const result = await executeQuery(sql, [
-        user_name, 
-        user_lastname, 
-        user_dni, 
-        user_phone, 
-        user_password,
-        user_id,
-        user_type
-      ]);
+      const result = await executeQuery(sql, values);
       return result;
     } catch (error) {
       console.log("Error al completar responsable:", error);
@@ -230,6 +212,25 @@ class UserDal {
     } catch (err) {
       console.error("Error al validar documento:", err);
       throw new Error("Error al validar documento");
+    }
+  };
+
+  // REVISAR CON LOS PROFES
+  addActivityToUser = async (user_id, activity_id, center_id, olympics_id) => {
+    try {
+      const query = `
+        INSERT INTO reservation (user_id, activity_id, center_id, olympics_id)
+        VALUES (?, ?, ?, ?)
+      `;
+      const result = await executeQuery(query, [user_id, activity_id, center_id, olympics_id]);
+      
+      return {
+        message: 'Actividad añadida al usuario con éxito.',
+        result
+      };
+    } catch (error) {
+      console.error('Error en el DAL:', error);
+      throw new Error('Error al añadir actividad al usuario');
     }
   };
 

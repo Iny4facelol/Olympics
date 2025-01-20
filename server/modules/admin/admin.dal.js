@@ -57,14 +57,14 @@ class AdminDal {
   };
 
   addResponsible = async (userData) => {
-    const { user_name, user_email, center_id } = userData;
+    const { user_name, user_email, user_center_id } = userData;
 
     console.log("userData", userData);
     try {
       const result = await executeQuery(
-        `INSERT INTO user (user_name, user_email, user_center_id, user_type, user_password)
-        VALUES (?, ?, ?, ?, ?)`,
-        [user_name, user_email, user_center_id, user_type, user_password] // 2 indica que es un responsable
+        `INSERT INTO user (user_name, user_email, user_center_id, user_type)
+        VALUES (?, ?, ?, ?)`,
+        [user_name, user_email, user_center_id, 2] // 2 indica que es un responsable
       );
       return result;
     } catch (err) {
@@ -307,6 +307,27 @@ class AdminDal {
       return result;
     } catch (error) {
       throw error
+    }
+  };
+
+  getAllCenters = async () => {
+    const query = `
+      SELECT 
+        center_id, 
+        center_name, 
+        center_city, 
+        center_province, 
+        center_address, 
+        center_phone, 
+        center_auth_doc 
+      FROM center
+    `;
+    try {
+      const results = await executeQuery(query);
+      return results;
+    } catch (error) {
+      console.error("Error en getAllCenters:", error);
+      throw new Error("Error al obtener los centros.");
     }
   };
 }
