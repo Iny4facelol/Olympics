@@ -209,6 +209,16 @@ class AdminController {
     }
   }
 
+  allCenters = async (req, res) => {
+    try {
+      const centers = await adminDal.getAllCenters();
+      res.status(200).json(centers);
+    } catch (error) {
+      console.error("Error en allCenters:", error);
+      res.status(500).json({ message: "Error al obtener los centros." });
+    }
+  };
+
 }
 
 export default new AdminController();
