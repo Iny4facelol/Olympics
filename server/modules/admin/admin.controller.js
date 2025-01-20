@@ -194,6 +194,20 @@ class AdminController {
     }
   };
   
+  editCenter = async (req, res) => {
+    try {
+      let data = req.body;
+      let file = null;
+      if(req.file){
+        file= req.file.filename
+      }
+
+      const result = await adminDal.editCenter(data, file)      
+      res.status(200).json(result)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  }
 
 }
 
