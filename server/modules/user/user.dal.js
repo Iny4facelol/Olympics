@@ -215,6 +215,25 @@ class UserDal {
     }
   };
 
+  // REVISAR CON LOS PROFES
+  addActivityToUser = async (user_id, activity_id, center_id, olympics_id) => {
+    try {
+      const query = `
+        INSERT INTO reservation (user_id, activity_id, center_id, olympics_id)
+        VALUES (?, ?, ?, ?)
+      `;
+      const result = await executeQuery(query, [user_id, activity_id, center_id, olympics_id]);
+      
+      return {
+        message: 'Actividad añadida al usuario con éxito.',
+        result
+      };
+    } catch (error) {
+      console.error('Error en el DAL:', error);
+      throw new Error('Error al añadir actividad al usuario');
+    }
+  };
+
 }
 
 export default new UserDal();

@@ -13,6 +13,8 @@ router.put('/center/:center_id', userController.editCenter);
 router.put('/responsible/:user_id', userController.editResponsible);
 router.put('/user/:id', userController.editUserUser);
 router.put('/user/:user_id/validate', multer("file") , userController.ResponsibleValidateDocument);
+//REVISAR CON LOS PROFES
+router.post('/user/:user_id/activities', userController.addActivityToUser);
 
 
 export default router;
