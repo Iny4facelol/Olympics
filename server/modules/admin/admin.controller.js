@@ -1,6 +1,7 @@
 import adminDal from "./admin.dal.js";
 import jwt from "jsonwebtoken";
 import emailService from "../../utils/emailUtils/emailService.js";
+import { regResponsibleSchema } from "../../utils/zodSchemas/regResponsibleSchema.js";
 
 
 class AdminController {
@@ -42,15 +43,19 @@ class AdminController {
   };
 
   addResponsible = async (req, res) => {
+    const parsedData = regResponsibleSchema.parse(req.body);
+    console.log("Datos responsable validados:", parsedData);    
     try {
-
-      const { user_name, user_email, user_center_id, user_type, user_password } = req.body;
-      const values = { user_name, user_email, user_center_id, user_type, user_password};
+      const { user_name, user_email, user_center_id } = parsedData;
+      const values = { user_name, user_email, user_center_id };
       const result = await adminDal.addResponsible(values);
-
       res.status(200).json({ msg: "Responsable registrado con éxito", result });
     } catch (error) {
-      res.status(500).json({ msg: "Error al registrar responsable", error });
+      if (error instanceof z.ZodError){
+        res.status(400).json({ error: error.errors });
+      }else {
+        res.status(500).json({ msg: "Error al registrar responsable", error });
+      }
     }
   };
 
