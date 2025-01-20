@@ -282,6 +282,30 @@ ResponsibleValidateDocument = async (req, res) => {
   }
 };
 
+///REVISAR CON LOS PROFES
+addActivityToUser = (req, res) => {
+  const { user_id } = req.params;
+  const { activity_id, center_id, olympics_id } = req.body;
+console.log("Body:", req.body);
+console.log("Params:", req.params);
+  // Validar los datos recibidos
+  if (!user_id || !activity_id || !center_id || !olympics_id) {
+    return res.status(400).json({
+      message: 'Todos los campos son requeridos: user_id, activity_id, center_id, olympics_id',
+    });
+  }
+
+  // Simulación de inserción en la base de datos
+  const result = {
+    user_id,
+    activity_id,
+    center_id,
+    olympics_id,
+    message: 'Actividad añadida al usuario con éxito.',
+  };
+
+  return res.status(200).json(result);
+};
 
 }
 
