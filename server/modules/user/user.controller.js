@@ -23,7 +23,10 @@ class UserController {
 
       console.log("Body:", req.body);
       // Validación de campos
-    
+      
+      if(user_password !== user_confirm_password) {
+        throw new Error("Las contraseñas no coinciden");
+      }
 
       const hash = await hashPassword(user_password);
 
@@ -38,13 +41,11 @@ class UserController {
         user_phone,
         user_birth_date,
         user_email,
-        user_password,
+        hash,
         user_center_id,
       ];
 
-      if(user_password !== user_confirm_password) {
-        throw new Error("Las contraseñas no coinciden");
-      }
+
 
       await userDal.register(values);
 
@@ -56,17 +57,17 @@ class UserController {
   };
 
   login = async (req, res) => {
-    const { email, password } = req.body;
+    const { user_email, user_password } = req.body;
     try {
-      const result = await userDal.getUserByEmail(email);
+      const result = await userDal.getUserByEmail(user_email);
       if (result.length === 0) {
         res.status(401).json({ message: "datos incorrectos" });
       } else {
         const user = result[0];
-        const match = await comparePassword(password, user.user_password);
+        const match = await comparePassword(user_password, user.user_password);
         if (match) {
           const token = generateToken(user.user_id);
-          res.status(200).json({ token });
+          res.status(200).json({ token, user });
         } else {
           res.status(401).json({ message: "datos incorrectos" });
         }

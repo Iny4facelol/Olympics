@@ -4,7 +4,7 @@ import ButtonCustom from "../../../../core/components/Button/Button";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import "./CenterClienteFormComp.css";
 import { useParams } from "react-router-dom";
-import { use } from "react";
+import { useForm } from "react-hook-form";
 const initialValues = {
   center_city: "",
   center_province: "",
@@ -17,6 +17,10 @@ export default function CenterClientFormComp() {
   const [formData, setFormData] = useState(initialValues);
   const [centerId, setCenterId] = useState(null);
   const params = useParams();
+
+  const {register, handleSubmit, formState: { errors }} = useForm({
+    defaultValues: initialValues
+  })
 
 
   useEffect(() => {
