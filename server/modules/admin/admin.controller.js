@@ -44,12 +44,18 @@ class AdminController {
   // Editar Olimpiada
 
   editOlympics = async (req, res) => {
+    const parsedData = olympicsSchema.parse(req.body)
+    const { olympics_id } = req.body
     try {
-      const result = await adminDal.editOlympics(req.body);
-
+      console.log("parsedData", parsedData);      
+      const result = await adminDal.editOlympics(parsedData, olympics_id);
       res.status(200).json(result);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof z.ZodError){
+        res.status(400).json({ error: error.errors })
+      }else{
+        res.status(500).json(error);
+      }
     }
   };
 
@@ -251,18 +257,29 @@ class AdminController {
   // Editar Actividad
 
   editActivity = async (req, res) => {
+    const { activity_name, activity_description, max_participants, activity_id } = req.body;
+    const img = req.file.filename;
+
+    const max_participants_number = parseInt(max_participants);
+    const values = {
+      activity_name,
+      activity_description,
+      max_participants_number,
+      img,
+     
+    };
+    
     try {
-      let data = req.body;
-      let img = null;
+      const parsedData = activitySchema.parse(values);
+      const result = await adminDal.editActivity(parsedData, activity_id);
 
-      if (req.file) {
-        img = req.file.filename;
-      }
-
-      const result = await adminDal.editActivity(data, img);
       res.status(200).json(result);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json(error);
+      }
     }
   };
 
