@@ -93,7 +93,7 @@ export default function LoginUserForm() {
         </Col>
       </Row>
       <div className="mt-4">
-        <Toaster richColors position="top-right" />
+        <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
           {authenticating ? "Accediendo..." : "Acceder"}
         </ButtonCustom>

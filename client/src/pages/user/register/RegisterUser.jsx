@@ -6,7 +6,7 @@ import RegisterUserForm from './components/RegisterUserForm';
 export default function RegisterUser() {
   return (
     <AppLayout>
-      <Container className="d-flex flex-column gap-5">
+      <Container className="d-flex flex-column gap-5 px-4 px-sm-2">
         <h2 className="fs-1">Registro</h2>
         <RegisterUserForm />
       </Container>
