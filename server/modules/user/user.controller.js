@@ -286,12 +286,9 @@ class UserController {
       const documento = req.file; // Archivo subido
 
       if (!user_id || user_is_validated === undefined) {
-        return res
-          .status(400)
-          .json({
-            message:
-              "El ID del usuario y el estado de validación son requeridos.",
-          });
+        return res.status(400).json({
+          message: "El ID del usuario y el estado de validación son requeridos.",
+        });
       }
 
       if (!documento) {
@@ -302,34 +299,6 @@ class UserController {
         user_id,
         user_is_validated
       );
-
-    ///REVISAR CON LOS PROFES
-
-    addActivityToUser = (req, res) => {
-    const { user_id } = req.params;
-    const { activity_id, center_id, olympics_id } = req.body;
-
-    console.log("Body:", req.body);
-    console.log("Params:", req.params);
-
-    // Validar los datos recibidos
-    if (!user_id || !activity_id || !center_id || !olympics_id) {
-      return res.status(400).json({
-        message: 'Todos los campos son requeridos: user_id, activity_id, center_id, olympics_id',
-      });
-    }
-
-    // Simulación de inserción en la base de datos
-    const result = {
-      user_id,
-      activity_id,
-      center_id,
-      olympics_id,
-      message: 'Actividad añadida al usuario con éxito.',
-    };
-
-    return res.status(200).json(result);
-  };
       return res
         .status(200)
         .json({ message: "Documento validado con éxito.", result });
@@ -338,6 +307,39 @@ class UserController {
       return res
         .status(500)
         .json({ message: "Error al validar documento.", error });
+    }
+  };
+
+  addActivityToUser = async (req, res) => {
+    try {
+      const { user_id } = req.params;
+      const { activity_id, center_id, olympics_id } = req.body;
+
+      console.log("Body:", req.body);
+      console.log("Params:", req.params);
+
+      if (!user_id || !activity_id || !center_id || !olympics_id) {
+        return res.status(400).json({
+          message:
+            "Todos los campos son requeridos: user_id, activity_id, center_id, olympics_id",
+        });
+      }
+
+      // Este bloque simula la inserción
+      const result = {
+        user_id,
+        activity_id,
+        center_id,
+        olympics_id,
+        message: "Actividad añadida al usuario con éxito.",
+      };
+
+      return res.status(200).json(result);
+    } catch (error) {
+      console.log("Error al añadir actividad al usuario:", error);
+      return res
+        .status(500)
+        .json({ message: "Error al añadir actividad al usuario.", error });
     }
   };
 }
