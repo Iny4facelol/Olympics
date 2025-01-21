@@ -2,10 +2,14 @@ import adminDal from "./admin.dal.js";
 import jwt from "jsonwebtoken";
 import emailService from "../../utils/emailUtils/emailService.js";
 import { regResponsibleSchema } from "../../utils/zodSchemas/regResponsibleSchema.js";
+
+import { completeResponsibleSchema } from "../../utils/zodSchemas/completeResponsibleSchema.js";
+
 import { olympicsSchema } from "../../utils/zodSchemas/olympicsSchema.js";
 import { z } from "zod";
 import { createCenterSchema } from "../../utils/zodSchemas/createCenterSchema.js";
 import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
+
 
 class AdminController {
   // 1º Apartado de Olimpiadas
@@ -130,7 +134,18 @@ class AdminController {
       const values = { user_name, user_email, user_center_id };
       const result = await adminDal.addResponsible(values);
 
-      res.status(200).json({ msg: "Responsable registrado con éxito", result });
+      const token = jwt.sign(
+        { user_id: result.insertId },
+        process.env.TOKEN_KEY,
+        { expiresIn: "24h" }
+      );
+
+      await emailService.sendRegistrationResponsableEmail(parsedData, token);
+
+      return res.status(201).json({
+        message: "Responsable creado con éxito",
+        userId: result.insertId,
+      });
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json({ error: error.errors });
@@ -139,6 +154,38 @@ class AdminController {
       }
     }
   };
+
+
+  completeResponsible = async (req, res) => {
+    const parsedData = completeResponsibleSchema.parse(req.body);
+
+    try {
+      const { user_name, user_lastname, user_dni, user_phone, user_password } =
+        parsedData;
+
+      const { user_id } = req.params;
+
+      const hash = await hashPassword(user_password);
+
+      const values = [
+        user_name,
+        user_lastname,
+        user_dni,
+        user_phone,
+        hash,
+        user_id,
+      ];
+
+      await userDal.completeResponsible(values);
+      res.status(200).json({ msg: "Responsable completado con éxito." });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(400).json({ message: error.message });
+      }
+    }
+  }
 
   // Ver los Responsables user_type = 2 (Recordar Duda)
 
@@ -301,7 +348,27 @@ class AdminController {
       res.status(500).json({ message: "Error al buscar el centro" });
     }
   };
-};
+
+
+  verifyTokenResponsible = async (req, res) => {
+    try {
+      const { token } = req.params;
+      const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+      const user = await adminDal.getUserById(decoded.user_id);
+
+      if(!user) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+
+
+      res.status(200).json({ user_id: user[0].user_id, user_name : user[0].user_name });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error al buscar el usuario" });
+    }
+  }
+}
+
 
 
 export default new AdminController();

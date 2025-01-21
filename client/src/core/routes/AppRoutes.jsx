@@ -11,34 +11,79 @@ import ErrorPage from "../../pages/error/ErrorPage";
 import CreateOlympics from "../../pages/olympics/create-olympic/CreateOlympics";
 import CreateActivity from "../../pages/activity/create-activity/CreateActivity";
 import CreateResponsable from "../../pages/responsable/create-responsable/CreateResponsable";
+import CompleteResponsable from "../../pages/responsable/complete-responsable/CompleteResponsable";
+import ResponsibleDashboard from "../../pages/responsable/dashboard-responsible/DashboardResponsible";
+import AdminActivity from "../../pages/activity/admin-activity/AdminActivity";
+import AdminOlympics from "../../pages/olympics/admin-olympics/AdminOlympics";
+import AdminCenter from "../../pages/center/admin-center/AdminCenter";
+import AdminUser from "../../pages/user/admin-user/AdminUser";
 
 export default function AppRoutes() {
   const { user } = useAppContext();
-  
+
   console.log(user);
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        {/* Las rutas que existen cuando el user es Admin (1) */}
         {user?.user_type === 1 && (
           <>
             <Route path="/admin/createNewCenter" element={<CenterForm />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/createNewOlympics" element={<CreateOlympics />} />
-            <Route path="/admin/createNewActivity" element={<CreateActivity />} />
-            <Route path="/admin/createNewResponsable" element={<CreateResponsable />} />
+            <Route
+              path="/admin/createNewOlympics"
+              element={<CreateOlympics />}
+            />
+            <Route
+              path="/admin/createNewActivity"
+              element={<CreateActivity />}
+            />
+            <Route
+              path="/admin/createNewResponsable"
+              element={<CreateResponsable />}
+            />
+            <Route
+              path="/admin/manageActivities"
+              element={<AdminActivity />}
+            />
+            <Route
+              path="/admin/manageOlympics"
+              element={<AdminOlympics />}
+            />
+            <Route
+              path="/admin/manageCenters"
+              element={<AdminCenter/>}
+            />
+            <Route
+              path="/admin/manageUsers"
+              element={<AdminUser/>}
+            />
           </>
         )}
+        {/* Las rutas que existen cuando el user es Resp (2) */}
+        {user?.user_type === 2 && (
+          <Route
+            path="/user/res_dashboard"
+            element={<ResponsibleDashboard />}
+          />
+        )}
+        {/* Las rutas que existen cuando el user es Alumno (3) */}
+        {user?.user_type === 3 && (
+          <Route path="/user/dashboard" element={<UserDashboard />} />
+        )}
+        {/* Las rutas generales */}
         <Route
           path="/center/completeCenter/:registerToken"
           element={<CenterClientForm />}
         />
+        <Route
+          path="/user/completeResponsible/:registerToken"
+          element={<CompleteResponsable />}
+        />
         <Route path="/user/register" element={<RegisterUser />} />
         <Route path="/user/login" element={<LoginUser />} />
-        {user?.user_type === 3 && (
-          <Route path="/user/dashboard" element={<UserDashboard />} />
-        )}
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>

@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import React from "react";
-import { registerResponsableSchema } from "../../../../utils/zodSchemas/registerSchema";
+import { registerResponsibleSchema } from "../../../../utils/zodSchemas/registerSchema";
 
 export default function CreateResponsableForm() {
   const [authenticating, setAuthenticating] = useState(false);
@@ -33,7 +33,7 @@ export default function CreateResponsableForm() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(registerResponsableSchema),
+    resolver: zodResolver(registerResponsibleSchema),
     defaultValues: {
       user_name: "",
       user_email: "",

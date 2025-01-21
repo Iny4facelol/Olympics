@@ -199,6 +199,21 @@ class AdminDal {
   // 3º Apartado de Usuarios
   // Añadir Responsable user_type = 2
 
+
+  getUserById = async (userId) => {
+    try {
+      const result = await executeQuery(
+        `SELECT user_id, user_name FROM user WHERE user_id = ?`,
+        [userId]
+      );
+
+      return result;
+    } catch (error) {
+      throw new Error("Error al obtener user por id");
+    }
+  };
+
+
   addResponsible = async (userData) => {
     const { user_name, user_email, user_center_id } = userData;
 
@@ -212,6 +227,42 @@ class AdminDal {
       return result;
     } catch (err) {
       throw new Error("Error al registrar responsable");
+    }
+  };
+
+
+  completeResponsible = async (userData) => {
+    const {
+      user_name,
+      user_lastname,
+      user_dni,
+      user_phone,
+      user_password,
+      user_id,
+    } = userData;
+
+    try {
+      const sql = `
+        UPDATE center
+        SET 
+          center_city = ?, 
+          center_province = ?, 
+          center_address = ?, 
+          center_phone = ?, 
+          center_auth_doc = ?
+        WHERE center_id = ?
+      `;
+      const result = await executeQuery(sql, [
+        center_city,
+        center_province,
+        center_address,
+        center_phone,
+        center_auth_doc,
+        center_id,
+      ]);
+      return result;
+    } catch (error) {
+      throw new Error("Error al completar el centro");
     }
   };
 
@@ -293,7 +344,15 @@ class AdminDal {
 
   allUser = async () => {
     try {
-      let sql = "SELECT * FROM user WHERE user_is_deleted = 0";
+      let sql = `
+    SELECT u.*, c.center_id, c.center_name
+    FROM user u
+    INNER JOIN center c 
+    ON 
+    u.user_center_id = c.center_id
+    WHERE 
+    u.user_is_deleted = 0;
+`;
       let result = await executeQuery(sql);
 
       return result;
@@ -304,6 +363,7 @@ class AdminDal {
 
   // 4º Apartado de Actividades
   // Añadir Actividad
+
 
   addActivity = async (data) => {
     const {
@@ -322,7 +382,7 @@ class AdminDal {
         max_participants_number,
         img,
       ];
-
+      
       const result = await executeQuery(sql, values);
 
       return result;

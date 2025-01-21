@@ -98,7 +98,7 @@ export default function CreateActivityForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicActivityImage">
-            <Form.Label>Imagen de la actividad</Form.Label>
+            <Form.Label>Imagen de la actividad*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.activity_image ? "is-invalid" : ""
