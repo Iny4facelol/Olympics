@@ -59,7 +59,7 @@ class AdminDal {
 
   // Editar Olimpiada
 
-  editOlympics = async (data) => {
+  editOlympics = async (data, olympics_id) => {
     try {
       const {
         olympics_name,
@@ -69,7 +69,6 @@ class AdminDal {
         olympics_start_date,
         olympics_end_date,
         olympics_description,
-        olympics_id,
       } = data;
 
       let sql =
@@ -347,35 +346,26 @@ class AdminDal {
 
   // Editar Actividad
 
-  editActivity = async (data, file) => {
+  editActivity = async (data, activity_id) => {
     const {
       activity_name,
       activity_description,
-      max_participants,
-      activity_id,
+      max_participants_number,
+      img,
     } = data;
+
+    console.log("data en dal", data);
 
     try {
       let sql =
-        "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ? WHERE activity_id = ?";
+        "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
       let values = [
         activity_name,
         activity_description,
-        max_participants,
+        max_participants_number,
+        img,
         activity_id,
       ];
-
-      if (file) {
-        sql =
-          "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
-        values = [
-          activity_name,
-          activity_description,
-          max_participants,
-          file,
-          activity_id,
-        ];
-      }
 
       const result = await executeQuery(sql, values);
 
