@@ -11,7 +11,7 @@ export const activitySchema = z.object({
     invalid_type_error: "El número máximo de participantes debe ser un número",
   }),
   activity_image: z
-    .instanceof(FileList)
+    .instanceof(FileList, { invalid_type_error: "Tipo de archivo inválido" })
     .refine((files) => files?.length === 1, "Se requiere una imagen")
     .refine(
       (files) =>

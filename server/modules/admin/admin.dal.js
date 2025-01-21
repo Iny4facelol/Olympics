@@ -2,8 +2,8 @@ import { executeQuery } from "../../config/db.js";
 import { dbPool } from "../../config/db.js";
 
 class AdminDal {
-    // 1º Apartado de Olimpiadas
-      // Añadir Olimpiada
+  // 1º Apartado de Olimpiadas
+  // Añadir Olimpiada
 
   addOlympics = async (olympicsData) => {
     const {
@@ -44,7 +44,7 @@ class AdminDal {
     }
   };
 
-    // Seleccionar todas las Olimpiadas
+  // Seleccionar todas las Olimpiadas
 
   allOlympics = async () => {
     try {
@@ -57,7 +57,7 @@ class AdminDal {
     }
   };
 
-    // Editar Olimpiada
+  // Editar Olimpiada
 
   editOlympics = async (data) => {
     try {
@@ -95,7 +95,7 @@ class AdminDal {
   };
 
   // 2º Apartado de Centro
-    // Crear Centro
+  // Crear Centro
 
   createCenter = async (centerData) => {
     const { center_name, center_email } = centerData;
@@ -114,7 +114,7 @@ class AdminDal {
     }
   };
 
-    // Seleccionar todos los Centros 
+  // Seleccionar todos los Centros
 
   getAllCenters = async () => {
     const query = `
@@ -137,7 +137,7 @@ class AdminDal {
     }
   };
 
-    // Editar Centro
+  // Editar Centro
 
   editCenter = async (data, file) => {
     const {
@@ -150,20 +150,39 @@ class AdminDal {
       center_email,
     } = data;
     try {
-      let sql = "UPDATE center SET center_name = ?, center_city = ?, center_province = ?, center_address = ?, center_phone = ?, center_email = ? WHERE center_id = ?";
-      let values = [center_name, center_city, center_province, center_address, center_phone, center_email, center_id];
-      if(file) {
-        sql = "UPDATE center SET center_name = ?, center_city = ?, center_province = ?, center_address = ?, center_phone = ?, center_email = ?, center_auth_doc = ? WHERE center_id = ?";
-        values = [center_name, center_city, center_province, center_address, center_phone, center_email, file, center_id]
+      let sql =
+        "UPDATE center SET center_name = ?, center_city = ?, center_province = ?, center_address = ?, center_phone = ?, center_email = ? WHERE center_id = ?";
+      let values = [
+        center_name,
+        center_city,
+        center_province,
+        center_address,
+        center_phone,
+        center_email,
+        center_id,
+      ];
+      if (file) {
+        sql =
+          "UPDATE center SET center_name = ?, center_city = ?, center_province = ?, center_address = ?, center_phone = ?, center_email = ?, center_auth_doc = ? WHERE center_id = ?";
+        values = [
+          center_name,
+          center_city,
+          center_province,
+          center_address,
+          center_phone,
+          center_email,
+          file,
+          center_id,
+        ];
       }
       const result = await executeQuery(sql, values);
       return result;
     } catch (error) {
-      throw error
+      throw error;
     }
   };
 
-    // Seleccionar Centro por ID (Recordar Duda)
+  // Seleccionar Centro por ID (Recordar Duda)
 
   getCenterById = async (centerId) => {
     try {
@@ -178,8 +197,21 @@ class AdminDal {
     }
   };
 
-   // 3º Apartado de Usuarios
-    // Añadir Responsable user_type = 2
+  // 3º Apartado de Usuarios
+  // Añadir Responsable user_type = 2
+
+  getUserById = async (userId) => {
+    try {
+      const result = await executeQuery(
+        `SELECT user_id, user_name FROM user WHERE user_id = ?`,
+        [userId]
+      );
+
+      return result;
+    } catch (error) {
+      throw new Error("Error al obtener user por id");
+    }
+  };
 
   addResponsible = async (userData) => {
     const { user_name, user_email, user_center_id } = userData;
@@ -197,7 +229,42 @@ class AdminDal {
     }
   };
 
-    // Seleccionar Responsables user_type = 2
+  completeResponsible = async (userData) => {
+    const {
+      user_name,
+      user_lastname,
+      user_dni,
+      user_phone,
+      user_password,
+      user_id,
+    } = userData;
+
+    try {
+      const sql = `
+        UPDATE center
+        SET 
+          center_city = ?, 
+          center_province = ?, 
+          center_address = ?, 
+          center_phone = ?, 
+          center_auth_doc = ?
+        WHERE center_id = ?
+      `;
+      const result = await executeQuery(sql, [
+        center_city,
+        center_province,
+        center_address,
+        center_phone,
+        center_auth_doc,
+        center_id,
+      ]);
+      return result;
+    } catch (error) {
+      throw new Error("Error al completar el centro");
+    }
+  };
+
+  // Seleccionar Responsables user_type = 2
 
   getAllResponsibles = async () => {
     try {
@@ -209,7 +276,7 @@ class AdminDal {
     }
   };
 
-    // Actualizar Usuario user_type = 1 (Recordar Duda)
+  // Actualizar Usuario user_type = 1 (Recordar Duda)
 
   updateUser = async (id, userData) => {
     const {
@@ -271,11 +338,19 @@ class AdminDal {
     }
   };
 
-    // Ver todos los Usuarios
+  // Ver todos los Usuarios
 
   allUser = async () => {
     try {
-      let sql = "SELECT * FROM user WHERE user_is_deleted = 0";
+      let sql = `
+    SELECT u.*, c.center_id, c.center_name
+    FROM user u
+    INNER JOIN center c 
+    ON 
+    u.user_center_id = c.center_id
+    WHERE 
+    u.user_is_deleted = 0;
+`;
       let result = await executeQuery(sql);
 
       return result;
@@ -285,14 +360,10 @@ class AdminDal {
   };
 
   // 4º Apartado de Actividades
-    // Añadir Actividad
+  // Añadir Actividad
 
   addActivity = async (data, file) => {
-    const {
-      activity_name,
-      activity_description,
-      max_participants,
-    } = data;
+    const { activity_name, activity_description, max_participants } = data;
 
     try {
       let sql =
@@ -302,13 +373,8 @@ class AdminDal {
       if (file) {
         sql =
           "INSERT INTO activity (activity_name, activity_description, max_participants, activity_image) VALUES (?,?,?,?)";
-        values = [
-          activity_name,
-          activity_description,
-          max_participants,
-          file
-        ];
-      };
+        values = [activity_name, activity_description, max_participants, file];
+      }
 
       const result = await executeQuery(sql, values);
 
@@ -318,7 +384,7 @@ class AdminDal {
     }
   };
 
-    // Seleccionar Actividades
+  // Seleccionar Actividades
 
   allActivity = async () => {
     try {
@@ -331,7 +397,7 @@ class AdminDal {
     }
   };
 
-    // Editar Actividad
+  // Editar Actividad
 
   editActivity = async (data, file) => {
     const {
@@ -361,7 +427,7 @@ class AdminDal {
           file,
           activity_id,
         ];
-      };
+      }
 
       const result = await executeQuery(sql, values);
 

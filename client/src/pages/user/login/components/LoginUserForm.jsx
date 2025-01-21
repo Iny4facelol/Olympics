@@ -25,7 +25,7 @@ export default function LoginUserForm() {
         if(result.user.user_type === 1) {
           navigate("/admin/dashboard");
         } else if (result.user.user_type === 2) {
-          navigate("/user/responsable");
+          navigate("/user/res_dashboard");
         } else if (result.user.user_type === 3) {
           navigate("/user/dashboard");
         }
