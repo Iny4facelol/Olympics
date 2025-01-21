@@ -2,26 +2,34 @@ import adminDal from "./admin.dal.js";
 import jwt from "jsonwebtoken";
 import emailService from "../../utils/emailUtils/emailService.js";
 import { regResponsibleSchema } from "../../utils/zodSchemas/regResponsibleSchema.js";
+import { olympicsSchema } from "../../utils/zodSchemas/olympicsSchema.js";
+import { z } from "zod";
+import { createCenterSchema } from "../../utils/zodSchemas/createCenterSchema.js";
+import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
 
 class AdminController {
   // 1º Apartado de Olimpiadas
-    // Añadir Olimpiada
+  // Añadir Olimpiada
 
   addOlympics = async (req, res) => {
-    const olympicsData = req.body;
+    const parsedData = olympicsSchema.parse(req.body);
 
     try {
-      const result = await adminDal.addOlympics(olympicsData);
+      const result = await adminDal.addOlympics(parsedData);
       return res.status(201).json({
         message: "olimpiada creada con éxito",
         olympics_id: result.insertId,
       });
     } catch (error) {
-      res.status(500).json({ msg: "Error al crear las olimpiadas" });
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json({ msg: "Error al crear las olimpiadas" });
+      }
     }
   };
 
-    // Ver todas las Olimpiadas
+  // Ver todas las Olimpiadas
 
   allOlympics = async (req, res) => {
     try {
@@ -33,7 +41,7 @@ class AdminController {
     }
   };
 
-    // Editar Olimpiada
+  // Editar Olimpiada
 
   editOlympics = async (req, res) => {
     try {
@@ -46,32 +54,36 @@ class AdminController {
   };
 
   // 2º Apartado de Centro
-    // Añadir un Centro
+  // Añadir un Centro
 
   addCenter = async (req, res) => {
-    const centerData = req.body;
+    const parsedData = createCenterSchema.parse(req.body);
 
     try {
-      const result = await adminDal.createCenter(centerData);
+      const result = await adminDal.createCenter(parsedData);
       const token = jwt.sign(
         { center_id: result.insertId },
         process.env.TOKEN_KEY,
         { expiresIn: "24h" }
       );
 
-      await emailService.sendRegistrationEmail(centerData, token);
+      await emailService.sendRegistrationEmail(parsedData, token);
 
       return res.status(201).json({
         message: "Centro creado con éxito",
         centerId: result.insertId,
       });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Error al crear el centro" });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        console.error(error);
+        return res.status(500).json({ message: "Error al crear el centro" });
+      }
     }
   };
 
-    // Ver todos los Centros
+  // Ver todos los Centros
 
   allCenters = async (req, res) => {
     try {
@@ -84,8 +96,8 @@ class AdminController {
     }
   };
 
-    // Editar Centro
-    
+  // Editar Centro
+
   editCenter = async (req, res) => {
     try {
       let data = req.body;
@@ -102,7 +114,7 @@ class AdminController {
   };
 
   // 3º Apartado de Usuarios
-    // Añadir Responsable user_type = 2
+  // Añadir Responsable user_type = 2
 
   addResponsible = async (req, res) => {
     const parsedData = regResponsibleSchema.parse(req.body);
@@ -114,15 +126,15 @@ class AdminController {
 
       res.status(200).json({ msg: "Responsable registrado con éxito", result });
     } catch (error) {
-      if (error instanceof z.ZodError){
+      if (error instanceof z.ZodError) {
         res.status(400).json({ error: error.errors });
-      }else {
+      } else {
         res.status(500).json({ msg: "Error al registrar responsable", error });
       }
     }
   };
 
-    // Ver los Responsables user_type = 2 (Recordar Duda)
+  // Ver los Responsables user_type = 2 (Recordar Duda)
 
   getResponsibles = async (req, res) => {
     try {
@@ -133,7 +145,7 @@ class AdminController {
     }
   };
 
-    // Editar Usuario type_user = 1
+  // Editar Usuario type_user = 1
 
   editUser = async (req, res) => {
     try {
@@ -180,7 +192,7 @@ class AdminController {
     }
   };
 
-    // Ver todos los Usuarios
+  // Ver todos los Usuarios
 
   allUser = async (req, res) => {
     try {
@@ -192,24 +204,40 @@ class AdminController {
   };
 
   // 4º Apartado de Actividades
-    // Añadir una Actividad
+  // Añadir una Actividad
 
   addActivity = async (req, res) => {
+    const { activity_name, activity_description, max_participants } = req.body;
+
+    const img = req.file.filename;
+
+    const max_participants_number = parseInt(max_participants);
+    const values = {
+      activity_name,
+      activity_description,
+      max_participants_number,
+      img,
+    };
+
     try {
-      const data = req.body;
-      const activity_image = req.file.filename;
-      const result = await adminDal.addActivity(data, activity_image);
+      const parsedData = activitySchema.parse(values);
+
+      const result = await adminDal.addActivity(parsedData);
 
       return res.status(201).json({
         message: "actividad creada",
         activity_id: result.insertId,
       });
     } catch (error) {
-      res.status(500).json({ msg: "Error al crear actividad" });
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json({ msg: "Error al crear actividad" });
+      }
     }
   };
 
-    // Ver todas las Actividades
+  // Ver todas las Actividades
 
   allActivity = async (req, res) => {
     try {
@@ -220,7 +248,7 @@ class AdminController {
     }
   };
 
-    // Editar Actividad
+  // Editar Actividad
 
   editActivity = async (req, res) => {
     try {
@@ -256,7 +284,6 @@ class AdminController {
       res.status(500).json({ message: "Error al buscar el centro" });
     }
   };
-
 };
 
 
