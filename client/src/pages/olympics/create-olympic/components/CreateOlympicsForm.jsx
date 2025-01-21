@@ -32,7 +32,7 @@ export default function CreateOlympicsForm() {
       olympics_host_address: "",
       olympics_start_date: "",
       olympics_end_date: "",
-      olimpics_description: "",
+      olympics_description: "",
     },
   });
 
@@ -55,7 +55,7 @@ export default function CreateOlympicsForm() {
       className="d-flex gap-4 flex-column justify-content-center align-content-center"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Row>
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicOlympicsName">
             <Form.Label>Nombre de la Olimpiada*</Form.Label>
@@ -93,7 +93,7 @@ export default function CreateOlympicsForm() {
           )}
         </Col>
       </Row>
-      <Row>
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicOlympicsHostCity">
             <Form.Label>Localidad*</Form.Label>
@@ -131,7 +131,7 @@ export default function CreateOlympicsForm() {
           )}
         </Col>
       </Row>
-      <Row>
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicOlympicsStartDate">
             <Form.Label>Fecha de inicio*</Form.Label>
@@ -173,16 +173,16 @@ export default function CreateOlympicsForm() {
               <Form.Label>Descripción</Form.Label>
               <Form.Control
                 className={`custom-input ${
-                  errors.olimpics_description ? "is-invalid" : ""
+                  errors.olympics_description ? "is-invalid" : ""
                 }`}
-                {...register("olimpics_description")}
+                {...register("olympics_description")}
                 type="text"
                 placeholder="Descripción de la olimpiada"
               />
             </Form.Group>
-            {errors.olimpics_description && (
+            {errors.olympics_description && (
               <Form.Text className="text-danger">
-                {errors.olimpics_description.message}
+                {errors.olympics_description.message}
               </Form.Text>
             )}
           </Col>

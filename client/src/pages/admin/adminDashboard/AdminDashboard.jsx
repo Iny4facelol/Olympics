@@ -12,59 +12,83 @@ export default function AdminDashboard() {
       <Container>
         <div className="d-flex flex-column gap-5">
           <Row>
-            <h2>Panel de {user.user_name}</h2>
+            <h2 className="text-center text-md-start">Panel de {user.user_name}</h2>
           </Row>
           <Row>
-            <Col md={6}>
+            <Col
+              className="d-flex justify-content-center justify-content-md-start"
+              md={6}
+            >
               <p className="d-flex gap-2 ">
                 <Link className="link-hover" to="/admin/createNewCenter">
                   Crear nuevo centro <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
-            <Col md={6}>
+            <Col
+              className="d-flex justify-content-center justify-content-md-start"
+              md={6}
+            >
               <p className="d-flex gap-2">
                 <Link className="link-hover">
                   Administrar Centros <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
-            <Col md={6}>
+            <Col
+              className="d-flex justify-content-center justify-content-md-start"
+              md={6}
+            >
               <p className="d-flex gap-2">
-                <Link className="link-hover">
+                <Link className="link-hover" to={"/admin/createNewResponsable"}>
                   Crear nuevo responsable <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
-            <Col md={6}>
+            <Col
+              className="d-flex justify-content-center justify-content-md-start"
+              md={6}
+            >
               <p className="d-flex gap-2">
                 <Link className="link-hover">
                   Administrar Usuarios <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
-            <Col md={6}>
+            <Col
+              className="d-flex justify-content-center justify-content-md-start"
+              md={6}
+            >
               <p className="d-flex gap-2">
                 <Link className="link-hover" to={"/admin/createNewActivity"}>
                   Crear nueva Actividad <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
-            <Col md={6}>
+            <Col
+              className="d-flex justify-content-center justify-content-md-start"
+              md={6}
+            >
               <p className="d-flex gap-2">
                 <Link className="link-hover">
                   Administrar Actividades <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
-            <Col md={6}>
+            <Col
+              className="d-flex justify-content-center justify-content-md-start"
+              md={6}
+            >
               <p className="d-flex gap-2">
                 <Link className="link-hover" to={"/admin/createNewOlympics"}>
                   Crear nueva Olimpiada <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
-            <Col md={6}>
+            <Col
+              className="d-flex justify-content-center justify-content-md-start"
+              md={6}
+            >
               <p className="d-flex gap-2">
                 <Link className="link-hover">
                   Administrar Olimpiadas <MoveRight color="#ee531e" />

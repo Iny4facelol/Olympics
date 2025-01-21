@@ -82,7 +82,7 @@ export default function RegisterUserForm() {
       onSubmit={handleSubmit(onSubmit)}
       className="d-flex gap-4 flex-column justify-content-center align-content-center"
     >
-      <Row>
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicUserName">
             <Form.Label>Nombre*</Form.Label>
@@ -119,7 +119,7 @@ export default function RegisterUserForm() {
           </Form.Group>
         </Col>
       </Row>
-      <Row>
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicTutorName">
             <Form.Label>Nombre del tutor*</Form.Label>
@@ -153,8 +153,7 @@ export default function RegisterUserForm() {
           </Form.Group>
         </Col>
       </Row>
-
-      <Row>
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicDNI">
             <Form.Label>DNI*</Form.Label>
@@ -189,7 +188,7 @@ export default function RegisterUserForm() {
         </Col>
       </Row>
 
-      <Row>
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicAddress">
             <Form.Label>Dirección*</Form.Label>
@@ -223,8 +222,7 @@ export default function RegisterUserForm() {
           </Form.Group>
         </Col>
       </Row>
-
-      <Row>
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicBirthDate">
             <Form.Label>Fecha de Nacimiento*</Form.Label>
@@ -257,8 +255,7 @@ export default function RegisterUserForm() {
           </Form.Group>
         </Col>
       </Row>
-
-      <Row>
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicPassword">
             <Form.Label>Contraseña*</Form.Label>
