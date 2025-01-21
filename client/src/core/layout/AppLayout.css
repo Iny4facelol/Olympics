@@ -1,17 +1,32 @@
 .main-user {
-  background-color: #FDFDFD;
+  background-color: #fdfdfd;
   display: flex;
   padding-block: 6rem;
 }
 
+.custom-shadow {
+  box-shadow: 0 0 10px 1px rgba(102, 101, 101, 0.75);
+}
 .header-user {
-  background-color: #FDFDFD;
+  background-color: #fdfdfd;
+  div {
+    img {
+      width: 200px;
+      pointer-events: none;
+      user-select: none;
+      @media (width <= 768px) {
+        width: 150px;
+      }
+
+      @media (width <= 576px) {
+        width: 100px;
+      }
+    }
+  }
   nav {
     article {
-      img {
-        width: 200px;
-        pointer-events: none;
-        user-select: none;
+      p {
+        margin: 0;
       }
     }
   }

@@ -284,6 +284,7 @@ class AdminController {
       res.status(500).json({ message: "Error al buscar el centro" });
     }
   };
-}
+};
+
 
 export default new AdminController();

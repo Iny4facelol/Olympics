@@ -10,5 +10,14 @@ export const activitySchema = z.object({
   max_participants: z.number({
     invalid_type_error: "El número máximo de participantes debe ser un número",
   }),
-  activity_image: z.any()
+  activity_image: z
+    .instanceof(FileList)
+    .refine((files) => files?.length === 1, "Se requiere una imagen")
+    .refine(
+      (files) =>
+        ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
+          files?.[0]?.type
+        ),
+      "Formato permitido: .jpg, .jpeg, .png, .webp"
+    ),
 });

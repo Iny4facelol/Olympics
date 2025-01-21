@@ -10,7 +10,7 @@ import { centerSchema } from "../../utils/zodSchemas/centerSchema.js";
 class UserController {
   register = async (req, res) => {
     const parsedData = registerSchema.parse(req.body);
-
+ 
     try {
       const {
         user_name,
@@ -28,7 +28,7 @@ class UserController {
       } = parsedData;
 
       const hash = await hashPassword(user_password);
-
+ 
       const values = [
         user_name,
         user_lastname,
@@ -43,7 +43,7 @@ class UserController {
         hash,
         user_center_id,
       ];
-
+ 
       await userDal.register(values);
       res.status(200).json({ msg: "Usuario registrado correctamente" });
     } catch (error) {
@@ -54,20 +54,20 @@ class UserController {
       }
     }
   };
-
+ 
   login = async (req, res) => {
     const parsedData = loginSchema.parse(req.body)
     const { user_email, user_password } = parsedData;
 
     try {
       const result = await userDal.getUserByEmail(user_email);
-
+ 
       if (result.length === 0) {
         res.status(401).json({ message: "datos incorrectos" });
       } else {
         const user = result[0];
         const match = await comparePassword(user_password, user.user_password);
-
+ 
         if (match) {
           const token = generateToken(user.user_id);
           res.status(200).json({ token, user });
@@ -83,19 +83,19 @@ class UserController {
       }
     }
   };
-
+ 
   completeCenter = async (req, res) => {
     const parsedData = centerSchema.parse(req.body)
     try {
       const { center_city, center_province, center_address, center_phone } =
         parsedData;
 
+
       const { filename } = req.file;
       const center_auth_doc = filename;
+ 
+      const { center_id } = req.params;    
 
-      const { center_id } = req.params;
-
-      
 
       const result = await userDal.completeCenter({
         center_id,
@@ -105,7 +105,7 @@ class UserController {
         center_phone,
         center_auth_doc,
       });
-
+ 
       return res.status(200).json({ message: "Centro completado con éxito." });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -116,16 +116,16 @@ class UserController {
       }
     }
   };
-
+ 
   completeResponsible = async (req, res) => {
     const parsedData = completeResponsibleSchema.parse(req.body);
-
+ 
     try {
       const { user_name, user_lastname, user_dni, user_phone, user_password } =
         parsedData;
 
       const { user_id } = req.params;
-
+ 
       const hash = await hashPassword(user_password);
 
       const values = [
@@ -137,6 +137,7 @@ class UserController {
         user_id,
       ];
 
+
       await userDal.completeResponsible(values);
       res.status(200).json({ msg: "Responsable completado con éxito." });
     } catch (error) {
@@ -147,19 +148,19 @@ class UserController {
       }
     }
   };
-
+ 
   editResponsible = async (req, res) => {
     try {
       const { user_id } = req.params;
       const { user_name, user_lastname, user_phone, user_dni } = req.body;
-
+ 
       const result = await userDal.updateResponsible(user_id, {
         user_name,
         user_lastname,
         user_phone,
         user_dni,
       });
-
+ 
       return res.status(200).json({
         message: "Responsable actualizado con éxito.",
         result,
@@ -172,7 +173,7 @@ class UserController {
       });
     }
   };
-
+ 
   editCenter = async (req, res) => {
     try {
       const { id } = req.params;
@@ -183,7 +184,7 @@ class UserController {
         center_phone,
         center_auth_doc,
       } = req.body;
-
+ 
       if (
         !center_city ||
         !center_province ||
@@ -195,7 +196,7 @@ class UserController {
           "Todos los campos son requeridos para editar el centro."
         );
       }
-
+ 
       const result = await userDal.updateCenter(id, {
         center_city,
         center_province,
@@ -203,7 +204,7 @@ class UserController {
         center_phone,
         center_auth_doc,
       });
-
+ 
       return res
         .status(200)
         .json({ message: "Centro actualizado con éxito.", result });
@@ -214,7 +215,7 @@ class UserController {
       });
     }
   };
-
+ 
   editUserUser = async (req, res) => {
     try {
       const { id } = req.params;
@@ -229,7 +230,7 @@ class UserController {
         user_phone,
         user_birth_date,
       } = req.body;
-
+ 
       if (
         !id ||
         !user_name ||
@@ -246,7 +247,7 @@ class UserController {
           message: "Todos los campos son requeridos para editar el usuario.",
         });
       }
-
+ 
       const result = await userDal.updateUserUser(id, {
         user_name,
         user_lastname,
@@ -258,7 +259,7 @@ class UserController {
         user_phone,
         user_birth_date,
       });
-
+ 
       return res
         .status(200)
         .json({ message: "Usuario actualizado con éxito.", result });
@@ -268,24 +269,24 @@ class UserController {
         .json({ message: "Error al actualizar usuario.", error });
     }
   };
-
+ 
   ResponsibleValidateDocument = async (req, res) => {
     try {
       const { user_id } = req.params;
       const { user_is_validated } = req.body;
       const documento = req.file; // Archivo subido
-
+ 
       if (!user_id || user_is_validated === undefined) {
         return res.status(400).json({
           message:
             "El ID del usuario y el estado de validación son requeridos.",
         });
       }
-
+ 
       if (!documento) {
         return res.status(400).json({ message: "El documento es requerido." });
       }
-
+ 
       const result = await userDal.updateDocumentValidation(
         user_id,
         user_is_validated
@@ -293,6 +294,7 @@ class UserController {
       return res
         .status(200)
         .json({ message: "Documento validado con éxito.", result });
+
     } catch (error) {
       console.log("Error al validar documento:", error);
       return res
@@ -305,10 +307,10 @@ class UserController {
     try {
       const { user_id } = req.params;
       const { activity_id, center_id, olympics_id } = req.body;
-
+ 
       console.log("Body:", req.body);
       console.log("Params:", req.params);
-
+ 
       if (!user_id || !activity_id || !center_id || !olympics_id) {
         return res.status(400).json({
           message:
@@ -334,5 +336,5 @@ class UserController {
     }
   };
 }
-
+ 
 export default new UserController();

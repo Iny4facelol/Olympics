@@ -19,7 +19,7 @@ router.put('/user/:id', userController.editUserUser);
 router.put('/user/:user_id/validate', multerFile("file") , userController.ResponsibleValidateDocument);
 
 //REVISAR CON LOS PROFES
-router.post('/user/:user_id/activities', userController.addActivityToUser);
+router.post("/user/:user_id/activities", userController.addActivityToUser);
 
 
 
