@@ -59,7 +59,7 @@ class AdminDal {
 
   // Editar Olimpiada
 
-  editOlympics = async (data) => {
+  editOlympics = async (data, olympics_id) => {
     try {
       const {
         olympics_name,
@@ -69,7 +69,6 @@ class AdminDal {
         olympics_start_date,
         olympics_end_date,
         olympics_description,
-        olympics_id,
       } = data;
 
       let sql =
@@ -82,7 +81,7 @@ class AdminDal {
         olympics_host_address,
         olympics_start_date,
         olympics_end_date,
-        olimpics_description,
+        olympics_description,
         olympics_id,
       ];
 
@@ -200,6 +199,7 @@ class AdminDal {
   // 3º Apartado de Usuarios
   // Añadir Responsable user_type = 2
 
+
   getUserById = async (userId) => {
     try {
       const result = await executeQuery(
@@ -212,6 +212,7 @@ class AdminDal {
       throw new Error("Error al obtener user por id");
     }
   };
+
 
   addResponsible = async (userData) => {
     const { user_name, user_email, user_center_id } = userData;
@@ -228,6 +229,7 @@ class AdminDal {
       throw new Error("Error al registrar responsable");
     }
   };
+
 
   completeResponsible = async (userData) => {
     const {
@@ -362,20 +364,25 @@ class AdminDal {
   // 4º Apartado de Actividades
   // Añadir Actividad
 
-  addActivity = async (data, file) => {
-    const { activity_name, activity_description, max_participants } = data;
+
+  addActivity = async (data) => {
+    const {
+      activity_name,
+      activity_description,
+      max_participants_number,
+      img,
+    } = data;
 
     try {
       let sql =
-        "INSERT INTO activity (activity_name, activity_description, max_participants) VALUES (?,?,?)";
-      let values = [activity_name, activity_description, max_participants];
-
-      if (file) {
-        sql =
-          "INSERT INTO activity (activity_name, activity_description, max_participants, activity_image) VALUES (?,?,?,?)";
-        values = [activity_name, activity_description, max_participants, file];
-      }
-
+        "INSERT INTO activity (activity_name, activity_description, max_participants, activity_image) VALUES (?,?,?,?)";
+      let values = [
+        activity_name,
+        activity_description,
+        max_participants_number,
+        img,
+      ];
+      
       const result = await executeQuery(sql, values);
 
       return result;
@@ -399,35 +406,26 @@ class AdminDal {
 
   // Editar Actividad
 
-  editActivity = async (data, file) => {
+  editActivity = async (data, activity_id) => {
     const {
       activity_name,
       activity_description,
-      max_participants,
-      activity_id,
+      max_participants_number,
+      img,
     } = data;
+
+    console.log("data en dal", data);
 
     try {
       let sql =
-        "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ? WHERE activity_id = ?";
+        "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
       let values = [
         activity_name,
         activity_description,
-        max_participants,
+        max_participants_number,
+        img,
         activity_id,
       ];
-
-      if (file) {
-        sql =
-          "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
-        values = [
-          activity_name,
-          activity_description,
-          max_participants,
-          file,
-          activity_id,
-        ];
-      }
 
       const result = await executeQuery(sql, values);
 

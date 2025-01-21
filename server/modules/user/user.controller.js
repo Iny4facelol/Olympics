@@ -4,6 +4,8 @@ import { completeResponsibleSchema } from "../../utils/zodSchemas/completeRespon
 import { registerSchema } from "../../utils/zodSchemas/registerSchema.js";
 import { z } from "zod";
 import userDal from "./user.dal.js";
+import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
+import { centerSchema } from "../../utils/zodSchemas/centerSchema.js";
 
 class UserController {
   register = async (req, res) => {
@@ -24,8 +26,6 @@ class UserController {
         user_password,
         user_center_id,
       } = parsedData;
-
-      // Validación de campos
 
       const hash = await hashPassword(user_password);
 
@@ -56,7 +56,8 @@ class UserController {
   };
 
   login = async (req, res) => {
-    const { user_email, user_password } = req.body;
+    const parsedData = loginSchema.parse(req.body)
+    const { user_email, user_password } = parsedData;
 
     try {
       const result = await userDal.getUserByEmail(user_email);
@@ -75,31 +76,26 @@ class UserController {
         }
       }
     } catch (error) {
-      res.status(500).json({ message: "Error en el servidor" });
+      if (error instanceof z.ZodError){
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json({ message: "Error en el servidor" });
+      }
     }
   };
 
   completeCenter = async (req, res) => {
+    const parsedData = centerSchema.parse(req.body)
     try {
       const { center_city, center_province, center_address, center_phone } =
-        req.body;
+        parsedData;
+
 
       const { filename } = req.file;
       const center_auth_doc = filename;
+ 
+      const { center_id } = req.params;    
 
-      const { center_id } = req.params;
-
-      if (
-        !center_city ||
-        !center_province ||
-        !center_address ||
-        !center_phone ||
-        !center_auth_doc
-      ) {
-        throw new Error(
-          "Todos los campos son requeridos para completar el centro."
-        );
-      }
 
       const result = await userDal.completeCenter({
         center_id,
@@ -112,14 +108,17 @@ class UserController {
 
       return res.status(200).json({ message: "Centro completado con éxito." });
     } catch (error) {
-      console.log(error);
-      return res.status(400).json({ message: error.message });
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      }else{
+        console.log(error);
+        return res.status(400).json({ message: error.message });
+      }
     }
   };
 
   completeResponsible = async (req, res) => {
     const parsedData = completeResponsibleSchema.parse(req.body);
-
     try {
       const { user_name, user_lastname, user_dni, user_phone, user_password } =
         parsedData;
@@ -136,6 +135,7 @@ class UserController {
         hash,
         user_id,
       ];
+
 
       await userDal.completeResponsible(values);
       res.status(200).json({ msg: "Responsable completado con éxito." });
@@ -272,36 +272,23 @@ class UserController {
   ResponsibleValidateDocument = async (req, res) => {
     try {
       const { user_id } = req.params;
-      const { user_is_validated } = req.body;
-      const documento = req.file; // Archivo subido
-
-      if (!user_id || user_is_validated === undefined) {
-        return res.status(400).json({
-          message:
-            "El ID del usuario y el estado de validación son requeridos.",
-        });
-      }
-
-      if (!documento) {
-        return res.status(400).json({ message: "El documento es requerido." });
-      }
-
+      
       const result = await userDal.updateDocumentValidation(
         user_id,
-        user_is_validated
       );
+
+      res
+        .status(200)
+        .json({ message: "Documento validado con éxito.", result });
     } catch (error) {
-      console.error("Error en ResponsibleValidateDocument:", error);
-      return res.status(500).json({
-        message: "Error al validar documento.",
-        error: error.message,
-      });
+   
+      res
+        .status(500)
+        .json({error });
     }
   };
-
-  ///REVISAR CON LOS PROFES
-
-  addActivityToUser = (req, res) => {
+//REVISADO CON SANTI
+  addActivityToUser = async (req, res) => {
     try {
       const { user_id } = req.params;
       const { activity_id, center_id, olympics_id } = req.body;
@@ -309,7 +296,6 @@ class UserController {
       console.log("Body:", req.body);
       console.log("Params:", req.params);
 
-      // Validar los datos recibidos
       if (!user_id || !activity_id || !center_id || !olympics_id) {
         return res.status(400).json({
           message:
@@ -317,7 +303,7 @@ class UserController {
         });
       }
 
-      // Simulación de inserción en la base de datos
+      // Este bloque simula la inserción
       const result = {
         user_id,
         activity_id,
@@ -328,10 +314,10 @@ class UserController {
 
       return res.status(200).json(result);
     } catch (error) {
-      console.log("Error al validar documento:", error);
+      console.log("Error al añadir actividad al usuario:", error);
       return res
         .status(500)
-        .json({ message: "Error al validar documento.", error });
+        .json({ message: "Error al añadir actividad al usuario.", error });
     }
   };
 }

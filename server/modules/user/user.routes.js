@@ -14,12 +14,12 @@ router.put('/completeResponsible/:user_id', userController.completeResponsible);
 router.put('/center/:center_id', userController.editCenter);
 
 router.put('/responsible/:user_id', userController.editResponsible);
-router.put('/user/:id', userController.editUserUser);
+router.put('/:id', userController.editUserUser);
 
-router.put('/user/:user_id/validate', multerFile("file") , userController.ResponsibleValidateDocument);
+router.put('/validate/:user_id', userController.ResponsibleValidateDocument);
 
 //REVISAR CON LOS PROFES
-router.post("/user/:user_id/activities", userController.addActivityToUser);
+router.post("/activities/:user_id", userController.addActivityToUser);
 
 
 
