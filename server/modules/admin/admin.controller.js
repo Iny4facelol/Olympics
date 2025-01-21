@@ -257,7 +257,7 @@ class AdminController {
   };
 
   // 4º Apartado de Actividades
-  // Añadir una Actividad
+    // Añadir una Actividad
 
   addActivity = async (req, res) => {
     const { activity_name, activity_description, max_participants } = req.body;
@@ -290,7 +290,7 @@ class AdminController {
     }
   };
 
-  // Ver todas las Actividades
+    // Ver todas las Actividades
 
   allActivity = async (req, res) => {
     try {
@@ -301,7 +301,7 @@ class AdminController {
     }
   };
 
-  // Editar Actividad
+    // Editar Actividad
 
   editActivity = async (req, res) => {
     const { activity_name, activity_description, max_participants, activity_id } = req.body;
@@ -313,7 +313,6 @@ class AdminController {
       activity_description,
       max_participants_number,
       img,
-     
     };
     
     try {
@@ -327,6 +326,22 @@ class AdminController {
       } else {
         res.status(500).json(error);
       }
+    }
+  };
+
+    // Añadir Actividad a Olimpiada
+
+  addActivityOlimpics = async (req, res) => {
+    try {
+      const { olympics_id } = req.params;
+      const { activity_id } = req.body;
+  
+      const result = await AdminDal.saveActivity(olympics_id, activity_id);
+  
+      res.status(200).json({ message: "Actividad añadida a la olimpiada", result });
+    } catch (error) {
+      console.log('Error al añadir la actividad', error);
+      res.status(500).json({ message: "Error al añadir la actividad.", error: error.message });
     }
   };
 

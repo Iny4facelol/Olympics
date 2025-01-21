@@ -28,5 +28,6 @@ router.get('/allUser', adminController.allUser);
 router.post('/addActivity', multerImage("activity_image") ,adminController.addActivity);
 router.put('/editActivity', multerImage("activity"), adminController.editActivity);
 router.get('/allActivity', adminController.allActivity);
+router.post('/activity/:olympics_id', adminController.addActivityOlimpics);
 
 export default router;
