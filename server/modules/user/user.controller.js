@@ -296,7 +296,6 @@ class UserController {
 
           message:
             "El ID del usuario y el estado de validación son requeridos.",
-
         });
       }
  
@@ -308,7 +307,7 @@ class UserController {
         user_id,
         user_is_validated
       );
-
+      
       return res
         .status(200)
         .json({ message: "Documento validado con éxito.", result });
@@ -320,7 +319,7 @@ class UserController {
         .json({ message: "Error al validar documento.", error });
     }
   };
- 
+
   addActivityToUser = async (req, res) => {
     try {
       const { user_id } = req.params;
@@ -335,7 +334,7 @@ class UserController {
             "Todos los campos son requeridos: user_id, activity_id, center_id, olympics_id",
         });
       }
- 
+
       // Este bloque simula la inserción
       const result = {
         user_id,
@@ -344,7 +343,7 @@ class UserController {
         olympics_id,
         message: "Actividad añadida al usuario con éxito.",
       };
- 
+
       return res.status(200).json(result);
     } catch (error) {
       console.log("Error al añadir actividad al usuario:", error);
