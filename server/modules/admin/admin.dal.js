@@ -362,8 +362,7 @@ class AdminDal {
   };
 
   // 4º Apartado de Actividades
-  // Añadir Actividad
-
+    // Añadir Actividad
 
   addActivity = async (data) => {
     const {
@@ -391,7 +390,7 @@ class AdminDal {
     }
   };
 
-  // Seleccionar Actividades
+    // Seleccionar Actividades
 
   allActivity = async () => {
     try {
@@ -404,7 +403,7 @@ class AdminDal {
     }
   };
 
-  // Editar Actividad
+    // Editar Actividad
 
   editActivity = async (data, activity_id) => {
     const {
@@ -434,6 +433,22 @@ class AdminDal {
       throw error;
     }
   };
-}
+
+    // Añadir Actividad a Olimpiada
+
+  saveActivity = async (olympics_id, activity_id) => {
+    try {
+      const query = `
+        INSERT INTO olympics_activity (olympics_id, activity_id)
+        VALUES (?, ?)
+      `;
+      const [result] = await db.query(query, [olympics_id, activity_id]);
+      return result;
+    } catch (error) {
+      console.error("Error al guardar la actividad", error);
+      throw error;
+    }
+  };
+};
 
 export default new AdminDal();
