@@ -2,6 +2,9 @@ import { executeQuery } from "../../config/db.js";
 import { dbPool } from "../../config/db.js";
 
 class AdminDal {
+    // 1º Apartado de Olimpiadas
+      // Añadir Olimpiada
+
   addOlympics = async (olympicsData) => {
     const {
       olympics_name,
@@ -14,6 +17,7 @@ class AdminDal {
     } = olympicsData;
 
     const connection = await dbPool.getConnection();
+
     try {
       await connection.beginTransaction();
       let sql =
@@ -27,6 +31,7 @@ class AdminDal {
         olympics_end_date,
         olimpics_description,
       ];
+
       const result = await connection.execute(sql, values);
       connection.commit();
       return result;
@@ -38,6 +43,59 @@ class AdminDal {
       connection.release();
     }
   };
+
+    // Seleccionar todas las Olimpiadas
+
+  allOlympics = async () => {
+    try {
+      let sql = "SELECT * FROM olympics WHERE olympics_is_deleted = 0";
+      let result = await executeQuery(sql);
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+    // Editar Olimpiada
+
+  editOlympics = async (data) => {
+    try {
+      const {
+        olympics_name,
+        olympics_host_name,
+        olympics_host_city,
+        olympics_host_address,
+        olympics_start_date,
+        olympics_end_date,
+        olimpics_description,
+        olympics_id,
+      } = data;
+
+      let sql =
+        "UPDATE olympics SET olympics_name=?, olympics_host_name=?, olympics_host_city=?, olympics_host_address=?, olympics_start_date=?, olympics_end_date=?, olimpics_description=? WHERE olympics_id=?";
+
+      let values = [
+        olympics_name,
+        olympics_host_name,
+        olympics_host_city,
+        olympics_host_address,
+        olympics_start_date,
+        olympics_end_date,
+        olimpics_description,
+        olympics_id,
+      ];
+
+      const result = await executeQuery(sql, values);
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  // 2º Apartado de Centro
+    // Crear Centro
 
   createCenter = async (centerData) => {
     const { center_name, center_email } = centerData;
@@ -56,93 +114,56 @@ class AdminDal {
     }
   };
 
-  addResponsible = async (userData) => {
-    const { user_name, user_email, center_id } = userData;
+    // Seleccionar todos los Centros 
 
-    console.log("userData", userData);
+  getAllCenters = async () => {
+    const query = `
+      SELECT 
+        center_id, 
+        center_name, 
+        center_city, 
+        center_province, 
+        center_address, 
+        center_phone, 
+        center_auth_doc 
+      FROM center
+    `;
     try {
-      const result = await executeQuery(
-        `INSERT INTO user (user_name, user_email, user_center_id, user_type, user_password)
-        VALUES (?, ?, ?, ?, ?)`,
-        [user_name, user_email, user_center_id, user_type, user_password] // 2 indica que es un responsable
-      );
-      return result;
-    } catch (err) {
-      console.log("Error al registrar responsable:", err);
-      throw new Error("Error al registrar responsable");
+      const results = await executeQuery(query);
+      return results;
+    } catch (error) {
+      console.error("Error en getAllCenters:", error);
+      throw new Error("Error al obtener los centros.");
     }
   };
 
-  getAllResponsibles = async () => {
-    try {
-      const result = await executeQuery(`SELECT * FROM user WHERE user_type=2`);
-      return result;
-    } catch (err) {
-      console.log("Error al obtener responsables:", err);
-      throw new Error("Error al obtener responsables");
-    }
-  };
+    // Editar Centro
 
-  addActivity = async (data, file) => {
+  editCenter = async (data, file) => {
     const {
-      activity_name,
-      activity_description,
-      max_participants,
-      activity_image,
+      center_id,
+      center_name,
+      center_city,
+      center_province,
+      center_address,
+      center_phone,
+      center_email,
     } = data;
-
     try {
-      console.log("log en dal", data);
-      let sql =
-        "INSERT INTO activity (activity_name, activity_description, max_participants) VALUES (?,?,?)";
-      let values = [activity_name, activity_description, max_participants];
-      if (file) {
-        sql =
-          "INSERT INTO activity (activity_name, activity_description, max_participants, activity_image) VALUES (?,?,?,?)";
-        values = [
-          activity_name,
-          activity_description,
-          max_participants,
-          activity_image,
-        ];
+      let sql = "UPDATE center SET center_name = ?, center_city = ?, center_province = ?, center_address = ?, center_phone = ?, center_email = ? WHERE center_id = ?";
+      let values = [center_name, center_city, center_province, center_address, center_phone, center_email, center_id];
+      if(file) {
+        sql = "UPDATE center SET center_name = ?, center_city = ?, center_province = ?, center_address = ?, center_phone = ?, center_email = ?, center_auth_doc = ? WHERE center_id = ?";
+        values = [center_name, center_city, center_province, center_address, center_phone, center_email, file, center_id]
       }
       const result = await executeQuery(sql, values);
       return result;
     } catch (error) {
-      console.log("*******Error al crear actividad en dal", error);
-      throw error;
+      throw error
     }
   };
 
-  allOlympics = async () => {
-    try {
-      let sql = "SELECT * FROM olympics WHERE olympics_is_deleted = 0";
-      let result = await executeQuery(sql);
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  allActivity = async () => {
-    try {
-      let sql = "SELECT * FROM activity WHERE activity_is_deleted = 0";
-      let result = await executeQuery(sql);
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  allUser = async () => {
-    try {
-      let sql = "SELECT * FROM user WHERE user_is_deleted = 0";
-      let result = await executeQuery(sql);
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  };
+    // Seleccionar Centro por ID (Recordar Duda)
 
   getCenterById = async (centerId) => {
     try {
@@ -150,80 +171,45 @@ class AdminDal {
         `SELECT * FROM center WHERE center_id = ?`,
         [centerId]
       );
+
       return result;
     } catch (err) {
-      console.log("Error al obtener centro por id:", err);
       throw new Error("Error al obtener centro por id");
     }
   };
 
-  editOlympics = async (data) => {
-    try {
-      const {
-        olympics_name,
-        olympics_host_name,
-        olympics_host_city,
-        olympics_host_address,
-        olympics_start_date,
-        olympics_end_date,
-        olimpics_description,
-        olympics_id,
-      } = data;
+   // 3º Apartado de Usuarios
+    // Añadir Responsable user_type = 2
 
-      let sql =
-        "UPDATE olympics SET olympics_name=?, olympics_host_name=?, olympics_host_city=?, olympics_host_address=?, olympics_start_date=?, olympics_end_date=?, olimpics_description=? WHERE olympics_id=?";
-      let values = [
-        olympics_name,
-        olympics_host_name,
-        olympics_host_city,
-        olympics_host_address,
-        olympics_start_date,
-        olympics_end_date,
-        olimpics_description,
-        olympics_id,
-      ];
-      const result = await executeQuery(sql, values);
-      console.log(data);
+  addResponsible = async (userData) => {
+    const { user_name, user_email, user_center_id } = userData;
+
+    try {
+      const result = await executeQuery(
+        `INSERT INTO user (user_name, user_email, user_center_id, user_type)
+        VALUES (?, ?, ?, ?)`,
+        [user_name, user_email, user_center_id, 2]
+      );
 
       return result;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw new Error("Error al registrar responsable");
     }
   };
 
-  editActivity = async (data, file) => {
-    const {
-      activity_name,
-      activity_description,
-      max_participants,
-      activity_id,
-    } = data;
+    // Seleccionar Responsables user_type = 2
+
+  getAllResponsibles = async () => {
     try {
-      let sql =
-        "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ? WHERE activity_id = ?";
-      let values = [
-        activity_name,
-        activity_description,
-        max_participants,
-        activity_id,
-      ];
-      if (file) {
-        sql =
-          "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
-        values = [
-          activity_name,
-          activity_description,
-          max_participants,
-          file,
-          activity_id,
-        ];
-      }
-      const result = await executeQuery(sql, values);
+      const result = await executeQuery(`SELECT * FROM user WHERE user_type=2`);
+
       return result;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw new Error("Error al obtener responsables");
     }
   };
+
+    // Actualizar Usuario user_type = 1 (Recordar Duda)
 
   updateUser = async (id, userData) => {
     const {
@@ -274,8 +260,6 @@ class AdminDal {
         ]
       );
 
-      console.log("Resultado de la consulta:", result);
-
       if (result.affectedRows === 0) {
         throw new Error("No se encontró el usuario con el ID proporcionado.");
       }
@@ -287,27 +271,103 @@ class AdminDal {
     }
   };
 
-  editCenter = async (data, file) => {
-    const {
-      center_id,
-      center_name,
-      center_city,
-      center_province,
-      center_address,
-      center_phone,
-      center_email,
-    } = data;
+    // Ver todos los Usuarios
+
+  allUser = async () => {
     try {
-      let sql = "UPDATE center SET center_name = ?, center_city = ?, center_province = ?, center_address = ?, center_phone = ?, center_email = ? WHERE center_id = ?";
-      let values = [center_name, center_city, center_province, center_address, center_phone, center_email, center_id];
-      if(file) {
-        sql = "UPDATE center SET center_name = ?, center_city = ?, center_province = ?, center_address = ?, center_phone = ?, center_email = ?, center_auth_doc = ? WHERE center_id = ?";
-        values = [center_name, center_city, center_province, center_address, center_phone, center_email, file, center_id]
-      }
-      const result = await executeQuery(sql, values);
+      let sql = "SELECT * FROM user WHERE user_is_deleted = 0";
+      let result = await executeQuery(sql);
+
       return result;
     } catch (error) {
-      throw error
+      throw error;
+    }
+  };
+
+  // 4º Apartado de Actividades
+    // Añadir Actividad
+
+  addActivity = async (data, file) => {
+    const {
+      activity_name,
+      activity_description,
+      max_participants,
+    } = data;
+
+    try {
+      let sql =
+        "INSERT INTO activity (activity_name, activity_description, max_participants) VALUES (?,?,?)";
+      let values = [activity_name, activity_description, max_participants];
+
+      if (file) {
+        sql =
+          "INSERT INTO activity (activity_name, activity_description, max_participants, activity_image) VALUES (?,?,?,?)";
+        values = [
+          activity_name,
+          activity_description,
+          max_participants,
+          file
+        ];
+      };
+
+      const result = await executeQuery(sql, values);
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+    // Seleccionar Actividades
+
+  allActivity = async () => {
+    try {
+      let sql = "SELECT * FROM activity WHERE activity_is_deleted = 0";
+      let result = await executeQuery(sql);
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+    // Editar Actividad
+
+  editActivity = async (data, file) => {
+    const {
+      activity_name,
+      activity_description,
+      max_participants,
+      activity_id,
+    } = data;
+
+    try {
+      let sql =
+        "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ? WHERE activity_id = ?";
+      let values = [
+        activity_name,
+        activity_description,
+        max_participants,
+        activity_id,
+      ];
+
+      if (file) {
+        sql =
+          "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
+        values = [
+          activity_name,
+          activity_description,
+          max_participants,
+          file,
+          activity_id,
+        ];
+      };
+
+      const result = await executeQuery(sql, values);
+
+      return result;
+    } catch (error) {
+      throw error;
     }
   };
 }

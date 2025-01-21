@@ -321,7 +321,7 @@ export default function RegisterUserForm() {
         <Toaster richColors position="bottom-center" />
         {/* Nuestro botton custom le podemos pasar las props 
         para reutilizarlo en este caso es type submit */}
-        <ButtonCustom type={"submit"} onClick={onSubmit} bgColor={"orange"}>
+        <ButtonCustom type={"submit"}  bgColor={"orange"}>
           {authenticating ? "Registrando..." : "Darse de alta"}
         </ButtonCustom>
       </div>

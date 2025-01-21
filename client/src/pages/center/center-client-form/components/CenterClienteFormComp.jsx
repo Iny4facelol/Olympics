@@ -4,125 +4,181 @@ import ButtonCustom from "../../../../core/components/Button/Button";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import "./CenterClienteFormComp.css";
 import { useParams } from "react-router-dom";
-import { use } from "react";
-const initialValues = {
-  center_city: "",
-  center_province: "",
-  center_address: "",
-  center_phone: "",
-  center_auth_doc: "",
-};
+import { useForm } from "react-hook-form";
+import { centerSchema } from "../../../../utils/zodSchemas/centerSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function CenterClientFormComp() {
-  const [formData, setFormData] = useState(initialValues);
   const [centerId, setCenterId] = useState(null);
+  const [file, setFile] = useState(null);
   const params = useParams();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(centerSchema),
+    defaultValues: {
+      center_city: "",
+      center_province: "",
+      center_address: "",
+      center_phone: "",
+      center_auth_doc: null,
+    },
+  });
 
   useEffect(() => {
     const token = params.registerToken;
-    console.log(token)
-    if(token) {
+    console.log(token);
+    if (token) {
       verifyToken(token);
     }
-  }, [])
-
+  }, []);
 
   const verifyToken = async (token) => {
     try {
-      const response = await fetchData(`api/admin/centers/verifyToken/${token}`, "get");
+      const response = await fetchData(
+        `api/admin/centers/verifyToken/${token}`,
+        "get"
+      );
       console.log(response);
-      setCenterId(response.center_id)
+      setCenterId(response.center_id);
     } catch (error) {
       console.error(error);
     }
-  }
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (data) => {
     try {
-      e.preventDefault();
-      await fetchData(`api/user/completeCenter/${centerId}`, "put", formData);
+      const formData = new FormData();
+      console.log(data);
+      formData.append("center_city", data.center_city);
+      formData.append("center_province", data.center_province);
+      formData.append("center_address", data.center_address);
+      formData.append("center_phone", data.center_phone);
+      
+      if (file) {
+        console.log(file);
+        formData.append("file", file);
+      }
+
+      await fetchData(
+        `api/user/completeCenter/${centerId}`,
+        "put",
+        formData
+      );
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <Form className="d-flex gap-4 flex-column justify-content-center align-content-center">
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      encType="multipart/form-data"
+      className="d-flex gap-4 flex-column justify-content-center align-content-center"
+    >
       <Row>
         <Col md={6} sm={12}>
-          <Form.Group controlId="formBasicPassword">
+          <Form.Group controlId="formBasicCity">
             <Form.Label>Localidad*</Form.Label>
             <Form.Control
-              className="custom-input"
-              onChange={handleChange}
-              value={formData.center_city}
+              className={`custom-input ${
+                errors.center_city ? "is-invalid" : ""
+              }`}
+              {...register("center_city")}
               type="text"
-              name="center_city"
               placeholder="Nombre de la localidad"
             />
+            {errors.center_city && (
+              <Form.Text className="text-danger">
+                {errors.center_city.message}
+              </Form.Text>
+            )}
           </Form.Group>
         </Col>
         <Col md={6} sm={12}>
-          <Form.Group controlId="formBasicEmail">
+          <Form.Group controlId="formBasicProvince">
             <Form.Label>Región*</Form.Label>
             <Form.Control
-              onChange={handleChange}
+              className={`custom-input ${
+                errors.center_province ? "is-invalid" : ""
+              }`}
+              {...register("center_province")}
               type="text"
-              name="center_province"
-              value={formData.center_province}
               placeholder="Zona de la localidad"
             />
+            {errors.center_province && (
+              <Form.Text className="text-danger">
+                {errors.center_province.message}
+              </Form.Text>
+            )}
           </Form.Group>
         </Col>
       </Row>
       <Row>
         <Col md={6} sm={12}>
-          <Form.Group controlId="formBasicPassword">
+          <Form.Group controlId="formBasicAddress">
             <Form.Label>Dirección*</Form.Label>
             <Form.Control
-              onChange={handleChange}
-              value={formData.center_address}
+              className={`custom-input ${
+                errors.center_address ? "is-invalid" : ""
+              }`}
+              {...register("center_address")}
               type="text"
-              name="center_address"
               placeholder="Dirección del centro"
             />
+            {errors.center_address && (
+              <Form.Text className="text-danger">
+                {errors.center_address.message}
+              </Form.Text>
+            )}
           </Form.Group>
         </Col>
         <Col md={6} sm={12}>
-          <Form.Group controlId="formBasicEmail">
+          <Form.Group controlId="formBasicPhone">
             <Form.Label>Nº de Teléfono*</Form.Label>
             <Form.Control
-              onChange={handleChange}
+              className={`custom-input ${
+                errors.center_phone ? "is-invalid" : ""
+              }`}
+              {...register("center_phone")}
               type="text"
-              name="center_phone"
-              value={formData.center_phone}
               placeholder="Número del centro"
             />
+            {errors.center_phone && (
+              <Form.Text className="text-danger">
+                {errors.center_phone.message}
+              </Form.Text>
+            )}
           </Form.Group>
         </Col>
       </Row>
       <Row>
         <Col md={6} sm={12}>
-          <Form.Group controlId="formBasicPassword">
+          <Form.Group controlId="formBasicAuthDoc">
             <Form.Label>Documento de Autorización*</Form.Label>
             <Form.Control
-              onChange={handleChange}
-              value={formData.center_auth_doc}
-              type="text"
-              name="center_auth_doc"
+              className={`custom-input ${
+                errors.center_auth_doc ? "is-invalid" : ""
+              }`}
+              type="file"
+              onChange={(e) => {
+                setFile(e.target.files[0]);
+              }}
             />
+            {errors.center_auth_doc && (
+              <Form.Text className="text-danger">
+                {errors.center_auth_doc.message}
+              </Form.Text>
+            )}
           </Form.Group>
         </Col>
       </Row>
 
       <div>
-        <ButtonCustom onClick={onSubmit} bgColor={"orange"}>
+        <ButtonCustom type={"submit"} bgColor={"orange"}>
           Crear
         </ButtonCustom>
       </div>
