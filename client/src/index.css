@@ -12,6 +12,10 @@ html, body {
     text-decoration: none;
     color: inherit;
   }
+  .form-control:focus {
+    border-color: #ee531e;
+    box-shadow: 0 0 0 0.2rem rgba(238, 83, 30, 0.25);
+  }
 }
 
 .link-hover {

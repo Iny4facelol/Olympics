@@ -12,6 +12,12 @@
         width: 200px;
         pointer-events: none;
         user-select: none;
+        @media (width <= 768px) {
+          width: 150px;
+        }
+        @media (width <= 576px) {
+          width: 100px;
+        }
       }
     }
   }
