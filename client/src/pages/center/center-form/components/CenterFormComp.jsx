@@ -2,63 +2,84 @@ import { useState } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 import ButtonCustom from "../../../../core/components/Button/Button";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createCenterSchema } from "../../../../utils/zodSchemas/centerSchema";
+import { useNavigate } from "react-router-dom";
+import { toast, Toaster } from "sonner";
 
-const initialValues = {
-  center_name: "",
-  center_email: "",
-};
+export default function CenterFormComp() {
+  const [authenticating, setAuthenticating] = useState(false);
+  const navigate = useNavigate();
 
-export default function FormComp() {
-  const [formData, setFormData] = useState(initialValues);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(createCenterSchema),
+    defaultValues: {
+      center_name: "",
+      center_email: "",
+    },
+  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const onSubmit = async (e) => {
+  const onSubmit = async (data) => {
     try {
-      e.preventDefault();
-      await fetchData(`api/admin/addCenter`, "post", formData);
+      setAuthenticating(true);
+      await fetchData(`api/admin/addCenter`, "post", data);
+      toast.success("Centro creado correctamente");
+      setTimeout(() => {
+        setAuthenticating(false);
+        navigate("/admin/dashboard");
+      }, 2000)
     } catch (error) {
+      toast.error("Ha ocurrido un error");
       console.error(error);
     }
   };
 
   return (
-    <Form className="d-flex gap-4 flex-column justify-content-center align-content-center">
-      <Row>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      className="d-flex gap-4 flex-column justify-content-center align-content-center"
+    >
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Nombre del centro</Form.Label>
             <Form.Control
-              onChange={handleChange}
+              {...register("center_name")}
               type="text"
-              name="center_name"
-              value={formData.center_name}
-              placeholder="IES Ribalta"
+              placeholder="Ej: IES Ribalta, IES Llombai"
             />
-            <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
-            </Form.Text>
           </Form.Group>
+          {errors.center_name && (
+            <Form.Text className="text-danger">
+              {errors.center_name.message}
+            </Form.Text>
+          )}
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicPassword">
             <Form.Label>Email</Form.Label>
             <Form.Control
-              onChange={handleChange}
-              value={formData.center_email}
+              {...register("center_email")}
               type="email"
-              name="center_email"
-              placeholder="Email del centro"
+              placeholder="Ej: correocentro@email.com"
             />
           </Form.Group>
+          {errors.center_email && (
+            <Form.Text className="text-danger">
+              {errors.center_email.message}
+            </Form.Text>
+          )}
         </Col>
       </Row>
       <div>
-        <ButtonCustom onClick={onSubmit} bgColor={"orange"}>
-          Crear
+        <Toaster richColors position="top-center" />
+        <ButtonCustom type={"submit"} bgColor={"orange"}>
+           {authenticating ? "Creando centro..." : "Crear centro"}
         </ButtonCustom>
       </div>
     </Form>

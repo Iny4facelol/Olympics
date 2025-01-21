@@ -10,6 +10,7 @@ import { useAppContext } from "../context/AppContext";
 import ErrorPage from "../../pages/error/ErrorPage";
 import CreateOlympics from "../../pages/olympics/create-olympic/CreateOlympics";
 import CreateActivity from "../../pages/activity/create-activity/CreateActivity";
+import CreateResponsable from "../../pages/responsable/create-responsable/CreateResponsable";
 
 export default function AppRoutes() {
   const { user } = useAppContext();
@@ -26,6 +27,7 @@ export default function AppRoutes() {
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/createNewOlympics" element={<CreateOlympics />} />
             <Route path="/admin/createNewActivity" element={<CreateActivity />} />
+            <Route path="/admin/createNewResponsable" element={<CreateResponsable />} />
           </>
         )}
         <Route

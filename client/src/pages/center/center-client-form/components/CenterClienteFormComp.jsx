@@ -3,14 +3,17 @@ import { Form, Row, Col } from "react-bootstrap";
 import ButtonCustom from "../../../../core/components/Button/Button";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import "./CenterClienteFormComp.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { centerSchema } from "../../../../utils/zodSchemas/centerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast, Toaster } from "sonner";
 
 export default function CenterClientFormComp() {
   const [centerId, setCenterId] = useState(null);
+  const [authenticating, setAuthenticating] = useState(false);
   const [file, setFile] = useState(null);
+  const navigate = useNavigate();
   const params = useParams();
 
   const {
@@ -51,8 +54,9 @@ export default function CenterClientFormComp() {
 
   const onSubmit = async (data) => {
     try {
+      setAuthenticating(true);
+      toast.success("Centro creado correctamente");
       const formData = new FormData();
-      console.log(data);
       formData.append("center_city", data.center_city);
       formData.append("center_province", data.center_province);
       formData.append("center_address", data.center_address);
@@ -62,12 +66,18 @@ export default function CenterClientFormComp() {
         console.log(file);
         formData.append("file", file);
       }
-
+      
       await fetchData(
         `api/user/completeCenter/${centerId}`,
         "put",
         formData
       );
+
+      setTimeout(() => {
+        setAuthenticating(false);
+        navigate("/")
+      }, 2000)
+
     } catch (error) {
       console.error(error);
     }
@@ -178,8 +188,9 @@ export default function CenterClientFormComp() {
       </Row>
 
       <div>
+        <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
-          Crear
+          {authenticating ? "Creando..." : "Crear centro"}
         </ButtonCustom>
       </div>
     </Form>

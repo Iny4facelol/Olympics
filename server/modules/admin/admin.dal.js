@@ -13,7 +13,7 @@ class AdminDal {
       olympics_host_address,
       olympics_start_date,
       olympics_end_date,
-      olimpics_description,
+      olympics_description,
     } = olympicsData;
 
     const connection = await dbPool.getConnection();
@@ -21,7 +21,7 @@ class AdminDal {
     try {
       await connection.beginTransaction();
       let sql =
-        "INSERT INTO olympics (olympics_name, olympics_host_name, olympics_host_city, olympics_host_address, olympics_start_date, olympics_end_date, olimpics_description) VALUES (?,?,?,?,?,?,?)";
+        "INSERT INTO olympics (olympics_name, olympics_host_name, olympics_host_city, olympics_host_address, olympics_start_date, olympics_end_date, olympics_description) VALUES (?,?,?,?,?,?,?)";
       let values = [
         olympics_name,
         olympics_host_name,
@@ -29,7 +29,7 @@ class AdminDal {
         olympics_host_address,
         olympics_start_date,
         olympics_end_date,
-        olimpics_description,
+        olympics_description,
       ];
 
       const result = await connection.execute(sql, values);
@@ -68,12 +68,12 @@ class AdminDal {
         olympics_host_address,
         olympics_start_date,
         olympics_end_date,
-        olimpics_description,
+        olympics_description,
         olympics_id,
       } = data;
 
       let sql =
-        "UPDATE olympics SET olympics_name=?, olympics_host_name=?, olympics_host_city=?, olympics_host_address=?, olympics_start_date=?, olympics_end_date=?, olimpics_description=? WHERE olympics_id=?";
+        "UPDATE olympics SET olympics_name=?, olympics_host_name=?, olympics_host_city=?, olympics_host_address=?, olympics_start_date=?, olympics_end_date=?, olympics_description=? WHERE olympics_id=?";
 
       let values = [
         olympics_name,

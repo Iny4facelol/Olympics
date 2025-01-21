@@ -57,7 +57,7 @@ export default function CreateActivityForm() {
       className="d-flex gap-4 flex-column justify-content-center align-content-center"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Row>
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicActivityName">
             <Form.Label>Nombre de la Actividad*</Form.Label>
@@ -95,7 +95,7 @@ export default function CreateActivityForm() {
           )}
         </Col>
       </Row>
-      <Row>
+      <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicActivityImage">
             <Form.Label>Imagen de la actividad</Form.Label>
