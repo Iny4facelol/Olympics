@@ -4,7 +4,9 @@ import { completeResponsibleSchema } from "../../utils/zodSchemas/completeRespon
 import { registerSchema } from "../../utils/zodSchemas/registerSchema.js";
 import { z } from "zod";
 import userDal from "./user.dal.js";
- 
+import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
+import { centerSchema } from "../../utils/zodSchemas/centerSchema.js";
+
 class UserController {
   register = async (req, res) => {
     const parsedData = registerSchema.parse(req.body);
@@ -24,9 +26,7 @@ class UserController {
         user_password,
         user_center_id,
       } = parsedData;
- 
-      // Validación de campos
- 
+
       const hash = await hashPassword(user_password);
  
       const values = [
@@ -47,7 +47,6 @@ class UserController {
       await userDal.register(values);
       res.status(200).json({ msg: "Usuario registrado correctamente" });
     } catch (error) {
-
       if (error instanceof z.ZodError) {
         res.status(400).json({ error: error.errors });
       } else {
@@ -57,8 +56,9 @@ class UserController {
   };
  
   login = async (req, res) => {
-    const { user_email, user_password } = req.body;
- 
+    const parsedData = loginSchema.parse(req.body)
+    const { user_email, user_password } = parsedData;
+
     try {
       const result = await userDal.getUserByEmail(user_email);
  
@@ -76,38 +76,27 @@ class UserController {
         }
       }
     } catch (error) {
-      res.status(500).json({ message: "Error en el servidor" });
+      if (error instanceof z.ZodError){
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json({ message: "Error en el servidor" });
+      }
     }
   };
  
   completeCenter = async (req, res) => {
+    const parsedData = centerSchema.parse(req.body)
     try {
+      const { center_city, center_province, center_address, center_phone } =
+        parsedData;
 
-      const {
-        center_city,
-        center_province,
-        center_address,
-        center_phone,
-      } = req.body;
- 
 
       const { filename } = req.file;
       const center_auth_doc = filename;
  
-      const { center_id } = req.params;
- 
-      if (
-        !center_city ||
-        !center_province ||
-        !center_address ||
-        !center_phone ||
-        !center_auth_doc
-      ) {
-        throw new Error(
-          "Todos los campos son requeridos para completar el centro."
-        );
-      }
- 
+      const { center_id } = req.params;    
+
+
       const result = await userDal.completeCenter({
         center_id,
         center_city,
@@ -119,8 +108,12 @@ class UserController {
  
       return res.status(200).json({ message: "Centro completado con éxito." });
     } catch (error) {
-      console.log(error);
-      return res.status(400).json({ message: error.message });
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      }else{
+        console.log(error);
+        return res.status(400).json({ message: error.message });
+      }
     }
   };
  
@@ -128,20 +121,12 @@ class UserController {
     const parsedData = completeResponsibleSchema.parse(req.body);
  
     try {
-
-      const {
-        user_name,
-        user_lastname,
-        user_dni,
-        user_phone,
-        user_password,        
-      } = parsedData;
- 
+      const { user_name, user_lastname, user_dni, user_phone, user_password } =
+        parsedData;
 
       const { user_id } = req.params;
  
       const hash = await hashPassword(user_password);
-
 
       const values = [
         user_name,
@@ -152,11 +137,11 @@ class UserController {
         user_id,
       ];
 
+
       await userDal.completeResponsible(values);
       res.status(200).json({ msg: "Responsable completado con éxito." });
     } catch (error) {
       if (error instanceof z.ZodError) {
-
         res.status(400).json({ error: error.errors });
       } else {
         res.status(400).json({ message: error.message });
@@ -293,7 +278,6 @@ class UserController {
  
       if (!user_id || user_is_validated === undefined) {
         return res.status(400).json({
-
           message:
             "El ID del usuario y el estado de validación son requeridos.",
         });
@@ -307,7 +291,6 @@ class UserController {
         user_id,
         user_is_validated
       );
-      
       return res
         .status(200)
         .json({ message: "Documento validado con éxito.", result });
