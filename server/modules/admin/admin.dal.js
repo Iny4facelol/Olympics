@@ -82,7 +82,7 @@ class AdminDal {
         olympics_host_address,
         olympics_start_date,
         olympics_end_date,
-        olimpics_description,
+        olympics_description,
         olympics_id,
       ];
 
