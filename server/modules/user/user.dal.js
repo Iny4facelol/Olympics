@@ -190,12 +190,11 @@ class UserDal {
     }
   };
 
-  updateDocumentValidation = async (user_id, user_is_validated) => {
+  updateDocumentValidation = async (user_id) => {
     try {
       const result = await executeQuery(
-        `UPDATE user SET user_is_validated = ? WHERE user_id = ?`,
-        [user_is_validated, 
-          user_id]
+        `UPDATE user SET user_is_auth = 1 WHERE user_id = ?`,
+        [user_id]
       );
       
       return result;
@@ -205,7 +204,7 @@ class UserDal {
     }
   };
 
-  // REVISAR CON LOS PROFES
+  // REVISADO CON SANTI
   addActivityToUser = async (user_id, activity_id, center_id, olympics_id) => {
     try {
       const query = `
