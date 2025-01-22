@@ -1,11 +1,10 @@
 import { comparePassword, hashPassword } from "../../utils/hashUtils.js";
 import { generateToken, getIdFromToken } from "../../utils/tokenUtils.js";
-import { completeResponsibleSchema } from "../../utils/zodSchemas/completeResponsibleSchema.js";
-import { registerSchema } from "../../utils/zodSchemas/registerSchema.js";
+import { registerSchema, completeResponsibleSchema } from "../../utils/zodSchemas/userSchema.js";
 import { z } from "zod";
 import userDal from "./user.dal.js";
 import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
-import { centerSchema } from "../../utils/zodSchemas/centerSchema.js";
+import { completeCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
 
 class UserController {
   register = async (req, res) => {
@@ -85,7 +84,7 @@ class UserController {
   };
 
   completeCenter = async (req, res) => {
-    const parsedData = centerSchema.parse(req.body)
+    const parsedData = completeCenterSchema.parse(req.body)
     try {
       const { center_city, center_province, center_address, center_phone } =
         parsedData;

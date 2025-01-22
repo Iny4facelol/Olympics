@@ -1,13 +1,10 @@
 import adminDal from "./admin.dal.js";
 import jwt from "jsonwebtoken";
 import emailService from "../../utils/emailUtils/emailService.js";
-import { regResponsibleSchema } from "../../utils/zodSchemas/regResponsibleSchema.js";
-
-import { completeResponsibleSchema } from "../../utils/zodSchemas/completeResponsibleSchema.js";
-
+import { editResponsibleSchema, editUserSchema, registerResponsibleSchema } from "../../utils/zodSchemas/userSchema.js";
 import { olympicsSchema } from "../../utils/zodSchemas/olympicsSchema.js";
 import { z } from "zod";
-import { createCenterSchema } from "../../utils/zodSchemas/createCenterSchema.js";
+import { createCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
 import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
 
 
@@ -51,7 +48,6 @@ class AdminController {
     const parsedData = olympicsSchema.parse(req.body)
     const { olympics_id } = req.body
     try {
-      console.log("parsedData", parsedData);      
       const result = await adminDal.editOlympics(parsedData, olympics_id);
       res.status(200).json(result);
     } catch (error) {
@@ -127,7 +123,7 @@ class AdminController {
   // Añadir Responsable user_type = 2
 
   addResponsible = async (req, res) => {
-    const parsedData = regResponsibleSchema.parse(req.body);
+    const parsedData = registerResponsibleSchema.parse(req.body);
 
     try {
       const { user_name, user_email, user_center_id } = parsedData;
@@ -154,38 +150,7 @@ class AdminController {
       }
     }
   };
-
-
-  completeResponsible = async (req, res) => {
-    const parsedData = completeResponsibleSchema.parse(req.body);
-
-    try {
-      const { user_name, user_lastname, user_dni, user_phone, user_password } =
-        parsedData;
-
-      const { user_id } = req.params;
-
-      const hash = await hashPassword(user_password);
-
-      const values = [
-        user_name,
-        user_lastname,
-        user_dni,
-        user_phone,
-        hash,
-        user_id,
-      ];
-
-      await userDal.completeResponsible(values);
-      res.status(200).json({ msg: "Responsable completado con éxito." });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ error: error.errors });
-      } else {
-        res.status(400).json({ message: error.message });
-      }
-    }
-  }
+ 
 
   // Ver los Responsables user_type = 2 (Recordar Duda)
 
@@ -198,50 +163,51 @@ class AdminController {
     }
   };
 
-  // Editar Usuario type_user = 1
+  // Editar Usuario type_user = 3
 
   editUser = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const {
-        user_name,
-        user_lastname,
-        user_tutor_name,
-        user_tutor_lastname,
-        user_dni,
-        user_city,
-        user_address,
-        user_birth_date,
-        user_phone,
-        user_type,
-        user_center_id,
-        user_olympics_id,
-      } = req.body;
-
-      const result = await adminDal.updateUser(id, {
-        user_name,
-        user_lastname,
-        user_tutor_name,
-        user_tutor_lastname,
-        user_dni,
-        user_city,
-        user_address,
-        user_birth_date,
-        user_phone,
-        user_type,
-        user_center_id,
-        user_olympics_id,
-      });
-
+    const parsedData = editUserSchema.parse(req.body)
+    const { user_id } = req.body
+    try {     
+      const result = await adminDal.updateUser(parsedData, user_id);
       return res
         .status(200)
         .json({ message: "Usuario actualizado con éxito.", result });
     } catch (error) {
-      console.error("Error en editUser:", error.message);
-      return res.status(500).json({
-        message: "Error al actualizar usuario.",
-        error: error.message,
-      });
+      if (error instanceof z.ZodError){
+        res.status(400).json({ error: error.errors })
+      }else{
+        console.error("Error en editUser:", error.message);
+        return res.status(500).json({
+          message: "Error al actualizar usuario.",
+          error: error.message,
+        });
+      }
+    }
+  };
+
+   // Editar Usuario type_user = 2
+
+   editResponsible = async (req, res) => {
+    const parsedData = editResponsibleSchema.parse(req.body)
+    const { user_id } = req.body
+    console.log("***", parsedData);
+    
+    try {     
+      const result = await adminDal.updateResponsible(parsedData, user_id);
+      return res
+        .status(200)
+        .json({ message: "Usuario actualizado con éxito.", result });
+    } catch (error) {
+      if (error instanceof z.ZodError){
+        res.status(400).json({ error: error.errors })
+      }else{
+        console.error("Error en editUser:", error.message);
+        return res.status(500).json({
+          message: "Error al actualizar usuario.",
+          error: error.message,
+        });
+      }
     }
   };
 
