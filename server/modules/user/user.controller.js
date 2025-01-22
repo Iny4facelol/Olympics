@@ -268,7 +268,7 @@ class UserController {
         .json({ message: "Error al actualizar usuario.", error });
     }
   };
-
+//REVISADO CON SANTI
   ResponsibleValidateDocument = async (req, res) => {
     try {
       const { user_id } = req.params;
@@ -320,6 +320,55 @@ class UserController {
         .json({ message: "Error al añadir actividad al usuario.", error });
     }
   };
+  getPendingValidationUsers = async (req, res) => {
+    try {
+      const { user_center_id } = req.params;
+      console.log("user_center_id: Recibido", user_center_id);
+      
+      const pendingUsers = await userDal.getPendingValidationUsers(user_center_id);
+
+      return res.status(200).json(pendingUsers);
+    } catch (error) {
+      console.error("Error al obtener usuarios pendientes de validar:", error);
+      return res.status(500).json({ message: "Error al obtener usuarios pendientes de validar.", error });
+    }
+  };
+
+  
+
+  getUnauthorizedUserProfile = async (req, res) => {
+    try {
+      const { user_id } = req.params;
+      console.log("user_id", user_id);
+      
+      if (!user_id) {
+        return res.status(400).json({ message: "El id del usuario es requerido" });
+      }
+  
+      const user = await userDal.getUnauthorizedUserById(user_id);
+        console.log('user', user);
+  
+      if (!user) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+  
+      const userProfile = {
+        id: user.user_id,
+        name: user.user_name,
+        authorized: user.user_is_auth,
+      };
+  
+      console.log("userProfile", userProfile);
+      
+      return res.status(200).json(userProfile);
+    } catch (error) {
+      console.error("Error al obtener el perfil del usuario:", error);
+      return res.status(500).json({ message: "Error al obtener el perfil del usuario", error });
+    }
+  };
+  
+  
+
 }
 
 export default new UserController();
