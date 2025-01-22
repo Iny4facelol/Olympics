@@ -18,7 +18,10 @@ router.put('/:id', userController.editUserUser);
 
 router.put('/validate/:user_id', userController.ResponsibleValidateDocument);
 
-//REVISADO CON SANTI, ruta de añadir actividades a alumnos
+
+router.get("/details/:user_id", userController.userDetails);
+
+
 router.post("/activities/:user_id", userController.addActivityToUser);
 
 //ruta de alumnos pendientes de validacion

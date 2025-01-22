@@ -199,7 +199,6 @@ class AdminDal {
   // 3º Apartado de Usuarios
   // Añadir Responsable user_type = 2
 
-
   getUserById = async (userId) => {
     try {
       const result = await executeQuery(
@@ -212,7 +211,6 @@ class AdminDal {
       throw new Error("Error al obtener user por id");
     }
   };
-
 
   addResponsible = async (userData) => {
     const { user_name, user_email, user_center_id } = userData;
@@ -230,42 +228,6 @@ class AdminDal {
     }
   };
 
-
-  completeResponsible = async (userData) => {
-    const {
-      user_name,
-      user_lastname,
-      user_dni,
-      user_phone,
-      user_password,
-      user_id,
-    } = userData;
-
-    try {
-      const sql = `
-        UPDATE center
-        SET 
-          center_city = ?, 
-          center_province = ?, 
-          center_address = ?, 
-          center_phone = ?, 
-          center_auth_doc = ?
-        WHERE center_id = ?
-      `;
-      const result = await executeQuery(sql, [
-        center_city,
-        center_province,
-        center_address,
-        center_phone,
-        center_auth_doc,
-        center_id,
-      ]);
-      return result;
-    } catch (error) {
-      throw new Error("Error al completar el centro");
-    }
-  };
-
   // Seleccionar Responsables user_type = 2
 
   getAllResponsibles = async () => {
@@ -278,27 +240,24 @@ class AdminDal {
     }
   };
 
-  // Actualizar Usuario user_type = 1 (Recordar Duda)
+  // Actualizar Usuario user_type = 3
 
-  updateUser = async (id, userData) => {
-    const {
-      user_name,
-      user_lastname,
-      user_tutor_name,
-      user_tutor_lastname,
-      user_dni,
-      user_city,
-      user_address,
-      user_birth_date,
-      user_phone,
-      user_type,
-      user_center_id,
-      user_olympics_id,
-    } = userData;
-
+  updateUser = async (userData, user_id) => {
     try {
-      const result = await executeQuery(
-        `UPDATE user SET
+      const {
+        user_name,
+        user_lastname,
+        user_tutor_name,
+        user_tutor_lastname,
+        user_dni,
+        user_city,
+        user_address,
+        user_birth_date,
+        user_phone,
+        user_center_id,
+      } = userData;
+
+      let sql = `UPDATE user SET
           user_name = ?, 
           user_lastname = ?, 
           user_tutor_name = ?,
@@ -308,30 +267,61 @@ class AdminDal {
           user_address = ?,
           user_birth_date = ?,
           user_phone = ?,
-          user_type = ?,
-          user_center_id = ?, 
-          user_olympics_id = ?
-        WHERE user_id = ?`,
-        [
-          user_name,
-          user_lastname,
-          user_tutor_name,
-          user_tutor_lastname,
-          user_dni,
-          user_city,
-          user_address,
-          user_birth_date,
-          user_phone,
-          user_type,
-          user_center_id,
-          user_olympics_id,
-          id,
-        ]
-      );
+          user_center_id = ? 
+        WHERE user_id = ?`;
+      let values = [
+        user_name,
+        user_lastname,
+        user_tutor_name,
+        user_tutor_lastname,
+        user_dni,
+        user_city,
+        user_address,
+        user_birth_date,
+        user_phone,
+        user_center_id,
+        user_id,
+      ];
+      const result = await executeQuery(sql, values);   
 
-      if (result.affectedRows === 0) {
-        throw new Error("No se encontró el usuario con el ID proporcionado.");
-      }
+      return result;
+    } catch (err) {
+      console.error("Error al actualizar usuario:", err.message);
+      throw new Error("Error al actualizar usuario. Detalles: " + err.message);
+    }
+  };
+
+  // Actualizar Usuario user_type = 2
+
+  updateResponsible = async (userData, user_id) => {
+    try {
+      const {
+        user_name,
+        user_lastname,        
+        user_dni,
+        user_city,
+        user_phone,
+        user_center_id,
+      } = userData;
+
+      let sql = `UPDATE user SET
+          user_name = ?, 
+          user_lastname = ?,           
+          user_dni = ?,
+          user_city = ?,
+          user_phone = ?,
+          user_center_id = ? 
+        WHERE user_id = ?`;
+      let values = [
+        user_name,
+        user_lastname,        
+        user_dni,
+        user_city,       
+        user_phone,
+        user_center_id,
+        user_id,
+      ];
+      const result = await executeQuery(sql, values);   
 
       return result;
     } catch (err) {
@@ -362,7 +352,7 @@ class AdminDal {
   };
 
   // 4º Apartado de Actividades
-    // Añadir Actividad
+  // Añadir Actividad
 
   addActivity = async (data) => {
     const {
@@ -381,7 +371,7 @@ class AdminDal {
         max_participants_number,
         img,
       ];
-      
+
       const result = await executeQuery(sql, values);
 
       return result;
@@ -390,7 +380,7 @@ class AdminDal {
     }
   };
 
-    // Seleccionar Actividades
+  // Seleccionar Actividades
 
   allActivity = async () => {
     try {
@@ -403,7 +393,7 @@ class AdminDal {
     }
   };
 
-    // Editar Actividad
+  // Editar Actividad
 
   editActivity = async (data, activity_id) => {
     const {
@@ -434,7 +424,7 @@ class AdminDal {
     }
   };
 
-    // Añadir Actividad a Olimpiada
+  // Añadir Actividad a Olimpiada
 
   saveActivity = async (olympics_id, activity_id) => {
     try {
@@ -442,13 +432,13 @@ class AdminDal {
         INSERT INTO olympics_activity (olympics_id, activity_id)
         VALUES (?, ?)
       `;
-      const [result] = await db.query(query, [olympics_id, activity_id]);
+      const [result] = await dbPool.query(query, [olympics_id, activity_id]);
       return result;
     } catch (error) {
       console.error("Error al guardar la actividad", error);
       throw error;
     }
   };
-};
+}
 
 export default new AdminDal();

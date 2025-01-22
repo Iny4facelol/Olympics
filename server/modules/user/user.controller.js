@@ -1,11 +1,10 @@
 import { comparePassword, hashPassword } from "../../utils/hashUtils.js";
 import { generateToken, getIdFromToken } from "../../utils/tokenUtils.js";
-import { completeResponsibleSchema } from "../../utils/zodSchemas/completeResponsibleSchema.js";
-import { registerSchema } from "../../utils/zodSchemas/registerSchema.js";
+import { registerSchema, completeResponsibleSchema } from "../../utils/zodSchemas/userSchema.js";
 import { z } from "zod";
 import userDal from "./user.dal.js";
 import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
-import { centerSchema } from "../../utils/zodSchemas/centerSchema.js";
+import { completeCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
 
 class UserController {
   register = async (req, res) => {
@@ -85,7 +84,7 @@ class UserController {
   };
 
   completeCenter = async (req, res) => {
-    const parsedData = centerSchema.parse(req.body)
+    const parsedData = completeCenterSchema.parse(req.body)
     try {
       const { center_city, center_province, center_address, center_phone } =
         parsedData;
@@ -320,6 +319,7 @@ class UserController {
         .json({ message: "Error al añadir actividad al usuario.", error });
     }
   };
+
   getPendingValidationUsers = async (req, res) => {
     try {
       const { user_center_id } = req.params;
@@ -368,6 +368,20 @@ class UserController {
   };
   
   
+
+
+
+  userDetails = async (req, res) => {
+    try {
+      const { user_id } = req.params;
+      const result = await userDal.searchUserDetails(user_id);
+  
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Error al obtener los detalles del usuario", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    };
+  };  
 
 }
 
