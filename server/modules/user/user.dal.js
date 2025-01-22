@@ -1,5 +1,4 @@
-import { executeQuery } from '../../config/db.js';
-
+import { executeQuery } from "../../config/db.js";
 
 class UserDal {
   getCenter = async () => {
@@ -7,7 +6,6 @@ class UserDal {
       let sql = `SELECT center_name, center_id FROM center WHERE center_is_deleted = 0`;
       let result = await executeQuery(sql);
       return result;
-      
     } catch (error) {
       throw error;
     }
@@ -31,31 +29,29 @@ class UserDal {
           user_center_id
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) `;
       await executeQuery(sql, values);
-      
     } catch (error) {
       throw error;
     }
-  }
+  };
 
   getUserByEmail = async (email) => {
     try {
       let sql = `SELECT * FROM user WHERE user_email = ? AND user_is_deleted = 0`;
       let result = await executeQuery(sql, [email]);
       return result;
-      
     } catch (error) {
       throw error;
     }
-  }
+  };
 
   completeCenter = async (centerData) => {
-    const { 
+    const {
       center_id,
-      center_city, 
-      center_province, 
-      center_address, 
-      center_phone, 
-      center_auth_doc, 
+      center_city,
+      center_province,
+      center_address,
+      center_phone,
+      center_auth_doc,
     } = centerData;
 
     try {
@@ -70,12 +66,12 @@ class UserDal {
         WHERE center_id = ?
       `;
       const result = await executeQuery(sql, [
-        center_city, 
-        center_province, 
-        center_address, 
-        center_phone, 
+        center_city,
+        center_province,
+        center_address,
+        center_phone,
         center_auth_doc,
-        center_id
+        center_id,
       ]);
       return result;
     } catch (error) {
@@ -83,7 +79,7 @@ class UserDal {
     }
   };
 
-  completeResponsible = async (values) => {    
+  completeResponsible = async (values) => {
     try {
       let sql = `
         UPDATE user SET 
@@ -123,8 +119,14 @@ class UserDal {
   };
 
   updateCenter = async (id, data) => {
-    const { center_city, center_province, center_address, center_phone, center_auth_doc } = data;
-  
+    const {
+      center_city,
+      center_province,
+      center_address,
+      center_phone,
+      center_auth_doc,
+    } = data;
+
     try {
       const query = `
         UPDATE center
@@ -151,15 +153,17 @@ class UserDal {
   };
 
   updateUserUser = async (id, userData) => {
-    const { 
-      user_name, 
-      user_lastname, 
-      user_tutor_name, user_tutor_lastname,
-      user_dni, user_city, 
-      user_address, 
-      user_phone, 
-      user_birth_date
-     } = userData;
+    const {
+      user_name,
+      user_lastname,
+      user_tutor_name,
+      user_tutor_lastname,
+      user_dni,
+      user_city,
+      user_address,
+      user_phone,
+      user_birth_date,
+    } = userData;
 
     try {
       const result = await executeQuery(
@@ -174,14 +178,18 @@ class UserDal {
          user_phone = ?,
          user_birth_date = ?
          WHERE user_id = ?`,
-        [user_name, 
-          user_lastname, 
-          user_tutor_name,user_tutor_lastname, 
-          user_dni, 
-          user_city, 
-          user_address, 
-          user_phone, user_birth_date,
-           id]
+        [
+          user_name,
+          user_lastname,
+          user_tutor_name,
+          user_tutor_lastname,
+          user_dni,
+          user_city,
+          user_address,
+          user_phone,
+          user_birth_date,
+          id,
+        ]
       );
       return result;
     } catch (err) {
@@ -196,12 +204,32 @@ class UserDal {
         `UPDATE user SET user_is_auth = 1 WHERE user_id = ?`,
         [user_id]
       );
-      
+
       return result;
     } catch (err) {
       console.error("Error al validar documento:", err);
       throw new Error("Error al validar documento");
     }
+  };
+
+  getUsersToAddActivity = async (user_center_id) => {
+    try {      
+      let sql = `
+          SELECT u.user_id, u.user_name, u.user_lastname, a.activity_id, a.activity_name
+          FROM user u
+          JOIN reservation r ON u.user_id = r.user_id
+          JOIN activity a ON r.activity_id = a.activity_id
+          WHERE u.user_type = 3  
+          AND u.user_is_auth = TRUE  
+          AND u.user_center_id = ?
+          `;
+          
+      const result = await executeQuery(sql, user_center_id);
+      return result;      
+    } catch (error) {
+     throw error
+    }
+
   };
 
   // REVISADO CON SANTI
@@ -211,15 +239,20 @@ class UserDal {
         INSERT INTO reservation (user_id, activity_id, center_id, olympics_id)
         VALUES (?, ?, ?, ?)
       `;
-      const result = await executeQuery(query, [user_id, activity_id, center_id, olympics_id]);
-      
+      const result = await executeQuery(query, [
+        user_id,
+        activity_id,
+        center_id,
+        olympics_id,
+      ]);
+
       return {
-        message: 'Actividad añadida al usuario con éxito.',
-        result
+        message: "Actividad añadida al usuario con éxito.",
+        result,
       };
     } catch (error) {
-      console.error('Error en el DAL:', error);
-      throw new Error('Error al añadir actividad al usuario');
+      console.error("Error en el DAL:", error);
+      throw new Error("Error al añadir actividad al usuario");
     }
   };
 
@@ -253,10 +286,10 @@ class UserDal {
 
       return result;
     } catch (error) {
-      console.error('Error en fetchUserDetails:', error);
+      console.error("Error en fetchUserDetails:", error);
       throw error;
     }
   };
-};
+}
 
 export default new UserDal();

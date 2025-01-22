@@ -125,7 +125,7 @@ class AdminDal {
         center_address, 
         center_phone, 
         center_auth_doc 
-      FROM center
+      FROM center WHERE center_is_deleted = 0
     `;
     try {
       const results = await executeQuery(query);
@@ -232,7 +232,7 @@ class AdminDal {
 
   getAllResponsibles = async () => {
     try {
-      const result = await executeQuery(`SELECT * FROM user WHERE user_type=2`);
+      const result = await executeQuery(`SELECT * FROM user WHERE user_type=2 AND user_is_deleted = 0`);
 
       return result;
     } catch (err) {

@@ -10,7 +10,7 @@ router.post('/login', userController.login);
 
 router.put('/completeCenter/:center_id', multerFile("center_auth") ,userController.completeCenter);
 router.put('/completeResponsible/:user_id', userController.completeResponsible);
-
+router.get('/usersToAddActivity/:user_center_id', userController.getUsersToAddActivity)
 router.put('/center/:center_id', userController.editCenter);
 
 router.put('/responsible/:user_id', userController.editResponsible);
