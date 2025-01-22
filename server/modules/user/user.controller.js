@@ -1,13 +1,13 @@
 import { comparePassword, hashPassword } from "../../utils/hashUtils.js";
 import { generateToken, getIdFromToken } from "../../utils/tokenUtils.js";
-import { completeResponsibleSchema } from "../../utils/zodSchemas/completeResponsibleSchema.js";
-import { registerSchema } from "../../utils/zodSchemas/registerSchema.js";
+import { registerSchema, completeResponsibleSchema } from "../../utils/zodSchemas/userSchema.js";
 import { z } from "zod";
 import userDal from "./user.dal.js";
 import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
-import { centerSchema } from "../../utils/zodSchemas/centerSchema.js";
 import multerfile from "../../middleware/multerfile.js";
 import path from 'path'
+import { completeCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
+
 
 class UserController {
   register = async (req, res) => {
@@ -87,7 +87,7 @@ class UserController {
   };
 
   completeCenter = async (req, res) => {
-    const parsedData = centerSchema.parse(req.body)
+    const parsedData = completeCenterSchema.parse(req.body)
     try {
       const { center_city, center_province, center_address, center_phone } =
         parsedData;
@@ -270,7 +270,7 @@ class UserController {
         .json({ message: "Error al actualizar usuario.", error });
     }
   };
-
+//REVISADO CON SANTI
   ResponsibleValidateDocument = async (req, res) => {
     try {
       const { user_id } = req.params;
@@ -289,6 +289,22 @@ class UserController {
         .json({error });
     }
   };
+
+
+  //LISTADO PARA VER (EL RESPONSABLE, USER TYPE =2) ALUMNOS Y POSTERIORMENTE ASIGNAR ACTIVIDADES
+
+  getUsersToAddActivity = async (req, res) => {
+    try {
+      const {user_center_id} = req.params;
+      
+      const result = await userDal.getUsersToAddActivity(user_center_id);
+      return res.status(200).json(result)
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+
 //REVISADO CON SANTI
   addActivityToUser = async (req, res) => {
     try {
@@ -323,6 +339,57 @@ class UserController {
     }
   };
 
+  getPendingValidationUsers = async (req, res) => {
+    try {
+      const { user_center_id } = req.params;
+      console.log("user_center_id: Recibido", user_center_id);
+      
+      const pendingUsers = await userDal.getPendingValidationUsers(user_center_id);
+
+      return res.status(200).json(pendingUsers);
+    } catch (error) {
+      console.error("Error al obtener usuarios pendientes de validar:", error);
+      return res.status(500).json({ message: "Error al obtener usuarios pendientes de validar.", error });
+    }
+  };
+
+  
+
+  getUnauthorizedUserProfile = async (req, res) => {
+    try {
+      const { user_id } = req.params;
+      console.log("user_id", user_id);
+      
+      if (!user_id) {
+        return res.status(400).json({ message: "El id del usuario es requerido" });
+      }
+  
+      const user = await userDal.getUnauthorizedUserById(user_id);
+        console.log('user', user);
+  
+      if (!user) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+  
+      const userProfile = {
+        id: user.user_id,
+        name: user.user_name,
+        authorized: user.user_is_auth,
+      };
+  
+      console.log("userProfile", userProfile);
+      
+      return res.status(200).json(userProfile);
+    } catch (error) {
+      console.error("Error al obtener el perfil del usuario:", error);
+      return res.status(500).json({ message: "Error al obtener el perfil del usuario", error });
+    }
+  };
+  
+  
+
+
+
   userDetails = async (req, res) => {
     try {
       const { user_id } = req.params;
@@ -334,6 +401,7 @@ class UserController {
       res.status(500).json({ message: "Error interno del servidor" });
     };
   };  
+
 
   uploadAuthorizationFile = async (req, res) => {
     try {
@@ -363,5 +431,6 @@ class UserController {
     });
   };
 };
+
 
 export default new UserController();
