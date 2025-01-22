@@ -271,6 +271,7 @@ class UserDal {
       console.error('Error al obtener usuarios pendientes de validar:', error);
       throw error;
     }
+  }
 
   searchUserDetails = async (user_id) => {
     try {
@@ -346,32 +347,30 @@ class UserDal {
       throw error;
     }
   };
-};
 
 
-getUnauthorizedUserById = async (userId) => {
-  try {
-    const query = `
-      SELECT user_id, 
-      user_name, user_is_auth 
-      FROM user 
-      WHERE user_id = ? 
-      AND user_is_auth = false
-    `;
-    const values = [userId];
-      console.log('values', values);
-      console.log(userId);
 
-    const result = await executeQuery(query, values);
+  getUnauthorizedUserById = async (userId) => {
+    try {
+      const query = `
+        SELECT user_id, 
+        user_name, user_is_auth 
+        FROM user 
+        WHERE user_id = ? 
+        AND user_is_auth = false
+      `;
+      const values = [userId];
+        console.log('values', values);
+        console.log(userId);
 
-    return result.length > 0 ? result[0] : null;
-  } catch (error) {
-    console.error("Error al obtener el usuario no autorizado por id:", error);
-    throw new Error("Error al obtener el usuario no autorizado por id");
-  }
-};
+      const result = await executeQuery(query, values);
 
-
+      return result.length > 0 ? result[0] : null;
+    } catch (error) {
+      console.error("Error al obtener el usuario no autorizado por id:", error);
+      throw new Error("Error al obtener el usuario no autorizado por id");
+    }
+  };
 }
 
 export default new UserDal();
