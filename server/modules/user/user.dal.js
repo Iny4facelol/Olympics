@@ -197,7 +197,7 @@ class UserDal {
       throw new Error("Error al actualizar usuario");
     }
   };
-
+//REVISADO CON SANTI
   updateDocumentValidation = async (user_id) => {
     try {
       const result = await executeQuery(
@@ -256,6 +256,22 @@ class UserDal {
     }
   };
 
+
+  getPendingValidationUsers = async (user_center_id) => {
+    try {
+      const query = `
+        SELECT user_name, user_lastname, user_permission_file
+        FROM user
+        WHERE user_center_id = ? AND user_type = 3 AND user_is_auth = false;
+      `;
+      const values = [user_center_id];
+      const result = await executeQuery(query, values);
+      return result;
+    } catch (error) {
+      console.error('Error al obtener usuarios pendientes de validar:', error);
+      throw error;
+    }
+
   searchUserDetails = async (user_id) => {
     try {
       const query = `
@@ -290,6 +306,32 @@ class UserDal {
       throw error;
     }
   };
+};
+
+
+getUnauthorizedUserById = async (userId) => {
+  try {
+    const query = `
+      SELECT user_id, 
+      user_name, user_is_auth 
+      FROM user 
+      WHERE user_id = ? 
+      AND user_is_auth = false
+    `;
+    const values = [userId];
+      console.log('values', values);
+      console.log(userId);
+
+    const result = await executeQuery(query, values);
+
+    return result.length > 0 ? result[0] : null;
+  } catch (error) {
+    console.error("Error al obtener el usuario no autorizado por id:", error);
+    throw new Error("Error al obtener el usuario no autorizado por id");
+  }
+};
+
+
 }
 
 export default new UserDal();
