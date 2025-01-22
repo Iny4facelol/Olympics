@@ -276,17 +276,21 @@ class UserDal {
     try {
       const query = `
         SELECT 
-          user.user_name,
-          user.user_lastname,
-          center.center_name,
-          center.center_city,
-          center.center_address,
-          responsable.user_name AS responsable_name,
-          responsable.user_lastname AS responsable_lastname,
-          olympics.olympics_name,
-          olympics.olympics_host_name,
-          olympics.olympics_host_city,
-          olympics.olympics_host_address
+            user.user_name,
+            user.user_lastname,
+            center.center_name,
+            center.center_city,
+            center.center_address,
+            responsable.user_name AS responsable_name,
+            responsable.user_lastname AS responsable_lastname,
+            olympics.olympics_name,
+            olympics.olympics_host_name,
+            olympics.olympics_host_city,
+            olympics.olympics_host_address,
+            olympics.olympics_start_date,
+            olympics.olympics_end_date,
+            activity.activity_name,
+            activity.activity_id
         FROM 
             user
         LEFT JOIN 
@@ -295,6 +299,10 @@ class UserDal {
             olympics ON user.user_olympics_id = olympics.olympics_id
         LEFT JOIN 
             user AS responsable ON center.center_id = responsable.user_center_id AND responsable.user_type = 2
+        LEFT JOIN 
+            olympics_activity ON olympics.olympics_id = olympics_activity.olympics_id
+        LEFT JOIN 
+            activity ON olympics_activity.activity_id = activity.activity_id
         WHERE 
             user.user_id = ?;
       `;
@@ -303,6 +311,38 @@ class UserDal {
       return result;
     } catch (error) {
       console.error("Error en fetchUserDetails:", error);
+      throw error;
+    }
+  };
+
+  updateAuthorizationPath = async (user_id, filePath) => {
+    console.log("Entrando a updateAuthorizationPath...");
+    console.log("Datos recibidos - user_id:", user_id, "filePath:", filePath);
+  
+    try {
+      const result = await executeQuery(
+        "UPDATE user SET user_permission_file = ? WHERE user_id = ?",
+        [filePath, user_id]
+      );
+      console.log("Resultado de la actualización en la base de datos:", result);
+      return result;
+    } catch (err) {
+      console.error("Error en updateAuthorizationPath:", err.message);
+      throw err;
+    }
+  };
+
+  getAuthorizationPath = async (userId) => {
+    const query = `
+      SELECT user_permission_file
+      FROM user
+      WHERE user_id = ?;
+    `;
+    try {
+      const result = await executeQuery(query, [userId]);
+      return result.length > 0 ? result[0] : null;
+    } catch (error) {
+      console.error('Error en getAuthorizationPath:', error);
       throw error;
     }
   };
