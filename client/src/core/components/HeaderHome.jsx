@@ -14,6 +14,8 @@ export default function HeaderHome() {
       navigate("/user/res_dashboard");
     } else if(user?.user_type === 3) {
       navigate("/user/dashboard");
+    } else {
+      navigate("/user/register");
     }
   };
 
