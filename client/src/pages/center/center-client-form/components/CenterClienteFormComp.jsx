@@ -16,6 +16,8 @@ export default function CenterClientFormComp() {
   const navigate = useNavigate();
   const params = useParams();
 
+  
+
   const {
     register,
     handleSubmit,
@@ -40,7 +42,7 @@ export default function CenterClientFormComp() {
   }, []);
 
   const verifyToken = async (token) => {
-    try {
+    try { 
       const response = await fetchData(
         `api/admin/centers/verifyToken/${token}`,
         "get"

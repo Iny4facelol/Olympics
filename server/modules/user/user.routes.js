@@ -19,7 +19,9 @@ router.put('/:id', userController.editUserUser);
 router.put('/validate/:user_id', userController.ResponsibleValidateDocument);
 
 //REVISAR CON LOS PROFES
-router.post("/activities/:user_id", userController.addActivityToUser);
+router.post("/activities/:user_id", userController.addActivityToUser)
+
+router.put("/validateRegistrationUser/:validationToken" , userController.validateRegistrationUser)
 
 
 

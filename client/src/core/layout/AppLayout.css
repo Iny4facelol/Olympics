@@ -4,6 +4,12 @@
   padding-block: 6rem;
 }
 
+@media (width <= 768px) {
+  .main-user {
+    padding-block: 2rem;
+  }
+}
+
 .custom-shadow {
   box-shadow: 0 0 10px 1px rgba(102, 101, 101, 0.75);
 }

@@ -1,0 +1,80 @@
+h1 {
+  font-size: clamp(1.5rem, 2.5vw + 1rem, 4rem) !important;
+  font-weight: bold !important;
+  
+}
+
+.section-1 {
+  p {
+    font-size: 1.3rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
+  }
+  @media (width >= 1220px) {
+    p {
+      font-size: 1.5rem;
+    }
+  }
+  .custom-badge {
+    background-color: #ee531e;
+    color: white;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 100%;
+    margin-top: 1rem;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    p {
+      font-weight: bold;
+      margin: 0;
+    }
+  }
+}
+
+span {
+  color: #ee531e;
+}
+
+@media (width <= 990px) {
+  .section-1 {
+    .custom-badge {
+      background-color: #ee531e;
+      position: absolute;
+      top: 110%;
+      left: 30%;
+    }
+  }
+}
+
+@media (width <= 766px) {
+  .section-1 {
+    .custom-badge {
+      background-color: #ee531e;
+      position: absolute;
+      top: 80%;
+      left: 30%;
+    }
+  }
+}
+
+
+@media (width <= 476px) {
+  .section-1 {
+    .custom-badge {
+      background-color: #ee531e;
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      top: 75%;
+      left: 10%;
+    }
+  }
+}

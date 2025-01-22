@@ -98,6 +98,47 @@ class EmailService {
       throw error;
     }
   }
+
+  async sendValidationEmail(userData, token) {
+    try {
+      console.log("EL EMAIL SERVICE",userData, token);
+
+      // 1. Leer la plantilla MJML
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = dirname(__filename);
+      const templatePath = path.join(
+        __dirname,
+        "../emailUtils/emailTemplateValidationUser.mjml"
+      );
+      const mjmlTemplate = await fs.readFile(templatePath, "utf8");
+
+      // 2. Compilar la plantilla con Handlebars
+      const template = Handlebars.compile(mjmlTemplate);
+
+      // 3. Reemplazar variables
+      const mjmlWithData = template({
+        logoUrl: "https://i.ibb.co/GWBdBcw/Olympics-removebg-preview.png",
+        userName: userData.user_name,
+        registrationUrl: `${process.env.FRONTEND_URL}/user/validateUser/${token}`,
+      });
+
+      // 4. Convertir MJML a HTML
+      const { html } = mjml2html(mjmlWithData);
+
+      // 5. Enviar email
+      await this.transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: userData.user_email,
+        subject: "Complete su registro",
+        html,
+      });
+
+      return true;
+    } catch (error) {
+      console.error("Error sending email:", error);
+      throw error;
+    }
+  }
 }
 
 export default new EmailService();
