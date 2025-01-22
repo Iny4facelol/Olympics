@@ -1,6 +1,7 @@
 import express from 'express';
 import userController from './user.controller.js'
 import multerFile from '../../middleware/multerfile.js';
+import uploadImage from "../../middleware/multerfile.js";
 // import multerImage from '../../middleware/multerimage.js';
 
 const router = express.Router();
@@ -19,6 +20,11 @@ router.put('/:id', userController.editUserUser);
 router.put('/validate/:user_id', userController.ResponsibleValidateDocument);
 
 router.get("/details/:user_id", userController.userDetails);
+
+router.put('/upload-authorization/:user_id',multerFile("authorization"),userController.uploadAuthorizationFile);
+
+router.get('/get-authorization/:user_id', userController.getAuthorizationFile);
+
 
 //REVISAR CON LOS PROFES
 router.post("/activities/:user_id", userController.addActivityToUser);

@@ -6,6 +6,8 @@ import { z } from "zod";
 import userDal from "./user.dal.js";
 import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
 import { centerSchema } from "../../utils/zodSchemas/centerSchema.js";
+import multerfile from "../../middleware/multerfile.js";
+import path from 'path'
 
 class UserController {
   register = async (req, res) => {
@@ -332,6 +334,34 @@ class UserController {
       res.status(500).json({ message: "Error interno del servidor" });
     };
   };  
-}
+
+  uploadAuthorizationFile = async (req, res) => {
+    try {
+      const { user_id } = req.params;
+ 
+      const filePath = `/files/authorization/${req.file.filename}`;
+  
+      await userDal.updateAuthorizationPath(user_id, filePath);
+  
+      res.status(200).json({ message: "Archivo subido con éxito", filePath });
+    } catch (err) {
+      res.status(500).json({ message: "Error al guardar el archivo", error: err.message });
+    }
+  };
+  
+
+  getAuthorizationFile = async (req, res) => {
+    const user_id = req.params.userId; 
+    const userFileName = 'auto.menor.doc';
+  
+    const filePath = path.resolve(`./public/files/file/${userFileName}`);
+  
+    res.download(filePath, userFileName, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Error al intentar descargar el archivo." });
+      }
+    });
+  };
+};
 
 export default new UserController();
