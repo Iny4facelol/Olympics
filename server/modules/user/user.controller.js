@@ -286,6 +286,22 @@ class UserController {
         .json({error });
     }
   };
+
+
+  //LISTADO PARA VER (EL RESPONSABLE, USER TYPE =2) ALUMNOS Y POSTERIORMENTE ASIGNAR ACTIVIDADES
+
+  getUsersToAddActivity = async (req, res) => {
+    try {
+      const {user_center_id} = req.params;
+      
+      const result = await userDal.getUsersToAddActivity(user_center_id);
+      return res.status(200).json(result)
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+
 //REVISADO CON SANTI
   addActivityToUser = async (req, res) => {
     try {
