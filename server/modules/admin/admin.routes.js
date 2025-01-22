@@ -18,11 +18,11 @@ router.get('/allOlympics', adminController.allOlympics);
 
 // Rutas de Usuarios
 router.post('/addResponsible', adminController.addResponsible);
-router.put('/completeResponsible/:id', adminController.completeResponsible);
 router.get('/verifyTokenResponsible/:token', adminController.verifyTokenResponsible);
-router.put('/user/:id', adminController.editUser); //  revisar (no hace falta id por params)
 router.get('/allResponsibles', adminController.getResponsibles);
 router.get('/allUser', adminController.allUser);
+router.put('/editUser', adminController.editUser); 
+router.put('/editResponsible', adminController.editResponsible)
 
 // Rutas de Actividades
 router.post('/addActivity', multerImage("activity_image") ,adminController.addActivity);
