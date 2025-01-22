@@ -320,6 +320,18 @@ class UserController {
         .json({ message: "Error al añadir actividad al usuario.", error });
     }
   };
+
+  userDetails = async (req, res) => {
+    try {
+      const { user_id } = req.params;
+      const result = await userDal.searchUserDetails(user_id);
+  
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Error al obtener los detalles del usuario", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    };
+  };  
 }
 
 export default new UserController();
