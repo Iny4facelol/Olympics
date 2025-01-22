@@ -18,11 +18,17 @@ router.put('/:id', userController.editUserUser);
 
 router.put('/validate/:user_id', userController.ResponsibleValidateDocument);
 
+
 router.get("/details/:user_id", userController.userDetails);
 
-//REVISAR CON LOS PROFES
+
 router.post("/activities/:user_id", userController.addActivityToUser);
 
+//ruta de alumnos pendientes de validacion
+router.get('/pendingValidationUsers/:user_center_id', userController.getPendingValidationUsers);
+
+//ruta de perfil usuario no autorizado
+router.get('/unAuthorizedProfile/:user_id', userController.getUnauthorizedUserProfile);
 
 
 export default router;
