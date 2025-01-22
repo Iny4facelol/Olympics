@@ -222,6 +222,41 @@ class UserDal {
       throw new Error('Error al añadir actividad al usuario');
     }
   };
+
+  searchUserDetails = async (user_id) => {
+    try {
+      const query = `
+        SELECT 
+          user.user_name,
+          user.user_lastname,
+          center.center_name,
+          center.center_city,
+          center.center_address,
+          responsable.user_name AS responsable_name,
+          responsable.user_lastname AS responsable_lastname,
+          olympics.olympics_name,
+          olympics.olympics_host_name,
+          olympics.olympics_host_city,
+          olympics.olympics_host_address
+        FROM 
+            user
+        LEFT JOIN 
+            center ON user.user_center_id = center.center_id
+        LEFT JOIN 
+            olympics ON user.user_olympics_id = olympics.olympics_id
+        LEFT JOIN 
+            user AS responsable ON center.center_id = responsable.user_center_id AND responsable.user_type = 2
+        WHERE 
+            user.user_id = ?;
+      `;
+      const result = await executeQuery(query, [user_id]);
+
+      return result;
+    } catch (error) {
+      console.error('Error en fetchUserDetails:', error);
+      throw error;
+    }
+  };
 };
 
 export default new UserDal();

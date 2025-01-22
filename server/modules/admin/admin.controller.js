@@ -336,7 +336,7 @@ class AdminController {
       const { olympics_id } = req.params;
       const { activity_id } = req.body;
   
-      const result = await AdminDal.saveActivity(olympics_id, activity_id);
+      const result = await adminDal.saveActivity(olympics_id, activity_id);
   
       res.status(200).json({ message: "Actividad añadida a la olimpiada", result });
     } catch (error) {

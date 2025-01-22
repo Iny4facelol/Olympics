@@ -442,7 +442,7 @@ class AdminDal {
         INSERT INTO olympics_activity (olympics_id, activity_id)
         VALUES (?, ?)
       `;
-      const [result] = await db.query(query, [olympics_id, activity_id]);
+      const [result] = await dbPool.query(query, [olympics_id, activity_id]);
       return result;
     } catch (error) {
       console.error("Error al guardar la actividad", error);

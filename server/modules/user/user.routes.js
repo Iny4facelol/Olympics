@@ -18,6 +18,8 @@ router.put('/:id', userController.editUserUser);
 
 router.put('/validate/:user_id', userController.ResponsibleValidateDocument);
 
+router.get("/details/:user_id", userController.userDetails);
+
 //REVISAR CON LOS PROFES
 router.post("/activities/:user_id", userController.addActivityToUser);
 
