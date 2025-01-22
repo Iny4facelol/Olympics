@@ -17,7 +17,7 @@ export default function CreateActivityForm() {
     register,
     handleSubmit,
     formState: { errors },
-    setValue
+    setValue,
   } = useForm({
     resolver: zodResolver(activitySchema),
     defaultValues: {
@@ -122,6 +122,7 @@ export default function CreateActivityForm() {
           <Form.Group controlId="formBasicActivityDescription">
             <Form.Label>Descripción de la actividad</Form.Label>
             <Form.Control
+              as={"textarea"}
               className={`custom-input ${
                 errors.activity_description ? "is-invalid" : ""
               }`}

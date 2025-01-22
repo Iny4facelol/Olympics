@@ -72,7 +72,7 @@ class AdminDal {
       } = data;
 
       let sql =
-        "UPDATE olympics SET olympics_name=?, olympics_host_name=?, olympics_host_city=?, olympics_host_address=?, olympics_start_date=?, olympics_end_date=?, olympics_description=? WHERE olympics_id=?";
+        "UPDATE olympics SET olympics_name = ?, olympics_host_name = ?, olympics_host_city = ?, olympics_host_address = ?, olympics_start_date = ?, olympics_end_date = ?, olympics_description = ? WHERE olympics_id = ?";
 
       let values = [
         olympics_name,
@@ -84,7 +84,6 @@ class AdminDal {
         olympics_description,
         olympics_id,
       ];
-
       const result = await executeQuery(sql, values);
 
       return result;

@@ -20,6 +20,12 @@ router.put('/:id', userController.editUserUser);
 router.put('/validate/:user_id', userController.ResponsibleValidateDocument);
 
 
+//REVISAR CON LOS PROFES
+router.post("/activities/:user_id", userController.addActivityToUser)
+
+router.put("/validateRegistrationUser/:validationToken" , userController.validateRegistrationUser)
+
+
 router.get("/details/:user_id", userController.userDetails);
 
 
@@ -28,6 +34,7 @@ router.put('/upload-authorization/:user_id',multerFile("authorization"),userCont
 router.get('/get-authorization/:user_id', userController.getAuthorizationFile);
 
 router.post("/activities/:user_id", userController.addActivityToUser);
+
 
 //ruta de alumnos pendientes de validacion
 router.get('/pendingValidationUsers/:user_center_id', userController.getPendingValidationUsers);

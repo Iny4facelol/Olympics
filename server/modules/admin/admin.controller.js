@@ -47,6 +47,7 @@ class AdminController {
   editOlympics = async (req, res) => {
     const parsedData = olympicsSchema.parse(req.body)
     const { olympics_id } = req.body
+
     try {
       const result = await adminDal.editOlympics(parsedData, olympics_id);
       res.status(200).json(result);

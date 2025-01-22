@@ -4,7 +4,7 @@ import CenterForm from "../../pages/center/center-form/CenterForm";
 import CenterClientForm from "../../pages/center/center-client-form/CenterClientForm";
 import RegisterUser from "../../pages/user/register/RegisterUser";
 import LoginUser from "../../pages/user/login/LoginUser";
-import UserDashboard from "../../pages/user/dashboard/components/UserDashboard";
+import UserDashboard from "../../pages/user/dashboard/UserDashboard";
 import AdminDashboard from "../../pages/admin/adminDashboard/AdminDashboard";
 import { useAppContext } from "../context/AppContext";
 import ErrorPage from "../../pages/error/ErrorPage";
@@ -17,6 +17,8 @@ import AdminActivity from "../../pages/activity/admin-activity/AdminActivity";
 import AdminOlympics from "../../pages/olympics/admin-olympics/AdminOlympics";
 import AdminCenter from "../../pages/center/admin-center/AdminCenter";
 import AdminUser from "../../pages/user/admin-user/AdminUser";
+import AsignActivity from "../../pages/activity/asign-activity/AsignActivity";
+import ValidationPage from "../../pages/user/validation/ValidationPage";
 
 export default function AppRoutes() {
   const { user } = useAppContext();
@@ -44,30 +46,24 @@ export default function AppRoutes() {
               path="/admin/createNewResponsable"
               element={<CreateResponsable />}
             />
-            <Route
-              path="/admin/manageActivities"
-              element={<AdminActivity />}
-            />
-            <Route
-              path="/admin/manageOlympics"
-              element={<AdminOlympics />}
-            />
-            <Route
-              path="/admin/manageCenters"
-              element={<AdminCenter/>}
-            />
-            <Route
-              path="/admin/manageUsers"
-              element={<AdminUser/>}
-            />
+            <Route path="/admin/manageActivities" element={<AdminActivity />} />
+            <Route path="/admin/manageOlympics" element={<AdminOlympics />} />
+            <Route path="/admin/manageCenters" element={<AdminCenter />} />
+            <Route path="/admin/manageUsers" element={<AdminUser />} />
           </>
         )}
         {/* Las rutas que existen cuando el user es Resp (2) */}
         {user?.user_type === 2 && (
-          <Route
-            path="/user/res_dashboard"
-            element={<ResponsibleDashboard />}
-          />
+          <>
+            <Route
+              path="/user/res_dashboard"
+              element={<ResponsibleDashboard />}
+            />
+            <Route
+              path="/user/res_dashboard/addActivitiesToUser"
+              element={<AsignActivity />}
+            />
+          </>
         )}
         {/* Las rutas que existen cuando el user es Alumno (3) */}
         {user?.user_type === 3 && (
@@ -82,6 +78,7 @@ export default function AppRoutes() {
           path="/user/completeResponsible/:registerToken"
           element={<CompleteResponsable />}
         />
+        <Route path="/user/validateUser/:validationToken" element={<ValidationPage />} />
         <Route path="/user/register" element={<RegisterUser />} />
         <Route path="/user/login" element={<LoginUser />} />
         <Route path="*" element={<ErrorPage />} />

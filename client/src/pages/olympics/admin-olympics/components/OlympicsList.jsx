@@ -1,9 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { fetchData } from '../../../../utils/axios/axiosHelper';
-import { Table } from 'react-bootstrap';
+import React, { useEffect, useState } from "react";
+import { fetchData } from "../../../../utils/axios/axiosHelper";
+import { Table } from "react-bootstrap";
+import { SquarePen, Trash2 } from "lucide-react";
+import OlympicsEditModal from "./OlympicsEditModal";
+import DeleteModal from "../../../../core/components/DeleteModal";
 
 export default function OlympicsList() {
-  const [olympics,setOlympics] = useState([]);
+  const [olympics, setOlympics] = useState([]);
+  const [show, setShow] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [olympicsEditData, setOlympicsEditData] = useState({});
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const handleCloseDelete = () => setShowDelete(false);
+  const handleShowDelete = () => setShowDelete(true);
 
   useEffect(() => {
     const getData = async () => {
@@ -16,9 +28,24 @@ export default function OlympicsList() {
       }
     };
     getData();
-  }, []);
+  }, [show]);
 
-  
+  const handleLogicDelete = async (olympics_id) => {
+    const data = olympics.find(
+      (olympic) => olympic.olympics_id === olympics_id
+    );
+    setOlympicsEditData(data);
+    handleShowDelete();
+  };
+
+  const handleEdit = (olympics_id) => {
+    const data = olympics.find(
+      (olympic) => olympic.olympics_id === olympics_id
+    );
+    setOlympicsEditData(data);
+    handleShow();
+  };
+
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
       <Table
@@ -30,6 +57,7 @@ export default function OlympicsList() {
       >
         <thead>
           <tr>
+            <th>Acciones</th>
             <th>Nombre Olimpiada</th>
             <th>Nombre Sede</th>
             <th>Ciudad Sede</th>
@@ -42,12 +70,32 @@ export default function OlympicsList() {
         <tbody>
           {olympics.map((olympic) => (
             <tr key={olympic.olympics_id}>
+              <td>
+                <Trash2
+                  onClick={() => handleLogicDelete(olympic.olympics_id)}
+                  size="24"
+                  className="text-danger"
+                  style={{ cursor: "pointer" }}
+                />{" "}
+                <SquarePen
+                  onClick={() => handleEdit(olympic.olympics_id)}
+                  size="24"
+                  className="text-success"
+                  style={{ cursor: "pointer" }}
+                />
+              </td>
               <td className="col-name">{olympic.olympics_name}</td>
               <td className="col-host-name">{olympic.olympics_host_name}</td>
               <td className="col-host-city">{olympic.olympics_host_city}</td>
-              <td className="col-host-address">{olympic.olympics_host_address}</td>
-              <td className="col-start-date">{olympic.olympics_start_date.split("-").reverse().join("-")}</td>
-              <td className="col-end-date">{olympic.olympics_end_date.split("-").reverse().join("-")}</td>
+              <td className="col-host-address">
+                {olympic.olympics_host_address}
+              </td>
+              <td className="col-start-date">
+                {olympic.olympics_start_date.split("-").reverse().join("-")}
+              </td>
+              <td className="col-end-date">
+                {olympic.olympics_end_date.split("-").reverse().join("-")}
+              </td>
               <td>
                 {olympic.olympics_description
                   ? olympic.olympics_description
@@ -57,6 +105,18 @@ export default function OlympicsList() {
           ))}
         </tbody>
       </Table>
+      <OlympicsEditModal
+        handleClose={handleClose}
+        handleShow={handleShow}
+        show={show}
+        data={olympicsEditData}
+      />
+      <DeleteModal
+        handleClose={handleCloseDelete}
+        handleShow={handleShowDelete}
+        show={showDelete}
+        data={olympicsEditData}
+      />
     </section>
   );
 }

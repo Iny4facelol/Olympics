@@ -28,7 +28,9 @@ class UserDal {
           user_password,
           user_center_id
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) `;
-      await executeQuery(sql, values);
+
+      const result = await executeQuery(sql, values);
+      return result;
     } catch (error) {
       throw error;
     }
@@ -371,6 +373,22 @@ class UserDal {
       throw new Error("Error al obtener el usuario no autorizado por id");
     }
   };
-}
+
+
+  validateRegistrationUser = async (user_id) => {
+    try {
+      let sql = `
+        UPDATE user
+        SET user_is_validated = 1
+        WHERE user_id = ?;
+      `;
+      const result = await executeQuery(sql, [user_id]);
+      return result;
+    } catch (error) {
+      throw new Error('Error al validar usuario');
+    }
+  }
+};
+
 
 export default new UserDal();

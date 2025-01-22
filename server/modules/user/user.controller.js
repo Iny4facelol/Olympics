@@ -4,6 +4,8 @@ import { registerSchema, completeResponsibleSchema } from "../../utils/zodSchema
 import { z } from "zod";
 import userDal from "./user.dal.js";
 import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
+import emailService from "../../utils/emailUtils/emailService.js";
+import jwt from "jsonwebtoken";
 import multerfile from "../../middleware/multerfile.js";
 import path from 'path'
 import { completeCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
@@ -46,8 +48,19 @@ class UserController {
         user_center_id,
       ];
 
-      await userDal.register(values);
-      res.status(200).json({ msg: "Usuario registrado correctamente" });
+      const result = await userDal.register(values);
+      
+      console.log("EL RESULT",result)
+
+     const token = jwt.sign(
+        { user_id: result.insertId },
+        process.env.TOKEN_KEY,
+        { expiresIn: "24h" }
+      );
+
+      await emailService.sendValidationEmail(parsedData, token);
+
+      return res.status(200).json({ msg: "Usuario registrado correctamente" });
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json({ error: error.errors });
@@ -58,7 +71,7 @@ class UserController {
   };
 
   login = async (req, res) => {
-    const parsedData = loginSchema.parse(req.body)
+    const parsedData = loginSchema.parse(req.body);
     const { user_email, user_password } = parsedData;
 
     try {
@@ -78,7 +91,7 @@ class UserController {
         }
       }
     } catch (error) {
-      if (error instanceof z.ZodError){
+      if (error instanceof z.ZodError) {
         res.status(400).json({ error: error.errors });
       } else {
         res.status(500).json({ message: "Error en el servidor" });
@@ -88,16 +101,15 @@ class UserController {
 
   completeCenter = async (req, res) => {
     const parsedData = completeCenterSchema.parse(req.body)
+    
     try {
       const { center_city, center_province, center_address, center_phone } =
         parsedData;
 
-
       const { filename } = req.file;
       const center_auth_doc = filename;
- 
-      const { center_id } = req.params;    
 
+      const { center_id } = req.params;
 
       const result = await userDal.completeCenter({
         center_id,
@@ -112,7 +124,7 @@ class UserController {
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json({ error: error.errors });
-      }else{
+      } else {
         console.log(error);
         return res.status(400).json({ message: error.message });
       }
@@ -137,7 +149,6 @@ class UserController {
         hash,
         user_id,
       ];
-
 
       await userDal.completeResponsible(values);
       res.status(200).json({ msg: "Responsable completado con éxito." });
@@ -274,21 +285,17 @@ class UserController {
   ResponsibleValidateDocument = async (req, res) => {
     try {
       const { user_id } = req.params;
-      
-      const result = await userDal.updateDocumentValidation(
-        user_id,
-      );
+
+      const result = await userDal.updateDocumentValidation(user_id);
 
       res
         .status(200)
         .json({ message: "Documento validado con éxito.", result });
     } catch (error) {
-   
-      res
-        .status(500)
-        .json({error });
+      res.status(500).json({ error });
     }
   };
+
 
 
   //LISTADO PARA VER (EL RESPONSABLE, USER TYPE =2) ALUMNOS Y POSTERIORMENTE ASIGNAR ACTIVIDADES
@@ -338,6 +345,22 @@ class UserController {
         .json({ message: "Error al añadir actividad al usuario.", error });
     }
   };
+
+
+  validateRegistrationUser = async (req, res) => {
+    try {
+      const { validationToken } = req.params;
+
+      const  user_id  = getIdFromToken(validationToken);
+      
+      const result = await userDal.validateRegistrationUser(user_id);
+    
+      res.status(200).json({ message: "Usuario validado con éxito.", result });
+    } catch (error) {
+      res.status(500).json({ error });
+    }
+  }
+}
 
   getPendingValidationUsers = async (req, res) => {
     try {
@@ -431,6 +454,7 @@ class UserController {
     });
   };
 };
+
 
 
 export default new UserController();
