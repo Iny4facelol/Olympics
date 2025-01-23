@@ -279,7 +279,9 @@ class UserController {
     } catch (error) {
       res.status(500).json({ error });
     }
+
   };
+
 
   getPendingValidationUsers = async (req, res) => {
     try {
@@ -379,6 +381,8 @@ class UserController {
       }
     });
   };
+
 }
+
 
 export default new UserController();

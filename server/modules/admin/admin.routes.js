@@ -16,6 +16,8 @@ router.put('/deleteCenter/:center_id', adminController.deleteCenter);
 router.post('/addOlympics', adminController.addOlympics);
 router.put('/editOlympics', adminController.editOlympics);
 router.get('/allOlympics', adminController.allOlympics);
+router.put('/logicalDeleteOlympics/:olympics_id', adminController.logicalDeleteOlympics);
+
 
 // Rutas de Usuarios
 router.post('/addResponsible', adminController.addResponsible);
@@ -30,5 +32,6 @@ router.post('/addActivity', multerImage("activity_image") ,adminController.addAc
 router.put('/editActivity', multerImage("activity"), adminController.editActivity);
 router.get('/allActivity', adminController.allActivity);
 router.post('/activity/:olympics_id', adminController.addActivityOlimpics);
+router.put('/logicalDeleteActivity/:activity_id', adminController.logicalDeleteActivity);
 
 export default router;
