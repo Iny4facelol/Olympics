@@ -1,15 +1,18 @@
 import { comparePassword, hashPassword } from "../../utils/hashUtils.js";
 import { generateToken, getIdFromToken } from "../../utils/tokenUtils.js";
-import { registerSchema, completeResponsibleSchema } from "../../utils/zodSchemas/userSchema.js";
+import {
+  registerSchema,
+  completeResponsibleSchema,
+  editUserSchema,
+} from "../../utils/zodSchemas/userSchema.js";
 import { z } from "zod";
 import userDal from "./user.dal.js";
 import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
 import emailService from "../../utils/emailUtils/emailService.js";
 import jwt from "jsonwebtoken";
 import multerfile from "../../middleware/multerfile.js";
-import path from 'path'
+import path from "path";
 import { completeCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
-
 
 class UserController {
   register = async (req, res) => {
@@ -49,10 +52,10 @@ class UserController {
       ];
 
       const result = await userDal.register(values);
-      
-      console.log("EL RESULT",result)
 
-     const token = jwt.sign(
+      console.log("EL RESULT", result);
+
+      const token = jwt.sign(
         { user_id: result.insertId },
         process.env.TOKEN_KEY,
         { expiresIn: "24h" }
@@ -100,8 +103,8 @@ class UserController {
   };
 
   completeCenter = async (req, res) => {
-    const parsedData = completeCenterSchema.parse(req.body)
-    
+    const parsedData = completeCenterSchema.parse(req.body);
+
     try {
       const { center_city, center_province, center_address, center_phone } =
         parsedData;
@@ -186,102 +189,23 @@ class UserController {
     }
   };
 
-  editCenter = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const {
-        center_city,
-        center_province,
-        center_address,
-        center_phone,
-        center_auth_doc,
-      } = req.body;
-
-      if (
-        !center_city ||
-        !center_province ||
-        !center_address ||
-        !center_phone ||
-        !center_auth_doc
-      ) {
-        throw new Error(
-          "Todos los campos son requeridos para editar el centro."
-        );
-      }
-
-      const result = await userDal.updateCenter(id, {
-        center_city,
-        center_province,
-        center_address,
-        center_phone,
-        center_auth_doc,
-      });
-
-      return res
-        .status(200)
-        .json({ message: "Centro actualizado con éxito.", result });
-    } catch (error) {
-      return res.status(500).json({
-        message: "Error al actualizar",
-        error: error.message || error,
-      });
-    }
-  };
-
   editUserUser = async (req, res) => {
+    const parsedData = editUserSchema.parse(req.body);
     try {
-      const { id } = req.params;
-      const {
-        user_name,
-        user_lastname,
-        user_tutor_name,
-        user_tutor_lastname,
-        user_dni,
-        user_city,
-        user_address,
-        user_phone,
-        user_birth_date,
-      } = req.body;
-
-      if (
-        !id ||
-        !user_name ||
-        !user_lastname ||
-        !user_tutor_name ||
-        !user_tutor_lastname ||
-        !user_dni ||
-        !user_city ||
-        !user_address ||
-        !user_phone ||
-        !user_birth_date
-      ) {
-        return res.status(400).json({
-          message: "Todos los campos son requeridos para editar el usuario.",
-        });
-      }
-
-      const result = await userDal.updateUserUser(id, {
-        user_name,
-        user_lastname,
-        user_tutor_name,
-        user_tutor_lastname,
-        user_dni,
-        user_city,
-        user_address,
-        user_phone,
-        user_birth_date,
-      });
-
+      const { user_id } = req.params;
+      const result = await userDal.updateUserUser(user_id, parsedData);
       return res
         .status(200)
         .json({ message: "Usuario actualizado con éxito.", result });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "Error al actualizar usuario.", error });
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        throw error;
+      }
     }
   };
-//REVISADO CON SANTI
+  //REVISADO CON SANTI
   ResponsibleValidateDocument = async (req, res) => {
     try {
       const { user_id } = req.params;
@@ -296,23 +220,20 @@ class UserController {
     }
   };
 
-
-
   //LISTADO PARA VER (EL RESPONSABLE, USER TYPE =2) ALUMNOS Y POSTERIORMENTE ASIGNAR ACTIVIDADES
 
   getUsersToAddActivity = async (req, res) => {
     try {
-      const {user_center_id} = req.params;
-      
+      const { user_center_id } = req.params;
+
       const result = await userDal.getUsersToAddActivity(user_center_id);
-      return res.status(200).json(result)
+      return res.status(200).json(result);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  }
+  };
 
-
-//REVISADO CON SANTI
+  //REVISADO CON SANTI
   addActivityToUser = async (req, res) => {
     try {
       const { user_id } = req.params;
@@ -346,117 +267,122 @@ class UserController {
     }
   };
 
-
   validateRegistrationUser = async (req, res) => {
     try {
       const { validationToken } = req.params;
 
-      const  user_id  = getIdFromToken(validationToken);
-      
+      const user_id = getIdFromToken(validationToken);
+
       const result = await userDal.validateRegistrationUser(user_id);
-    
+
       res.status(200).json({ message: "Usuario validado con éxito.", result });
     } catch (error) {
       res.status(500).json({ error });
     }
-  }
+
+  };
 
 
   getPendingValidationUsers = async (req, res) => {
     try {
       const { user_center_id } = req.params;
       console.log("user_center_id: Recibido", user_center_id);
-      
-      const pendingUsers = await userDal.getPendingValidationUsers(user_center_id);
+
+      const pendingUsers = await userDal.getPendingValidationUsers(
+        user_center_id
+      );
 
       return res.status(200).json(pendingUsers);
     } catch (error) {
       console.error("Error al obtener usuarios pendientes de validar:", error);
-      return res.status(500).json({ message: "Error al obtener usuarios pendientes de validar.", error });
+      return res
+        .status(500)
+        .json({
+          message: "Error al obtener usuarios pendientes de validar.",
+          error,
+        });
     }
   };
-
-  
 
   getUnauthorizedUserProfile = async (req, res) => {
     try {
       const { user_id } = req.params;
       console.log("user_id", user_id);
-      
+
       if (!user_id) {
-        return res.status(400).json({ message: "El id del usuario es requerido" });
+        return res
+          .status(400)
+          .json({ message: "El id del usuario es requerido" });
       }
-  
+
       const user = await userDal.getUnauthorizedUserById(user_id);
-        console.log('user', user);
-  
+      console.log("user", user);
+
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });
       }
-  
+
       const userProfile = {
         id: user.user_id,
         name: user.user_name,
         authorized: user.user_is_auth,
       };
-  
+
       console.log("userProfile", userProfile);
-      
+
       return res.status(200).json(userProfile);
     } catch (error) {
       console.error("Error al obtener el perfil del usuario:", error);
-      return res.status(500).json({ message: "Error al obtener el perfil del usuario", error });
+      return res
+        .status(500)
+        .json({ message: "Error al obtener el perfil del usuario", error });
     }
   };
-  
-  
-
-
 
   userDetails = async (req, res) => {
     try {
       const { user_id } = req.params;
       const result = await userDal.searchUserDetails(user_id);
-  
+
       res.status(200).json(result);
     } catch (error) {
       console.error("Error al obtener los detalles del usuario", error);
       res.status(500).json({ message: "Error interno del servidor" });
-    };
-  };  
-
+    }
+  };
 
   uploadAuthorizationFile = async (req, res) => {
     try {
       const { user_id } = req.params;
- 
+
       const filePath = `/files/authorization/${req.file.filename}`;
-  
+
       await userDal.updateAuthorizationPath(user_id, filePath);
-  
+
       res.status(200).json({ message: "Archivo subido con éxito", filePath });
     } catch (err) {
-      res.status(500).json({ message: "Error al guardar el archivo", error: err.message });
+      res
+        .status(500)
+        .json({ message: "Error al guardar el archivo", error: err.message });
     }
   };
-  
 
   getAuthorizationFile = async (req, res) => {
-    const user_id = req.params.userId; 
-    const userFileName = 'auto.menor.doc';
-  
+    const user_id = req.params.userId;
+    const userFileName = "auto.menor.doc";
+
     const filePath = path.resolve(`./public/files/file/${userFileName}`);
-  
+
     res.download(filePath, userFileName, (err) => {
       if (err) {
-        return res.status(500).json({ message: "Error al intentar descargar el archivo." });
+        return res
+          .status(500)
+          .json({ message: "Error al intentar descargar el archivo." });
       }
     });
   };
 
-  
 }
-
 
 
 export default new UserController();

@@ -120,41 +120,7 @@ class UserDal {
     }
   };
 
-  updateCenter = async (id, data) => {
-    const {
-      center_city,
-      center_province,
-      center_address,
-      center_phone,
-      center_auth_doc,
-    } = data;
-
-    try {
-      const query = `
-        UPDATE center
-        SET 
-          center_city = ?,
-          center_province = ?,
-          center_address = ?,
-          center_phone = ?,
-          center_auth_doc = ?
-        WHERE center_id = ?;
-      `;
-      const result = await executeQuery(query, [
-        center_city,
-        center_province,
-        center_address,
-        center_phone,
-        center_auth_doc,
-        id,
-      ]);
-      return result;
-    } catch (error) {
-      throw new Error("Error en la base de datos");
-    }
-  };
-
-  updateUserUser = async (id, userData) => {
+  updateUserUser = async (user_id, userData) => {
     const {
       user_name,
       user_lastname,
@@ -163,8 +129,9 @@ class UserDal {
       user_dni,
       user_city,
       user_address,
-      user_phone,
       user_birth_date,
+      user_phone,
+      user_center_id,
     } = userData;
 
     try {
@@ -177,8 +144,9 @@ class UserDal {
          user_dni = ?,
          user_city = ?,
          user_address = ?,
+         user_birth_date = ?,
          user_phone = ?,
-         user_birth_date = ?
+         user_center_id = ?
          WHERE user_id = ?`,
         [
           user_name,
@@ -188,9 +156,10 @@ class UserDal {
           user_dni,
           user_city,
           user_address,
-          user_phone,
           user_birth_date,
-          id,
+          user_phone,
+          user_center_id,
+          user_id,
         ]
       );
       return result;
@@ -199,7 +168,7 @@ class UserDal {
       throw new Error("Error al actualizar usuario");
     }
   };
-//REVISADO CON SANTI
+  //REVISADO CON SANTI
   updateDocumentValidation = async (user_id) => {
     try {
       const result = await executeQuery(
@@ -215,7 +184,7 @@ class UserDal {
   };
 
   getUsersToAddActivity = async (user_center_id) => {
-    try {      
+    try {
       let sql = `
           SELECT u.user_id, u.user_name, u.user_lastname, a.activity_id, a.activity_name
           FROM user u
@@ -225,13 +194,12 @@ class UserDal {
           AND u.user_is_auth = TRUE  
           AND u.user_center_id = ?
           `;
-          
-      const result = await executeQuery(sql, user_center_id);
-      return result;      
-    } catch (error) {
-     throw error
-    }
 
+      const result = await executeQuery(sql, user_center_id);
+      return result;
+    } catch (error) {
+      throw error;
+    }
   };
 
   // REVISADO CON SANTI
@@ -258,7 +226,6 @@ class UserDal {
     }
   };
 
-
   getPendingValidationUsers = async (user_center_id) => {
     try {
       const query = `
@@ -270,10 +237,10 @@ class UserDal {
       const result = await executeQuery(query, values);
       return result;
     } catch (error) {
-      console.error('Error al obtener usuarios pendientes de validar:', error);
+      console.error("Error al obtener usuarios pendientes de validar:", error);
       throw error;
     }
-  }
+  };
 
   searchUserDetails = async (user_id) => {
     try {
@@ -321,7 +288,7 @@ class UserDal {
   updateAuthorizationPath = async (user_id, filePath) => {
     console.log("Entrando a updateAuthorizationPath...");
     console.log("Datos recibidos - user_id:", user_id, "filePath:", filePath);
-  
+
     try {
       const result = await executeQuery(
         "UPDATE user SET user_permission_file = ? WHERE user_id = ?",
@@ -345,12 +312,10 @@ class UserDal {
       const result = await executeQuery(query, [userId]);
       return result.length > 0 ? result[0] : null;
     } catch (error) {
-      console.error('Error en getAuthorizationPath:', error);
+      console.error("Error en getAuthorizationPath:", error);
       throw error;
     }
   };
-
-
 
   getUnauthorizedUserById = async (userId) => {
     try {
@@ -362,8 +327,8 @@ class UserDal {
         AND user_is_auth = false
       `;
       const values = [userId];
-        console.log('values', values);
-        console.log(userId);
+      console.log("values", values);
+      console.log(userId);
 
       const result = await executeQuery(query, values);
 
@@ -373,7 +338,6 @@ class UserDal {
       throw new Error("Error al obtener el usuario no autorizado por id");
     }
   };
-
 
   validateRegistrationUser = async (user_id) => {
     try {
@@ -385,10 +349,9 @@ class UserDal {
       const result = await executeQuery(sql, [user_id]);
       return result;
     } catch (error) {
-      throw new Error('Error al validar usuario');
+      throw new Error("Error al validar usuario");
     }
-  }
-};
-
+  };
+}
 
 export default new UserDal();

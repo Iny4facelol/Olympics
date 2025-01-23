@@ -8,6 +8,7 @@ import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { toast, Toaster } from "sonner";
 import { useAppContext } from "../../../../core/context/AppContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function LoginUserForm() {
   const { setToken, setUser } = useAppContext();
@@ -32,7 +33,9 @@ export default function LoginUserForm() {
         setAuthenticating(false);
       }, 2000);
     } catch (error) {
-      console.error(error);
+      if(error instanceof axios.AxiosError) {
+      console.error(error.response.data.message);
+      }
     }
   };
 
