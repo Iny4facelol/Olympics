@@ -2,12 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import "./ActivityList.css";
-
+import { SquarePen, Trash2 } from "lucide-react";
+import  ActivityEditModal  from "./ActivityEditModal";
+import DeleteModal from "../../../../core/components/DeleteModal";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_IMAGE_URL;
 
 export default function ActivityList() {
   const [activities, setActivities] = useState([]);
+  const [show, setShow] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [activityEditData, setActivityEditData] = useState({});
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const handleCloseDelete = () => setShowDelete(false);
+  const handleShowDelete = () => setShowDelete(true);
 
   useEffect(() => {
     const getData = async () => {
@@ -20,7 +31,23 @@ export default function ActivityList() {
       }
     };
     getData();
-  }, []);
+  }, [show]);
+
+  const handleLogicDelete = async (activity_id) => {
+    const data = activities.find(
+      (activity) => activity.activity_id === activity_id
+    );
+    setActivityEditData(data);
+    handleShowDelete();
+  };
+
+  const handleEdit = (activity_id) => {
+    const data = activities.find(
+      (activity) => activity.activity_id === activity_id
+    );
+    setActivityEditData(data);
+    handleShow();
+  };
 
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
@@ -33,15 +60,30 @@ export default function ActivityList() {
       >
         <thead>
           <tr>
+            <th>Acciones</th>
             <th>Nombre</th>
             <th>Nº de participantes</th>
             <th>Descripción</th>
-            <th>Imágen</th>
+            <th>Imagen</th>
           </tr>
         </thead>
         <tbody>
           {activities.map((activity) => (
             <tr key={activity.activity_id}>
+              <td>
+                <Trash2
+                  onClick={() => handleLogicDelete(activity.activity_id)}
+                  size="24"
+                  className="text-danger"
+                  style={{ cursor: "pointer" }}
+                />{" "}
+                <SquarePen
+                  onClick={() => handleEdit(activity.activity_id)}
+                  size="24"
+                  className="text-success"
+                  style={{ cursor: "pointer" }}
+                />
+              </td>
               <td className="col-name">{activity.activity_name}</td>
               <td className="col-participants">{activity.max_participants}</td>
               <td className="col-description">
@@ -60,6 +102,18 @@ export default function ActivityList() {
           ))}
         </tbody>
       </Table>
+      <ActivityEditModal
+        handleClose={handleClose}
+        handleShow={handleShow}
+        show={show}
+        data={activityEditData}
+      />
+      <DeleteModal
+        handleClose={handleCloseDelete}
+        handleShow={handleShowDelete}
+        show={showDelete}
+        data={activityEditData}      
+      />
     </section>
   );
 }

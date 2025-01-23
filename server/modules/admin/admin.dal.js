@@ -134,7 +134,8 @@ class AdminDal {
     const query = `
       SELECT 
         center_id, 
-        center_name, 
+        center_name,
+        center_email, 
         center_city, 
         center_province, 
         center_address, 
@@ -459,15 +460,25 @@ class AdminDal {
 
     try {
       let sql =
-        "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
+        "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?  WHERE activity_id = ?";
       let values = [
         activity_name,
         activity_description,
         max_participants_number,
-        img,
         activity_id,
       ];
 
+      if (img) {
+        sql =
+          "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
+        values = [
+          activity_name,
+          activity_description,
+          max_participants_number,
+          img,
+          activity_id,
+        ];
+      }
       const result = await executeQuery(sql, values);
 
       return result;

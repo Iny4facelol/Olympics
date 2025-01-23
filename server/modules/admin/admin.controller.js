@@ -8,7 +8,10 @@ import {
 } from "../../utils/zodSchemas/userSchema.js";
 import { olympicsSchema } from "../../utils/zodSchemas/olympicsSchema.js";
 import { z } from "zod";
-import { createCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
+import {
+  createCenterSchema,
+  editCenterSchema,
+} from "../../utils/zodSchemas/centerSchema.js";
 import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
 
 class AdminController {
@@ -128,11 +131,17 @@ class AdminController {
       if (req.file) {
         file = req.file.filename;
       }
-
-      const result = await adminDal.editCenter(data, file);
+      console.log(data);
+      const parsedData = editCenterSchema.parse(data);
+      
+      const result = await adminDal.editCenter(parsedData, file);
       res.status(200).json(result);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json(error);
+      }
     }
   };
 
@@ -313,23 +322,25 @@ class AdminController {
   // Editar Actividad
 
   editActivity = async (req, res) => {
-    const {
-      activity_name,
-      activity_description,
-      max_participants,
-      activity_id,
-    } = req.body;
-    const img = req.file.filename;
-
-    const max_participants_number = parseInt(max_participants);
-    const values = {
-      activity_name,
-      activity_description,
-      max_participants_number,
-      img,
-    };
-
     try {
+      let {
+        activity_name,
+        activity_description,
+        max_participants,
+        activity_id,
+      } = req.body;
+      let max_participants_number = parseInt(max_participants);
+      let img = null;
+      if (req.file) {
+        img = req.file.filename;
+      }
+      let values = {
+        activity_name,
+        activity_description,
+        max_participants_number,
+        img,
+      };
+
       const parsedData = activitySchema.parse(values);
       const result = await adminDal.editActivity(parsedData, activity_id);
 
@@ -348,9 +359,10 @@ class AdminController {
   addActivityOlimpics = async (req, res) => {
     try {
       const { olympics_id } = req.params;
+
       const { activity_id, activity_id_to_delete } = req.body;
 
-      // Use a single method in the DAL that handles both deletion and insertion
+  
       await adminDal.updateOlympicsActivities(
         olympics_id,
         activity_id,
