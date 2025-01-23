@@ -435,6 +435,17 @@ class AdminDal {
     }
   };
 
+  getOlympicsActivities = async (olympics_id) => {
+    try {
+      let sql = `SELECT * FROM olympics_activity WHERE olympics_id = ?`;
+      let result = await executeQuery(sql, olympics_id);
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   // Editar Actividad
 
   editActivity = async (data, activity_id) => {
@@ -489,6 +500,47 @@ class AdminDal {
     } catch (error) {
       console.error("Error al guardar la actividad", error);
       throw error;
+    }
+  };
+
+  // Eliminar Actividad de Olimpiada
+
+  updateOlympicsActivities = async (
+    olympicsId,
+    checkedActivities,
+    toDeleteActivities
+  ) => {
+    const connection = await dbPool.getConnection();
+
+    try {
+      await connection.beginTransaction();
+
+      // Borrar las actividades que se desmarcaron
+      if (toDeleteActivities.length > 0) {
+        await connection.query(
+          "DELETE FROM olympics_activity WHERE olympics_id = ? AND activity_id IN (?)",
+          [olympicsId, toDeleteActivities]
+        );
+      }
+      // Insertar las actividades que se marcaron
+      if (checkedActivities.length > 0) {
+        const insertValues = checkedActivities.map((activityId) => [
+          olympicsId,
+          activityId,
+        ]);
+
+        await connection.query(
+          "INSERT IGNORE INTO olympics_activity (olympics_id, activity_id) VALUES ?",
+          [insertValues]
+        );
+      }
+
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
     }
   };
 

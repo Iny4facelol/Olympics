@@ -359,19 +359,34 @@ class AdminController {
   addActivityOlimpics = async (req, res) => {
     try {
       const { olympics_id } = req.params;
-      const { activity_id } = req.body;
 
-      const result = await adminDal.saveActivity(olympics_id, activity_id);
+      const { activity_id, activity_id_to_delete } = req.body;
+
+  
+      await adminDal.updateOlympicsActivities(
+        olympics_id,
+        activity_id,
+        activity_id_to_delete
+      );
 
       res
         .status(200)
-        .json({ message: "Actividad añadida a la olimpiada", result });
+        .json({ message: "Actividades actualizadas correctamente" });
     } catch (error) {
-      console.log("Error al añadir la actividad", error);
-      res.status(500).json({
-        message: "Error al añadir la actividad.",
-        error: error.message,
-      });
+      console.log("Error al actualizar actividades", error);
+      res.status(500).json({ message: "Error al actualizar actividades" });
+    }
+  };
+
+  // Ver Actividades de una Olimpiada
+
+  getOlympicsActivities = async (req, res) => {
+    try {
+      const { olympics_id } = req.params;
+      const result = await adminDal.getOlympicsActivities(olympics_id);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ message: "Error al obtener las actividades" });
     }
   };
 

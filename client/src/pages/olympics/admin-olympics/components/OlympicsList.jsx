@@ -84,7 +84,7 @@ export default function OlympicsList() {
         <tbody>
           {olympics.map((olympic) => (
             <tr key={olympic.olympics_id}>
-              <td className="col-olympics-action">
+              <td className="col-olympics-action" style={{ width: "10%" }}>
                 <Trash2
                   onClick={() => handleLogicDelete(olympic.olympics_id)}
                   size="24"
@@ -94,11 +94,11 @@ export default function OlympicsList() {
                 <SquarePen
                   onClick={() => handleEdit(olympic.olympics_id)}
                   size="24"
-                  className="text-success custom-icon"
+                  className="text-primary custom-icon"
                   style={{ cursor: "pointer" }}
-                />
+                />{" "}
                 <CirclePlus
-                onClick={() => handleAddActivity(olympic.olympics_id)}
+                  onClick={() => handleAddActivity(olympic.olympics_id)}
                   size="24"
                   className="text-success custom-icon"
                   style={{ cursor: "pointer" }}
@@ -137,14 +137,13 @@ export default function OlympicsList() {
         show={showActivity}
         data={olympicsEditData}
       />
-      
+
       <DeleteModal
         handleClose={handleCloseDelete}
         handleShow={handleShowDelete}
         show={showDelete}
         data={olympicsEditData}
         deleteMessage="Olimpiada eliminada correctamente"
-        
       />
     </section>
   );
