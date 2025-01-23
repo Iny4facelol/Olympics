@@ -7,6 +7,7 @@ import AuthDashboard from "./components/AuthDashboard";
 import { fetchData } from "../../../utils/axios/axiosHelper";
 
 export default function UserDashboard() {
+  const {user} = useAppContext()
   const [userDetails, setUserDetails] = useState([]);
 
   useEffect(() => {
@@ -28,9 +29,9 @@ export default function UserDashboard() {
     <DashboardLayout>
       <Container className="d-flex justify-content-center flex-column gap-5 px-4 px-sm-2">
         <h2 style={{ fontSize: "72px" }}>
-          Bienvenido, <span className="custom-span">{userDetails.user_name}</span>
+          Bienvenido, <span className="custom-span">{user.user_name}</span>
         </h2>
-        {userDetails?.user_is_auth ? (
+        {user?.user_is_auth ? (
           <AuthDashboard />
         ) : (
           <NonAuthDashboard  />
