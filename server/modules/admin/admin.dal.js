@@ -350,6 +350,18 @@ class AdminDal {
     }
   };
 
+    // Borrado lógico Usuario
+
+  deleteUserLogically = async (user_id) => {
+    const query = 'UPDATE user SET user_is_deleted = 1 WHERE user_id = ?';
+    try {
+      const results = await executeQuery(query, [user_id]);
+      return results;
+    } catch (err) {
+      throw new Error(err.message);
+    };
+  };
+
   // 4º Apartado de Actividades
   // Añadir Actividad
 
