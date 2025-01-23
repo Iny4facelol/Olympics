@@ -120,6 +120,20 @@ class AdminController {
     }
   };
 
+  //Eliminar centro
+
+  deleteCenter = async (req, res) => {
+    try {
+      let {center_id} = req.params;      
+      const result = await adminDal.deleteCenter(center_id)
+      res.status(200).json(result)
+    } catch (error) {
+      console.log(error);
+      
+      res.status(400).json(error);
+    }
+  }
+
   // 3º Apartado de Usuarios
   // Añadir Responsable user_type = 2
 
