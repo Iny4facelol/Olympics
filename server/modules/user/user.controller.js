@@ -3,6 +3,7 @@ import { generateToken, getIdFromToken } from "../../utils/tokenUtils.js";
 import {
   registerSchema,
   completeResponsibleSchema,
+  editUserSchema,
 } from "../../utils/zodSchemas/userSchema.js";
 import { z } from "zod";
 import userDal from "./user.dal.js";
@@ -188,99 +189,20 @@ class UserController {
     }
   };
 
-  editCenter = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const {
-        center_city,
-        center_province,
-        center_address,
-        center_phone,
-        center_auth_doc,
-      } = req.body;
-
-      if (
-        !center_city ||
-        !center_province ||
-        !center_address ||
-        !center_phone ||
-        !center_auth_doc
-      ) {
-        throw new Error(
-          "Todos los campos son requeridos para editar el centro."
-        );
-      }
-
-      const result = await userDal.updateCenter(id, {
-        center_city,
-        center_province,
-        center_address,
-        center_phone,
-        center_auth_doc,
-      });
-
-      return res
-        .status(200)
-        .json({ message: "Centro actualizado con éxito.", result });
-    } catch (error) {
-      return res.status(500).json({
-        message: "Error al actualizar",
-        error: error.message || error,
-      });
-    }
-  };
-
   editUserUser = async (req, res) => {
+    const parsedData = editUserSchema.parse(req.body);
     try {
-      const { id } = req.params;
-      const {
-        user_name,
-        user_lastname,
-        user_tutor_name,
-        user_tutor_lastname,
-        user_dni,
-        user_city,
-        user_address,
-        user_phone,
-        user_birth_date,
-      } = req.body;
-
-      if (
-        !id ||
-        !user_name ||
-        !user_lastname ||
-        !user_tutor_name ||
-        !user_tutor_lastname ||
-        !user_dni ||
-        !user_city ||
-        !user_address ||
-        !user_phone ||
-        !user_birth_date
-      ) {
-        return res.status(400).json({
-          message: "Todos los campos son requeridos para editar el usuario.",
-        });
-      }
-
-      const result = await userDal.updateUserUser(id, {
-        user_name,
-        user_lastname,
-        user_tutor_name,
-        user_tutor_lastname,
-        user_dni,
-        user_city,
-        user_address,
-        user_phone,
-        user_birth_date,
-      });
-
+      const { user_id } = req.params;
+      const result = await userDal.updateUserUser(user_id, parsedData);
       return res
         .status(200)
         .json({ message: "Usuario actualizado con éxito.", result });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "Error al actualizar usuario.", error });
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        throw error;
+      }
     }
   };
   //REVISADO CON SANTI
@@ -371,10 +293,12 @@ class UserController {
       return res.status(200).json(pendingUsers);
     } catch (error) {
       console.error("Error al obtener usuarios pendientes de validar:", error);
-      return res.status(500).json({
-        message: "Error al obtener usuarios pendientes de validar.",
-        error,
-      });
+      return res
+        .status(500)
+        .json({
+          message: "Error al obtener usuarios pendientes de validar.",
+          error,
+        });
     }
   };
 

@@ -195,6 +195,18 @@ class AdminDal {
     }
   };
 
+  // Eliminar centro
+
+  deleteCenter = async (center_id) => {
+    let sql = 'UPDATE center SET center_is_deleted = 1 WHERE center_id = ?'
+    try {
+      const result = await executeQuery(sql, center_id);
+      return result;
+    } catch (error) {
+      throw error
+    }
+  }
+
   // 3º Apartado de Usuarios
   // Añadir Responsable user_type = 2
 
