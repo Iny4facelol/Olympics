@@ -5,7 +5,7 @@ export default function AuthDashboard() {
   return (
     <section className="d-flex flex-column gap-3">
       <article>
-        <h3>
+        <h3 className="text-success">
           Cuenta validada correctamente <ShieldCheck />
         </h3>
       </article>
