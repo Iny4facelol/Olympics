@@ -18,6 +18,13 @@ html, body {
   }
 }
 
+.custom-icon {
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
 .link-hover {
   display: inline-block;
   vertical-align: middle;

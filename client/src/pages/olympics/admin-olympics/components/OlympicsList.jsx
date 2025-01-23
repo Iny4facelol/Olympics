@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { Table } from "react-bootstrap";
-import { SquarePen, Trash2 } from "lucide-react";
+import { CirclePlus, SquarePen, Trash2 } from "lucide-react";
 import OlympicsEditModal from "./OlympicsEditModal";
 import DeleteModal from "../../../../core/components/DeleteModal";
+import OlympicsActivityModal from "./OlympicsActivityModal";
 
 export default function OlympicsList() {
   const [olympics, setOlympics] = useState([]);
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [showActivity, setShowActivity] = useState(false);
   const [olympicsEditData, setOlympicsEditData] = useState({});
 
   const handleClose = () => setShow(false);
@@ -16,6 +18,9 @@ export default function OlympicsList() {
 
   const handleCloseDelete = () => setShowDelete(false);
   const handleShowDelete = () => setShowDelete(true);
+
+  const handleCloseActivity = () => setShowActivity(false);
+  const handleShowActivity = () => setShowActivity(true);
 
   useEffect(() => {
     const getData = async () => {
@@ -46,6 +51,15 @@ export default function OlympicsList() {
     handleShow();
   };
 
+  const handleAddActivity = (olympics_id) => {
+    const data = olympics.find(
+      (olympic) => olympic.olympics_id === olympics_id
+    );
+    setOlympicsEditData(data);
+    handleShowActivity();
+  }
+
+
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
       <Table
@@ -70,21 +84,27 @@ export default function OlympicsList() {
         <tbody>
           {olympics.map((olympic) => (
             <tr key={olympic.olympics_id}>
-              <td>
+              <td className="col-olympics-action">
                 <Trash2
                   onClick={() => handleLogicDelete(olympic.olympics_id)}
                   size="24"
-                  className="text-danger"
+                  className="text-danger custom-icon"
                   style={{ cursor: "pointer" }}
                 />{" "}
                 <SquarePen
                   onClick={() => handleEdit(olympic.olympics_id)}
                   size="24"
-                  className="text-success"
+                  className="text-success custom-icon"
+                  style={{ cursor: "pointer" }}
+                />
+                <CirclePlus
+                onClick={() => handleAddActivity(olympic.olympics_id)}
+                  size="24"
+                  className="text-success custom-icon"
                   style={{ cursor: "pointer" }}
                 />
               </td>
-              <td className="col-name">{olympic.olympics_name}</td>
+              <td className="col-olympics-name">{olympic.olympics_name}</td>
               <td className="col-host-name">{olympic.olympics_host_name}</td>
               <td className="col-host-city">{olympic.olympics_host_city}</td>
               <td className="col-host-address">
@@ -111,11 +131,20 @@ export default function OlympicsList() {
         show={show}
         data={olympicsEditData}
       />
+      <OlympicsActivityModal
+        handleClose={handleCloseActivity}
+        handleShow={handleShowActivity}
+        show={showActivity}
+        data={olympicsEditData}
+      />
+      
       <DeleteModal
         handleClose={handleCloseDelete}
         handleShow={handleShowDelete}
         show={showDelete}
         data={olympicsEditData}
+        deleteMessage="Olimpiada eliminada correctamente"
+        
       />
     </section>
   );

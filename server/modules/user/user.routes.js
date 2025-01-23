@@ -37,7 +37,7 @@ router.post("/activities/:user_id", userController.addActivityToUser);
 router.get('/pendingValidationUsers/:user_center_id', userController.getPendingValidationUsers);
 
 //ruta de perfil usuario no autorizado
-router.get('/unAuthorizedProfile/:user_id', userController.getUnauthorizedUserProfile);
+router.get('/NonAuthProfile/:user_id', userController.getUnauthorizedUserProfile);
 
 
 export default router;
