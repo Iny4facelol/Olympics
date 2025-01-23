@@ -1,12 +1,18 @@
 import adminDal from "./admin.dal.js";
 import jwt from "jsonwebtoken";
 import emailService from "../../utils/emailUtils/emailService.js";
-import { editResponsibleSchema, editUserSchema, registerResponsibleSchema } from "../../utils/zodSchemas/userSchema.js";
+import {
+  editResponsibleSchema,
+  editUserSchema,
+  registerResponsibleSchema,
+} from "../../utils/zodSchemas/userSchema.js";
 import { olympicsSchema } from "../../utils/zodSchemas/olympicsSchema.js";
 import { z } from "zod";
-import { createCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
+import {
+  createCenterSchema,
+  editCenterSchema,
+} from "../../utils/zodSchemas/centerSchema.js";
 import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
-
 
 class AdminController {
   // 1º Apartado de Olimpiadas
@@ -45,16 +51,16 @@ class AdminController {
   // Editar Olimpiada
 
   editOlympics = async (req, res) => {
-    const parsedData = olympicsSchema.parse(req.body)
-    const { olympics_id } = req.body
+    const parsedData = olympicsSchema.parse(req.body);
+    const { olympics_id } = req.body;
 
     try {
       const result = await adminDal.editOlympics(parsedData, olympics_id);
       res.status(200).json(result);
     } catch (error) {
-      if (error instanceof z.ZodError){
-        res.status(400).json({ error: error.errors })
-      }else{
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
         res.status(500).json(error);
       }
     }
@@ -62,20 +68,16 @@ class AdminController {
 
   //borrado logico de olimpiadas
   logicalDeleteOlympics = async (req, res) => {
-
-    const {olympics_id} = req.params;
+    const { olympics_id } = req.params;
     console.log("ID de la olimpiada recibido:", olympics_id);
     try {
-    
       const result = await adminDal.logicalDeleteOlympics(olympics_id);
-      res.status(200).json( result);
-     
-      
+      res.status(200).json(result);
     } catch (error) {
       res.status(500).json(error);
       res.status(400).json({ message: "Error al borrar la olimpidada" });
     }
-  }
+  };
 
   // 2º Apartado de Centro
   // Añadir un Centro
@@ -129,11 +131,17 @@ class AdminController {
       if (req.file) {
         file = req.file.filename;
       }
-
-      const result = await adminDal.editCenter(data, file);
+      console.log(data);
+      const parsedData = editCenterSchema.parse(data);
+      
+      const result = await adminDal.editCenter(parsedData, file);
       res.status(200).json(result);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json(error);
+      }
     }
   };
 
@@ -141,15 +149,15 @@ class AdminController {
 
   deleteCenter = async (req, res) => {
     try {
-      let {center_id} = req.params;      
-      const result = await adminDal.deleteCenter(center_id)
-      res.status(200).json(result)
+      let { center_id } = req.params;
+      const result = await adminDal.deleteCenter(center_id);
+      res.status(200).json(result);
     } catch (error) {
       console.log(error);
-      
+
       res.status(400).json(error);
     }
-  }
+  };
 
   // 3º Apartado de Usuarios
   // Añadir Responsable user_type = 2
@@ -182,7 +190,6 @@ class AdminController {
       }
     }
   };
- 
 
   // Ver los Responsables user_type = 2 (Recordar Duda)
 
@@ -198,17 +205,17 @@ class AdminController {
   // Editar Usuario type_user = 3
 
   editUser = async (req, res) => {
-    const parsedData = editUserSchema.parse(req.body)
-    const { user_id } = req.body
-    try {     
+    const parsedData = editUserSchema.parse(req.body);
+    const { user_id } = req.body;
+    try {
       const result = await adminDal.updateUser(parsedData, user_id);
       return res
         .status(200)
         .json({ message: "Usuario actualizado con éxito.", result });
     } catch (error) {
-      if (error instanceof z.ZodError){
-        res.status(400).json({ error: error.errors })
-      }else{
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
         console.error("Error en editUser:", error.message);
         return res.status(500).json({
           message: "Error al actualizar usuario.",
@@ -218,22 +225,22 @@ class AdminController {
     }
   };
 
-   // Editar Usuario type_user = 2
+  // Editar Usuario type_user = 2
 
-   editResponsible = async (req, res) => {
-    const parsedData = editResponsibleSchema.parse(req.body)
-    const { user_id } = req.body
+  editResponsible = async (req, res) => {
+    const parsedData = editResponsibleSchema.parse(req.body);
+    const { user_id } = req.body;
     console.log("***", parsedData);
-    
-    try {     
+
+    try {
       const result = await adminDal.updateResponsible(parsedData, user_id);
       return res
         .status(200)
         .json({ message: "Usuario actualizado con éxito.", result });
     } catch (error) {
-      if (error instanceof z.ZodError){
-        res.status(400).json({ error: error.errors })
-      }else{
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
         console.error("Error en editUser:", error.message);
         return res.status(500).json({
           message: "Error al actualizar usuario.",
@@ -243,7 +250,7 @@ class AdminController {
     }
   };
 
-    // Ver todos los Usuarios
+  // Ver todos los Usuarios
 
   allUser = async (req, res) => {
     try {
@@ -254,21 +261,21 @@ class AdminController {
     }
   };
 
-    // Borrado lógico Usuario
+  // Borrado lógico Usuario
 
-    deleteUserLogically = async (req, res) => {
-      const { user_id } = req.params;
-    
-      try {
-        await adminDal.deleteUserLogically(user_id);
-        res.status(200).json({ message: 'Usuario eliminado correctamente' });
-      } catch (err) {
-        res.status(404).json({ message: 'Usuario no encontrado o ya eliminado' });
-      };
-    };
+  deleteUserLogically = async (req, res) => {
+    const { user_id } = req.params;
+
+    try {
+      await adminDal.deleteUserLogically(user_id);
+      res.status(200).json({ message: "Usuario eliminado correctamente" });
+    } catch (err) {
+      res.status(404).json({ message: "Usuario no encontrado o ya eliminado" });
+    }
+  };
 
   // 4º Apartado de Actividades
-    // Añadir una Actividad
+  // Añadir una Actividad
 
   addActivity = async (req, res) => {
     const { activity_name, activity_description, max_participants } = req.body;
@@ -301,7 +308,7 @@ class AdminController {
     }
   };
 
-    // Ver todas las Actividades
+  // Ver todas las Actividades
 
   allActivity = async (req, res) => {
     try {
@@ -312,21 +319,28 @@ class AdminController {
     }
   };
 
-    // Editar Actividad
+  // Editar Actividad
 
   editActivity = async (req, res) => {
-    const { activity_name, activity_description, max_participants, activity_id } = req.body;
-    const img = req.file.filename;
-
-    const max_participants_number = parseInt(max_participants);
-    const values = {
-      activity_name,
-      activity_description,
-      max_participants_number,
-      img,
-    };
-    
     try {
+      let {
+        activity_name,
+        activity_description,
+        max_participants,
+        activity_id,
+      } = req.body;
+      let max_participants_number = parseInt(max_participants);
+      let img = null;
+      if (req.file) {
+        img = req.file.filename;
+      }
+      let values = {
+        activity_name,
+        activity_description,
+        max_participants_number,
+        img,
+      };
+
       const parsedData = activitySchema.parse(values);
       const result = await adminDal.editActivity(parsedData, activity_id);
 
@@ -340,38 +354,39 @@ class AdminController {
     }
   };
 
-    // Añadir Actividad a Olimpiada
+  // Añadir Actividad a Olimpiada
 
   addActivityOlimpics = async (req, res) => {
     try {
       const { olympics_id } = req.params;
       const { activity_id } = req.body;
-  
+
       const result = await adminDal.saveActivity(olympics_id, activity_id);
-  
-      res.status(200).json({ message: "Actividad añadida a la olimpiada", result });
+
+      res
+        .status(200)
+        .json({ message: "Actividad añadida a la olimpiada", result });
     } catch (error) {
-      console.log('Error al añadir la actividad', error);
-      res.status(500).json({ message: "Error al añadir la actividad.", error: error.message });
+      console.log("Error al añadir la actividad", error);
+      res.status(500).json({
+        message: "Error al añadir la actividad.",
+        error: error.message,
+      });
     }
   };
 
   //borrado logico de actividades
   logicalDeleteActivity = async (req, res) => {
-
-    const {activity_id} = req.params;
+    const { activity_id } = req.params;
     console.log("ID de la actividad recibido:", activity_id);
     try {
-    
       const result = await adminDal.logicalDeleteActivity(activity_id);
-      res.status(200).json( result);
-     
-      
+      res.status(200).json(result);
     } catch (error) {
       res.status(500).json(error);
       res.status(400).json({ message: "Error al borrar la actividad" });
     }
-  }
+  };
 
   // TOKEN
 
@@ -392,26 +407,24 @@ class AdminController {
     }
   };
 
-
   verifyTokenResponsible = async (req, res) => {
     try {
       const { token } = req.params;
       const decoded = jwt.verify(token, process.env.TOKEN_KEY);
       const user = await adminDal.getUserById(decoded.user_id);
 
-      if(!user) {
+      if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });
       }
 
-
-      res.status(200).json({ user_id: user[0].user_id, user_name : user[0].user_name });
+      res
+        .status(200)
+        .json({ user_id: user[0].user_id, user_name: user[0].user_name });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Error al buscar el usuario" });
     }
-  }
+  };
 }
-
-
 
 export default new AdminController();
