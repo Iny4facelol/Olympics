@@ -243,7 +243,7 @@ class AdminController {
     }
   };
 
-  // Ver todos los Usuarios
+    // Ver todos los Usuarios
 
   allUser = async (req, res) => {
     try {
@@ -253,6 +253,19 @@ class AdminController {
       res.status(500).json(error);
     }
   };
+
+    // Borrado lógico Usuario
+
+    deleteUserLogically = async (req, res) => {
+      const { user_id } = req.params;
+    
+      try {
+        await adminDal.deleteUserLogically(user_id);
+        res.status(200).json({ message: 'Usuario eliminado correctamente' });
+      } catch (err) {
+        res.status(404).json({ message: 'Usuario no encontrado o ya eliminado' });
+      };
+    };
 
   // 4º Apartado de Actividades
     // Añadir una Actividad
