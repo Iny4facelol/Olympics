@@ -60,6 +60,23 @@ class AdminController {
     }
   };
 
+  //borrado logico de olimpiadas
+  logicalDeleteOlympics = async (req, res) => {
+
+    const {olympics_id} = req.params;
+    console.log("ID de la olimpiada recibido:", olympics_id);
+    try {
+    
+      const result = await adminDal.logicalDeleteOlympics(olympics_id);
+      res.status(200).json( result);
+     
+      
+    } catch (error) {
+      res.status(500).json(error);
+      res.status(400).json({ message: "Error al borrar la olimpidada" });
+    }
+  }
+
   // 2º Apartado de Centro
   // Añadir un Centro
 
@@ -311,6 +328,23 @@ class AdminController {
       res.status(500).json({ message: "Error al añadir la actividad.", error: error.message });
     }
   };
+
+  //borrado logico de actividades
+  logicalDeleteActivity = async (req, res) => {
+
+    const {activity_id} = req.params;
+    console.log("ID de la actividad recibido:", activity_id);
+    try {
+    
+      const result = await adminDal.logicalDeleteActivity(activity_id);
+      res.status(200).json( result);
+     
+      
+    } catch (error) {
+      res.status(500).json(error);
+      res.status(400).json({ message: "Error al borrar la actividad" });
+    }
+  }
 
   // TOKEN
 

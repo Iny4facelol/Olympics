@@ -92,6 +92,21 @@ class AdminDal {
     }
   };
 
+  //borrado logico de olimpiada
+  logicalDeleteOlympics = async (olympics_id) => {
+    
+    let sql = ` UPDATE olympics SET olympics_is_deleted = 1 WHERE olympics_id = ?`;
+    
+    try {
+      const result = await executeQuery(sql, [olympics_id]);
+      return result;
+      
+    } catch (error) {
+      console.error("Error al realizar el borrado lógico de la olimpidada:", error);
+      throw new Error("Error al realizar el borrado lógico de la olimpidada");
+    }
+  };
+
   // 2º Apartado de Centro
   // Crear Centro
 
@@ -436,6 +451,21 @@ class AdminDal {
     } catch (error) {
       console.error("Error al guardar la actividad", error);
       throw error;
+    }
+  };
+
+  //borrado logico de actividad
+  logicalDeleteActivity = async (activity_id) => {
+    
+    let sql = ` UPDATE activity SET activity_is_deleted = 1 WHERE activity_id = ?`;
+    
+    try {
+      const result = await executeQuery(sql, activity_id);
+      return result;
+      
+    } catch (error) {
+      console.error("Error al realizar el borrado lógico de la actividad:", error);
+      throw new Error("Error al realizar el borrado lógico de la actividad");
     }
   };
 }

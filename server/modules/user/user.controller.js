@@ -360,7 +360,7 @@ class UserController {
       res.status(500).json({ error });
     }
   }
-}
+
 
   getPendingValidationUsers = async (req, res) => {
     try {
@@ -453,7 +453,9 @@ class UserController {
       }
     });
   };
-};
+
+  
+}
 
 
 
