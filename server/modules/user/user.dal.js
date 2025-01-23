@@ -38,8 +38,9 @@ class UserDal {
 
   getUserByEmail = async (email) => {
     try {
-      let sql = `SELECT * FROM user WHERE user_email = ? AND user_is_deleted = 0`;
+      let sql = `SELECT * FROM user WHERE user_email = ? AND user_is_deleted = 0 AND user_is_validated = 1`;
       let result = await executeQuery(sql, [email]);
+      console.log(result)
       return result;
     } catch (error) {
       throw error;
@@ -359,7 +360,6 @@ class UserDal {
         user_name, user_is_auth 
         FROM user 
         WHERE user_id = ? 
-        AND user_is_auth = false
       `;
       const values = [userId];
         console.log('values', values);

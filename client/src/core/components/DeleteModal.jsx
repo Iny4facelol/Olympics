@@ -4,14 +4,14 @@ import { fetchData } from "../../utils/axios/axiosHelper";
 import { useState } from "react";
 import { toast, Toaster } from "sonner";
 
-function DeleteModal({ show, handleClose, handleShow, data }) {
+function DeleteModal({ show, handleClose, handleShow, data, deleteMessage , fetchData  }) {
   const [authenticating, setAuthenticating] = useState(false);
   
   const handleDelete = async () => {
     try {
       setAuthenticating(true);
-      // await fetchData(`api/admin/deleteOlympics/${data.olympics_id}`, "delete");
-      toast.success("Olimpiada eliminada correctamente");
+      await fetchData(`${fetchData}`, "put");
+      toast.success(deleteMessage);
       setTimeout(() => {
         setAuthenticating(false);
         handleClose();

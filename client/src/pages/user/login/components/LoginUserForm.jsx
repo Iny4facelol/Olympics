@@ -11,19 +11,23 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function LoginUserForm() {
-  const { setToken, setUser } = useAppContext();
+  const { setToken, setUser, setRememberMe, rememberMe } = useAppContext();
+  const [emailErrorMsg, setEmailErrorMsg] = useState();
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState();
   const [authenticating, setAuthenticating] = useState(false);
   const navigate = useNavigate();
-
+  console.log(rememberMe);
   const onSubmit = async (data) => {
     try {
       setAuthenticating(true);
       const result = await fetchData(`api/user/login`, "post", data);
-      toast.success("Acceso correcto");      
+      toast.success("Acceso correcto");
+      setEmailErrorMsg();
+      setPasswordErrorMsg();
       setToken(result.token);
       setUser(result.user);
       setTimeout(() => {
-        if(result.user.user_type === 1) {
+        if (result.user.user_type === 1) {
           navigate("/admin/dashboard");
         } else if (result.user.user_type === 2) {
           navigate("/user/res_dashboard");
@@ -33,8 +37,10 @@ export default function LoginUserForm() {
         setAuthenticating(false);
       }, 2000);
     } catch (error) {
-      if(error instanceof axios.AxiosError) {
-      console.error(error.response.data.message);
+      if (error instanceof axios.AxiosError) {
+        setAuthenticating(false);
+        setEmailErrorMsg(error.response.data.emailError);
+        setPasswordErrorMsg(error.response.data.passwordError);
       }
     }
   };
@@ -70,6 +76,9 @@ export default function LoginUserForm() {
               placeholder="Email"
             />
           </Form.Group>
+          {emailErrorMsg && (
+            <Form.Text className="text-danger">{emailErrorMsg}</Form.Text>
+          )}
           {errors.user_email && (
             <Form.Text className="text-danger">
               {errors.user_email.message}
@@ -87,6 +96,9 @@ export default function LoginUserForm() {
               type="password"
               placeholder="Contraseña"
             />
+            {passwordErrorMsg && (
+              <Form.Text className="text-danger">{passwordErrorMsg}</Form.Text>
+            )}
             {errors.user_password && (
               <Form.Text className="text-danger">
                 {errors.user_password.message}
@@ -95,6 +107,22 @@ export default function LoginUserForm() {
           </Form.Group>
         </Col>
       </Row>
+      <Row>
+        <Col className="d-flex gap-2" md={6} sm={12}>
+          <Form.Check // prettier-ignore
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+          />
+          <Form.Text>Recordar Usuario</Form.Text>
+        </Col>
+        <Col md={6} sm={12}>
+          <Form.Text>
+            <a href="/user/recover">¿Olvidaste tu contraseña?</a>
+          </Form.Text>
+        </Col>
+      </Row>
+
       <div className="mt-4">
         <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
