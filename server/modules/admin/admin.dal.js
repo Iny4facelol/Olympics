@@ -402,7 +402,11 @@ class AdminDal {
     ON 
     u.user_center_id = c.center_id
     WHERE 
-    u.user_is_deleted = 0;
+    user_type IN (2, 3)
+    AND
+    u.user_is_deleted = 0
+    
+    ;
 `;
       let result = await executeQuery(sql);
 
