@@ -10,7 +10,7 @@ router.post('/addCenter', adminController.addCenter);
 router.put('/editCenter', multerFile("file"), adminController.editCenter);
 router.get("/allCenters", adminController.allCenters);
 router.get('/centers/verifyToken/:token', adminController.verifyToken);
-router.put('/deleteCenter/:center_id', adminController.deleteCenter);
+router.put('/logicalDeleteCenter/:center_id', adminController.deleteCenter);
 
 // Rutas de Olimpiadas
 router.post('/addOlympics', adminController.addOlympics);

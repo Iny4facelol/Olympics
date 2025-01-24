@@ -31,7 +31,7 @@ export default function ActivityList() {
       }
     };
     getData();
-  }, [show]);
+  }, [show, showDelete]);
 
   const handleLogicDelete = async (activity_id) => {
     const data = activities.find(
@@ -113,6 +113,8 @@ export default function ActivityList() {
         handleShow={handleShowDelete}
         show={showDelete}
         data={activityEditData}      
+        deleteMessage={"Actividad eliminada con éxito"}
+        apiEndpoint={`api/admin/logicalDeleteActivity/${activityEditData.activity_id}`}
       />
     </section>
   );
