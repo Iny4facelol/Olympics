@@ -424,6 +424,24 @@ class AdminDal {
     }
   };
 
+  //Búsqueda en tiempo real usuarios
+  searchUsers = async (filter) => {
+    try {
+      let query = 'SELECT * FROM user WHERE 1=1';
+      const params = [];
+  
+      Object.keys(filter).forEach(key => {
+        query += ` AND ${key} = ?`;
+        params.push(filter[key]);
+      });
+  
+      const [result] = await executeQuery(query, params);
+      return result;
+    } catch (error) {
+      throw new Error('Error al buscar usuarios: ' + error.message);
+    }
+  };
+
   // 4º Apartado de Actividades
   // Añadir Actividad
 

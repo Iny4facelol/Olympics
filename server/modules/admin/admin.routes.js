@@ -28,6 +28,7 @@ router.get('/allUser', adminController.allUser);
 router.put('/editUser', adminController.editUser); 
 router.put('/editResponsible', adminController.editResponsible);
 router.put('/delete-user/:user_id', adminController.deleteUserLogically);
+router.get('/searchUsers', adminController.searchUsers);
 
 // Rutas de Actividades
 router.post('/addActivity', multerImage("activity_image") ,adminController.addActivity);
