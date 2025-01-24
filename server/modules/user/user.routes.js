@@ -28,7 +28,7 @@ router.get("/details/:user_id", userController.userDetails);
 
 router.put('/upload-authorization/:user_id',multerFile("authorization"),userController.uploadAuthorizationFile);
 
-router.get('/get-authorization/:user_id', userController.getAuthorizationFile);
+router.get("/authorization-file/:user_id", userController.getAuthorizationFile);
 
 router.post("/activities/:user_id", userController.addActivityToUser);
 
