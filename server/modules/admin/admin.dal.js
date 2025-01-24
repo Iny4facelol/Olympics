@@ -107,6 +107,37 @@ class AdminDal {
     }
   };
 
+    // Seleccionar las Actividades de una Olimpiada
+
+    getOlympicsWithActivity = async (olympics_id) => {
+      const query = `
+        SELECT 
+          olympics.olympics_id,
+          olympics.olympics_name,
+          olympics.olympics_description,
+          activity.activity_id,
+          activity.activity_name,
+          activity.activity_description
+        FROM 
+          olympics
+        LEFT JOIN 
+          olympics_activity ON olympics.olympics_id = olympics_activity.olympics_id
+        LEFT JOIN 
+          activity ON olympics_activity.activity_id = activity.activity_id
+        WHERE 
+          olympics.olympics_id = ?;
+      `;
+    
+      try {
+        const results = await executeQuery(query, [olympics_id]);
+    
+        return results;
+      } catch (error) {
+        throw new Error("Error al obtener la olimpiada y actividades: " + error.message);
+      }
+    };
+
+
   // 2º Apartado de Centro
   // Crear Centro
 
