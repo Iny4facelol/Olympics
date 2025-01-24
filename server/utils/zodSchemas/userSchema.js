@@ -132,7 +132,7 @@ export const completeResponsibleSchema = z
     user_phone: z
         .string()
         .regex(/^[0-9]{9}$/, "El teléfono debe tener 9 números"),
-    user_center_id: z.string().min(1, "Debes seleccionar un centro")
+    user_center_id: z.any()
   })
 
   export const editResponsibleSchema = z
@@ -158,7 +158,7 @@ export const completeResponsibleSchema = z
     user_phone: z
         .string()
         .regex(/^[0-9]{9}$/, "El teléfono debe tener 9 números"),
-    user_center_id: z.string().min(1, "Debes seleccionar un centro")
+    user_center_id: z.any()
   })
 
   
