@@ -16,7 +16,7 @@ import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
 
 class AdminController {
   // 1º Apartado de Olimpiadas
-  // Añadir Olimpiada
+    // Añadir Olimpiada
 
   addOlympics = async (req, res) => {
     const parsedData = olympicsSchema.parse(req.body);
@@ -36,7 +36,7 @@ class AdminController {
     }
   };
 
-  // Ver todas las Olimpiadas
+    // Ver todas las Olimpiadas
 
   allOlympics = async (req, res) => {
     try {
@@ -48,7 +48,7 @@ class AdminController {
     }
   };
 
-  // Editar Olimpiada
+    // Editar Olimpiada
 
   editOlympics = async (req, res) => {
     const parsedData = olympicsSchema.parse(req.body);
@@ -66,7 +66,7 @@ class AdminController {
     }
   };
 
-  //borrado logico de olimpiadas
+    //borrado logico de olimpiadas
   logicalDeleteOlympics = async (req, res) => {
     const { olympics_id } = req.params;
     console.log("ID de la olimpiada recibido:", olympics_id);
@@ -79,6 +79,23 @@ class AdminController {
     }
   };
 
+    // Ver Actividades de una Olimpiada
+
+    getOlympicsWithActivity = async (req, res) => {
+      const { olympics_id } = req.params;
+    
+      try {
+        const results = await adminDal.getOlympicsWithActivity(olympics_id);
+    
+        if (results.length > 0) {
+          res.status(200).json({message: "Olimpiada y actividades obtenidas correctamente",data: results,});
+        }
+      } catch (error) {
+        res.status(500).json({
+          message: "Error al obtener la olimpiada y actividades",error: error.message,});
+      }
+    };
+  
   // 2º Apartado de Centro
   // Añadir un Centro
 
