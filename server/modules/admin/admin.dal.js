@@ -94,15 +94,16 @@ class AdminDal {
 
   //borrado logico de olimpiada
   logicalDeleteOlympics = async (olympics_id) => {
-    
     let sql = ` UPDATE olympics SET olympics_is_deleted = 1 WHERE olympics_id = ?`;
-    
+
     try {
       const result = await executeQuery(sql, [olympics_id]);
       return result;
-      
     } catch (error) {
-      console.error("Error al realizar el borrado lógico de la olimpidada:", error);
+      console.error(
+        "Error al realizar el borrado lógico de la olimpidada:",
+        error
+      );
       throw new Error("Error al realizar el borrado lógico de la olimpidada");
     }
   };
@@ -164,7 +165,8 @@ class AdminDal {
     const query = `
       SELECT 
         center_id, 
-        center_name, 
+        center_name,
+        center_email, 
         center_city, 
         center_province, 
         center_address, 
@@ -244,14 +246,14 @@ class AdminDal {
   // Eliminar centro
 
   deleteCenter = async (center_id) => {
-    let sql = 'UPDATE center SET center_is_deleted = 1 WHERE center_id = ?'
+    let sql = "UPDATE center SET center_is_deleted = 1 WHERE center_id = ?";
     try {
       const result = await executeQuery(sql, center_id);
       return result;
     } catch (error) {
-      throw error
+      throw error;
     }
-  }
+  };
 
   // 3º Apartado de Usuarios
   // Añadir Responsable user_type = 2
@@ -289,7 +291,9 @@ class AdminDal {
 
   getAllResponsibles = async () => {
     try {
-      const result = await executeQuery(`SELECT * FROM user WHERE user_type=2 AND user_is_deleted = 0`);
+      const result = await executeQuery(
+        `SELECT * FROM user WHERE user_type=2 AND user_is_deleted = 0`
+      );
 
       return result;
     } catch (err) {
@@ -339,7 +343,7 @@ class AdminDal {
         user_center_id,
         user_id,
       ];
-      const result = await executeQuery(sql, values);   
+      const result = await executeQuery(sql, values);
 
       return result;
     } catch (err) {
@@ -354,7 +358,7 @@ class AdminDal {
     try {
       const {
         user_name,
-        user_lastname,        
+        user_lastname,
         user_dni,
         user_city,
         user_phone,
@@ -371,14 +375,14 @@ class AdminDal {
         WHERE user_id = ?`;
       let values = [
         user_name,
-        user_lastname,        
+        user_lastname,
         user_dni,
-        user_city,       
+        user_city,
         user_phone,
         user_center_id,
         user_id,
       ];
-      const result = await executeQuery(sql, values);   
+      const result = await executeQuery(sql, values);
 
       return result;
     } catch (err) {
@@ -408,16 +412,16 @@ class AdminDal {
     }
   };
 
-    // Borrado lógico Usuario
+  // Borrado lógico Usuario
 
   deleteUserLogically = async (user_id) => {
-    const query = 'UPDATE user SET user_is_deleted = 1 WHERE user_id = ?';
+    const query = "UPDATE user SET user_is_deleted = 1 WHERE user_id = ?";
     try {
       const results = await executeQuery(query, [user_id]);
       return results;
     } catch (err) {
       throw new Error(err.message);
-    };
+    }
   };
 
   // 4º Apartado de Actividades
@@ -462,6 +466,17 @@ class AdminDal {
     }
   };
 
+  getOlympicsActivities = async (olympics_id) => {
+    try {
+      let sql = `SELECT * FROM olympics_activity WHERE olympics_id = ?`;
+      let result = await executeQuery(sql, olympics_id);
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   // Editar Actividad
 
   editActivity = async (data, activity_id) => {
@@ -476,15 +491,25 @@ class AdminDal {
 
     try {
       let sql =
-        "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
+        "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?  WHERE activity_id = ?";
       let values = [
         activity_name,
         activity_description,
         max_participants_number,
-        img,
         activity_id,
       ];
 
+      if (img) {
+        sql =
+          "UPDATE activity SET activity_name = ?, activity_description = ?, max_participants = ?, activity_image = ?  WHERE activity_id = ?";
+        values = [
+          activity_name,
+          activity_description,
+          max_participants_number,
+          img,
+          activity_id,
+        ];
+      }
       const result = await executeQuery(sql, values);
 
       return result;
@@ -509,17 +534,59 @@ class AdminDal {
     }
   };
 
+  // Eliminar Actividad de Olimpiada
+
+  updateOlympicsActivities = async (
+    olympicsId,
+    checkedActivities,
+    toDeleteActivities
+  ) => {
+    const connection = await dbPool.getConnection();
+
+    try {
+      await connection.beginTransaction();
+
+      // Borrar las actividades que se desmarcaron
+      if (toDeleteActivities.length > 0) {
+        await connection.query(
+          "DELETE FROM olympics_activity WHERE olympics_id = ? AND activity_id IN (?)",
+          [olympicsId, toDeleteActivities]
+        );
+      }
+      // Insertar las actividades que se marcaron
+      if (checkedActivities.length > 0) {
+        const insertValues = checkedActivities.map((activityId) => [
+          olympicsId,
+          activityId,
+        ]);
+
+        await connection.query(
+          "INSERT IGNORE INTO olympics_activity (olympics_id, activity_id) VALUES ?",
+          [insertValues]
+        );
+      }
+
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+  };
+
   //borrado logico de actividad
   logicalDeleteActivity = async (activity_id) => {
-    
     let sql = ` UPDATE activity SET activity_is_deleted = 1 WHERE activity_id = ?`;
-    
+
     try {
       const result = await executeQuery(sql, activity_id);
       return result;
-      
     } catch (error) {
-      console.error("Error al realizar el borrado lógico de la actividad:", error);
+      console.error(
+        "Error al realizar el borrado lógico de la actividad:",
+        error
+      );
       throw new Error("Error al realizar el borrado lógico de la actividad");
     }
   };

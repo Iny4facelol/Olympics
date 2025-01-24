@@ -45,7 +45,10 @@ export default function ResponsibleDashboard() {
               md={6}
             >
               <p className="d-flex gap-2 fw-bold">
-                <Link className="link-hover" to={"/admin/createNewResponsable"}>
+                <Link
+                  className="link-hover"
+                  to={"/user/res_dashboard/authUser"}
+                >
                   Validar Autorizaciones Alumnos <MoveRight color="#ee531e" />
                 </Link>
               </p>

@@ -129,7 +129,7 @@ class EmailService {
       await this.transporter.sendMail({
         from: process.env.EMAIL_USER,
         to: userData.user_email,
-        subject: "Complete su registro",
+        subject: "Valide su cuenta",
         html,
       });
 

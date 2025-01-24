@@ -13,7 +13,7 @@ export default function UserDashboard() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetchData("api/admin/allUser", "get");
+        const response = await fetchData(`api/user/NonAuthProfile/${user.user_id}`, "get");
         console.log(response);
         setUserDetails(response);
       } catch (error) {
@@ -29,10 +29,10 @@ export default function UserDashboard() {
     <DashboardLayout>
       <Container className="d-flex justify-content-center flex-column gap-5 px-4 px-sm-2">
         <h2 style={{ fontSize: "72px" }}>
-          Bienvenido, <span className="custom-span">{user.user_name}</span>
+          Bienvenido, <span className="custom-span">{userDetails.name}</span>
         </h2>
-        {user?.user_is_auth ? (
-          <AuthDashboard />
+        {userDetails.authorized ? (
+          <AuthDashboard userData={userDetails} />
         ) : (
           <NonAuthDashboard  />
         )}

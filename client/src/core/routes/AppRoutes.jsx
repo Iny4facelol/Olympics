@@ -19,6 +19,7 @@ import AdminCenter from "../../pages/center/admin-center/AdminCenter";
 import AdminUser from "../../pages/user/admin-user/AdminUser";
 import AsignActivity from "../../pages/activity/asign-activity/AsignActivity";
 import ValidationPage from "../../pages/user/validation/ValidationPage";
+import AuthUsers from "../../pages/responsable/auth-users/AuthUsers";
 
 export default function AppRoutes() {
   const { user } = useAppContext();
@@ -62,6 +63,10 @@ export default function AppRoutes() {
             <Route
               path="/user/res_dashboard/addActivitiesToUser"
               element={<AsignActivity />}
+            />
+            <Route
+              path="/user/res_dashboard/authUser"
+              element={<AuthUsers />}
             />
           </>
         )}

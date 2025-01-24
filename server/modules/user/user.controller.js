@@ -10,7 +10,6 @@ import userDal from "./user.dal.js";
 import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
 import emailService from "../../utils/emailUtils/emailService.js";
 import jwt from "jsonwebtoken";
-import multerfile from "../../middleware/multerfile.js";
 import path from "path";
 import { completeCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
 
@@ -81,7 +80,7 @@ class UserController {
       const result = await userDal.getUserByEmail(user_email);
 
       if (result.length === 0) {
-        res.status(401).json({ message: "datos incorrectos" });
+        res.status(401).json({ emailError: "El email introducido no existe" });
       } else {
         const user = result[0];
         const match = await comparePassword(user_password, user.user_password);
@@ -90,7 +89,7 @@ class UserController {
           const token = generateToken(user.user_id);
           res.status(200).json({ token, user });
         } else {
-          res.status(401).json({ message: "datos incorrectos" });
+          res.status(401).json({ passwordError: "La contraseña no es válida" });
         }
       }
     } catch (error) {
@@ -323,7 +322,7 @@ class UserController {
       }
 
       const userProfile = {
-        id: user.user_id,
+        user_id: user.user_id,
         name: user.user_name,
         authorized: user.user_is_auth,
       };
