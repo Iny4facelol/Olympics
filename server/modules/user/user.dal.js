@@ -230,7 +230,7 @@ class UserDal {
   getPendingValidationUsers = async (user_center_id) => {
     try {
       const query = `
-        SELECT user_name, user_lastname, user_permission_file
+        SELECT user_id, user_name, user_lastname, user_permission_file
         FROM user
         WHERE user_center_id = ? AND user_type = 3 AND user_is_auth = false;
       `;

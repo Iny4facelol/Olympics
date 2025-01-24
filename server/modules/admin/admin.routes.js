@@ -19,6 +19,8 @@ router.get('/allOlympics', adminController.allOlympics);
 router.put('/logicalDeleteOlympics/:olympics_id', adminController.logicalDeleteOlympics);
 router.get('/showActivitysInOlympics/:olympics_id', adminController.getOlympicsWithActivity);
 router.get("/olympicsActivities/:olympics_id", adminController.getOlympicsActivities);
+router.get("/centerOlympics/:center_id", adminController.getCenterOlympics);
+router.post('/addOlympicsToCenter/:center_id', adminController.addOlympicsToCenter);
 
 // Rutas de Usuarios
 router.post('/addResponsible', adminController.addResponsible);

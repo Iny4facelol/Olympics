@@ -477,6 +477,52 @@ class AdminDal {
     }
   };
 
+  getCenterOlympics = async (center_id) => {
+    try {
+      let sql = `SELECT * FROM olympics_center WHERE center_id = ?`;
+      let result = await executeQuery(sql, center_id);
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  updateCenterOlympics = async (centerId, checkedOlympics, toDeleteOlympics) => {
+    const connection = await dbPool.getConnection();
+
+    try {
+      await connection.beginTransaction();
+
+      // Borrar las olimpiadas que se desmarcaron
+      if (toDeleteOlympics.length > 0) {
+        await connection.query(
+          "DELETE FROM olympics_center WHERE center_id = ? AND olympics_id IN (?)",
+          [centerId, toDeleteOlympics]
+        );
+      }
+      // Insertar las olimpiadas que se marcaron
+      if (checkedOlympics.length > 0) {
+        const insertValues = checkedOlympics.map((olympicsId) => [
+          centerId,
+          olympicsId,
+        ]);
+
+        await connection.query(
+          "INSERT IGNORE INTO olympics_center (center_id, olympics_id) VALUES ?",
+          [insertValues]
+        );
+      }
+
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+  }
+
   // Editar Actividad
 
   editActivity = async (data, activity_id) => {

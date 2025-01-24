@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { Table } from "react-bootstrap";
-import { Square, SquarePen, Trash2 } from "lucide-react";
+import { CirclePlus, Square, SquarePen, Trash2 } from "lucide-react";
 import CenterEditModal from "./CenterEditModal";
 import DeleteModal from "../../../../core/components/DeleteModal";
+import CenterOlympicsModal from "./CenterOlympicsModal";
 
 export default function CenterList() {
   const [centers, setCenters] = useState([]);
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [showOlympics, setShowOlympics] = useState(false);
   const [centerEditData, setCenterEditData] = useState({});
 
   const handleClose = () => setShow(false);
@@ -16,6 +18,9 @@ export default function CenterList() {
 
   const handleCloseDelete = () => setShowDelete(false);
   const handleShowDelete = () => setShowDelete(true);
+
+  const handleCloseOlympics = () => setShowOlympics(false);
+  const handleShowOlympics = () => setShowOlympics(true);
 
   useEffect(() => {
     const getData = async () => {
@@ -42,6 +47,12 @@ export default function CenterList() {
     handleShow();
   };
 
+  const handleAddOlympics = (center_id) => {
+    const data = centers.find((center) => center.center_id === center_id);
+    setCenterEditData(data);
+    handleShowOlympics();
+  };
+
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
       <Table
@@ -55,36 +66,47 @@ export default function CenterList() {
           <tr>
             <th>Acciones</th>
             <th>Nombre Centro</th>
-            <th>Email</th>
             <th>Localidad</th>
             <th>Región</th>
             <th>Dirección</th>
             <th>Teléfono</th>
+            <th>Email</th>
           </tr>
         </thead>
         <tbody>
           {centers.map((center) => (
             <tr key={center.center_id}>
-              <td>
+              <td style={{ width: "10%" }}>
                 <Trash2
                   onClick={() => handleLogicDelete(center.center_id)}
                   size="24"
-                  className="text-danger"
+                  className="text-danger custom-icon"
                   style={{ cursor: "pointer" }}
                 />{" "}
                 <SquarePen
                   onClick={() => handleEdit(center.center_id)}
                   size="24"
-                  className="text-success"
+                  className="text-primary custom-icon"
+                  style={{ cursor: "pointer" }}
+                />{" "}
+                <CirclePlus
+                  onClick={() => handleAddOlympics(center.center_id)}
+                  size="24"
+                  className="text-success custom-icon"
                   style={{ cursor: "pointer" }}
                 />
               </td>
-              <td className="col-name">{center.center_name}</td>
-              <td className="col-center-email">{center.center_email}</td>
+              <td className="col-name" style={{ width: "20%" }}>
+                {center.center_name}
+              </td>
+
               <td className="col-center-name">{center.center_city}</td>
               <td className="col-center-province">{center.center_province}</td>
               <td className="col-center-address">{center.center_address}</td>
               <td className="col-center-phone">{center.center_phone}</td>
+              <td className="col-center-email" style={{ width: "10%" }}>
+                {center.center_email}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -93,6 +115,12 @@ export default function CenterList() {
         handleClose={handleClose}
         handleShow={handleShow}
         show={show}
+        data={centerEditData}
+      />
+      <CenterOlympicsModal
+        handleClose={handleCloseOlympics}
+        handleShow={handleShowOlympics}
+        show={showOlympics}
         data={centerEditData}
       />
       <DeleteModal

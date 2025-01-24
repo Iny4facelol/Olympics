@@ -63,7 +63,7 @@ export default function RegisterUserForm() {
       // el botón de registrando
       setAuthenticating(true);
       await fetchData(`api/user/register`, "post", data);
-      toast.success("Usuario registrado correctamente");
+      toast.success("Usuario registrado correctamente, se ha enviado un correo a tu email para verificar tu cuenta");
       // Redirigimos al usuario a la página de login después de 3 segundos para dar sensacion de carga
       setTimeout(() => {
         navigate("/user/login");

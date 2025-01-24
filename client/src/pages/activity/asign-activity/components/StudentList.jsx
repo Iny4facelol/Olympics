@@ -1,7 +1,24 @@
 import React from 'react'
 import { Table } from 'react-bootstrap';
+import { fetchData } from '../../../../utils/axios/axiosHelper';
+import { useEffect, useState } from 'react';
 
 export default function StudentList() {
+  const [users, setUsers] = useState([]);
+
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        // const response = await fetchData('http://localhost:5000/olympics');
+        setUsers(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getData();
+  }, [])
+
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
       <Table
@@ -13,17 +30,14 @@ export default function StudentList() {
       >
         <thead>
           <tr>
-            <th>Nombre Olimpiada</th>
-            <th>Nombre Sede</th>
-            <th>Ciudad Sede</th>
-            <th>Dirección Sede</th>
-            <th>Fecha Inicio</th>
-            <th>Fecha Fin</th>
-            <th>Descripción</th>
+            <th>Acciones</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Actividades</th>
           </tr>
         </thead>
         <tbody>
-          {/* {olympics.map((olympic) => (
+          {olympics.map((olympic) => (
             <tr key={olympic.olympics_id}>
               <td className="col-name">{olympic.olympics_name}</td>
               <td className="col-host-name">{olympic.olympics_host_name}</td>
@@ -31,19 +45,8 @@ export default function StudentList() {
               <td className="col-host-address">
                 {olympic.olympics_host_address}
               </td>
-              <td className="col-start-date">
-                {olympic.olympics_start_date.split("-").reverse().join("-")}
-              </td>
-              <td className="col-end-date">
-                {olympic.olympics_end_date.split("-").reverse().join("-")}
-              </td>
-              <td>
-                {olympic.olympics_description
-                  ? olympic.olympics_description
-                  : "Esta actividad no tiene descripción"}
-              </td>
             </tr>
-          ))} */}
+          ))}
         </tbody>
       </Table>
     </section>
