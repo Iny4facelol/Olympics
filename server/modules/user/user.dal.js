@@ -352,6 +352,45 @@ class UserDal {
       throw new Error("Error al validar usuario");
     }
   };
+
+  getAuthorizationFileFromDB = async (user_id) => {
+    try {
+      const sql = `
+        SELECT c.center_auth_doc
+        FROM center c
+        INNER JOIN user u ON u.user_center_id = c.center_id
+        WHERE u.user_id = ? AND u.user_is_deleted = 0;
+      `;
+      const result = await executeQuery(sql, [user_id]);
+  
+      if (result && result.length > 0) {
+        return result[0].center_auth_doc;
+      }
+      return null;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  saveUserPermissionFile = async (user_id, fileName, filePath) => {
+    console.log(filePath);
+    
+    try {
+      const query = `
+        UPDATE user 
+        SET user_permission_file = ?, 
+            user_is_auth = true
+        WHERE user_id = ?
+      `;
+      await executeQuery(query, [filePath, user_id]);
+      console.log(filePath);
+  
+      console.log("Archivo guardado en la base de datos.");
+    } catch (error) {
+      console.error("Error al guardar el archivo en la base de datos:", error);
+      throw error;
+    }
+  };
 }
 
 export default new UserDal();

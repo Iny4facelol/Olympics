@@ -352,34 +352,62 @@ class UserController {
 
   uploadAuthorizationFile = async (req, res) => {
     try {
-      const { user_id } = req.params;
-
-      const filePath = `/files/authorization/${req.file.filename}`;
-
-      await userDal.updateAuthorizationPath(user_id, filePath);
-
-      res.status(200).json({ message: "Archivo subido con éxito", filePath });
-    } catch (err) {
-      res
-        .status(500)
-        .json({ message: "Error al guardar el archivo", error: err.message });
+      if (!req.file) {
+        console.error("No se ha recibido ningún archivo.");
+        res.status(400).json({
+          message: "No se ha recibido ningún archivo.",
+        });
+      } else {
+        await userDal.saveUserPermissionFile(req.params.user_id, req.file.filename, `/files/authorization/${req.file.filename}`);
+  
+        res.status(200).json({
+          message: "Archivo subido correctamente.",
+          fileName: req.file.filename,
+        });
+      }
+    } catch (error) {
+      console.error("Error al procesar la solicitud:", error);
+      res.status(500).json({
+        message: "Error al procesar la solicitud.",
+        error: error.message,
+      });
     }
+    return;
   };
 
   getAuthorizationFile = async (req, res) => {
-    const user_id = req.params.userId;
-    const userFileName = "auto.menor.doc";
+    try {
+      const user_id = req.params.user_id;
 
-    const filePath = path.resolve(`./public/files/file/${userFileName}`);
-
-    res.download(filePath, userFileName, (err) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ message: "Error al intentar descargar el archivo." });
+      const userFileName = await userDal.getAuthorizationFileFromDB(user_id);
+  
+      if (!userFileName) {
+        res.status(404).json({
+          message: "El archivo de autorización no se encuentra",
+        });
+      } else {
+        const filePath = path.resolve(`./public/files/file/${userFileName}`);
+  
+        res.download(filePath, userFileName, (err) => {
+          if (err) {
+            console.error("Error al intentar descargar el archivo:", err);
+            res.status(500).json({
+              message: "Error al intentar descargar el archivo.",
+            });
+          }
+        });
       }
-    });
+    } catch (error) {
+      console.error("Error en getAuthorizationFile:", error);
+      res.status(500).json({
+        message: "Error al procesar la solicitud.",
+        error: error.message,
+      });
+    }
+    return;
   };
+
+
 
 }
 
