@@ -70,7 +70,7 @@ export default function ActivityList() {
         <tbody>
           {activities.map((activity) => (
             <tr key={activity.activity_id}>
-              <td>
+              <td style={{ width: "10%" }}>
                 <Trash2
                   onClick={() => handleLogicDelete(activity.activity_id)}
                   size="24"
@@ -80,11 +80,13 @@ export default function ActivityList() {
                 <SquarePen
                   onClick={() => handleEdit(activity.activity_id)}
                   size="24"
-                  className="text-success"
+                  className="text-primary"
                   style={{ cursor: "pointer" }}
                 />
               </td>
-              <td className="col-name">{activity.activity_name}</td>
+              <td className="col-name" style={{ width: "10%" }}>
+                {activity.activity_name}
+              </td>
               <td className="col-participants">{activity.max_participants}</td>
               <td className="col-description">
                 {activity.activity_description
@@ -112,7 +114,7 @@ export default function ActivityList() {
         handleClose={handleCloseDelete}
         handleShow={handleShowDelete}
         show={showDelete}
-        data={activityEditData}      
+        data={activityEditData}
         deleteMessage={"Actividad eliminada con éxito"}
         apiEndpoint={`api/admin/logicalDeleteActivity/${activityEditData.activity_id}`}
       />

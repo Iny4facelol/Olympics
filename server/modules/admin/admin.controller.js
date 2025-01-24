@@ -425,6 +425,24 @@ class AdminController {
     }
   };
 
+  addOlympicsToCenter = async (req, res) => {
+    try {
+      const { center_id} = req.params;
+      const { olympics_id, olympics_id_to_delete } = req.body;
+
+      await adminDal.updateCenterOlympics(
+        center_id,
+        olympics_id,
+        olympics_id_to_delete
+      )
+
+      res.status(200).json({ message: "Olimpiadas actualizadas correctamente" });
+    } catch (error) {
+      console.log("Error al actualizar olimpiadas", error);
+      res.status(500).json({ message: "Error al actualizar olimpiadas" });
+    }
+  }
+
   // Ver Actividades de una Olimpiada
 
   getOlympicsActivities = async (req, res) => {
@@ -436,6 +454,16 @@ class AdminController {
       res.status(500).json({ message: "Error al obtener las actividades" });
     }
   };
+
+  getCenterOlympics = async (req, res) => {
+    try {
+      const { center_id } = req.params;
+      const result = await adminDal.getCenterOlympics(center_id);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ message: "Error al obtener las olimpiadas" });
+    }
+  }
 
   //borrado logico de actividades
   logicalDeleteActivity = async (req, res) => {

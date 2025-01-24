@@ -14,7 +14,7 @@ router.get('/usersToAddActivity/:user_center_id', userController.getUsersToAddAc
 router.put('/responsible/:user_id', userController.editResponsible);
 router.put('/editUser/:user_id', userController.editUserUser);
 
-router.put('/validate/:user_id', userController.ResponsibleValidateDocument);
+router.put('/authUser/:user_id', userController.ResponsibleValidateDocument);
 
 
 //REVISAR CON LOS PROFES

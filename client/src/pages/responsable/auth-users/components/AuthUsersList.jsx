@@ -4,10 +4,22 @@ import { useAppContext } from "../../../../core/context/AppContext";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { CircleCheckBig, CircleX } from "lucide-react";
 import "./AuthUsersList.css";
+import DeleteModal from "../../../../core/components/DeleteModal";
+import AuthModal from "./AuthModal";
+import DenyModal from "./DenyModal";
 
 export default function AuthUsersList() {
   const { user } = useAppContext();
   const [unauthorizedUsers, setUnauthorizedUsers] = useState([]);
+  const [authUserData, setAuthUserData] = useState({});
+  const [show, setShow] = useState(false);
+  const [showDeny, setShowDeny] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const handleCloseDeny = () => setShowDeny(false);
+  const handleShowDeny = () => setShowDeny(true);
 
   useEffect(() => {
     const getData = async () => {
@@ -23,7 +35,19 @@ export default function AuthUsersList() {
       }
     };
     getData();
-  }, []);
+  }, [show, showDeny]);
+
+  const handleAuthUser = (user_id) => {
+    const data = unauthorizedUsers.find((user) => user.user_id === user_id);
+    setAuthUserData(data);
+    handleShow();
+  };
+
+  const handleDenyAuthUser = (user_id) => {
+    const data = unauthorizedUsers.find((user) => user.user_id === user_id);
+    setAuthUserData(data);
+    handleShowDeny();
+  };
 
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
@@ -46,13 +70,13 @@ export default function AuthUsersList() {
             <tr key={user.user_id}>
               <td className="col-action">
                 <CircleCheckBig
-                  onClick={() => handleLogicDelete(olympic.olympics_id)}
+                  onClick={() => handleAuthUser(user.user_id)}
                   size="24"
                   className="text-success custom-icon"
                   style={{ cursor: "pointer" }}
                 />{" "}
                 <CircleX
-                  onClick={() => handleEdit(olympic.olympics_id)}
+                  onClick={() => handleDenyAuthUser(user.user_id)}
                   size="24"
                   style={{ cursor: "pointer" }}
                   className="text-danger custom-icon"
@@ -68,11 +92,16 @@ export default function AuthUsersList() {
           ))}
         </tbody>
       </Table>
-      <DeleteModal
-        handleClose={handleCloseDelete}
-        handleShow={handleShowDelete}
-        show={showDelete}
-        data={olympicsEditData}
+      <AuthModal
+        handleClose={handleClose}
+        handleShow={handleShow}
+        show={show}
+        data={authUserData}
+      />
+      <DenyModal
+        handleClose={handleCloseDeny}
+        show={showDeny}
+        data={authUserData}
       />
     </section>
   );

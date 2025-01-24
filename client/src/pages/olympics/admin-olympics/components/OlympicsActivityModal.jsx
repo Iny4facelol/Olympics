@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
-import { set, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { olympicsSchema } from "../../../../utils/zodSchemas/olympicsSchema";
+import { useForm } from "react-hook-form";
 import { Col, Form, Modal, Row } from "react-bootstrap";
 import { toast, Toaster } from "sonner";
 import ButtonCustom from "../../../../core/components/Button/Button";
@@ -114,6 +112,10 @@ export default function OlympicsActivityModal({ handleClose, show, data }) {
         <Modal.Title>Añadir actividades a {data.olympics_name}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        <p className="fst-italic">
+          Para eliminar las actividades asignadas a esta olimpiada, simplemente
+          desmárquelas.
+        </p>
         <Form
           className="d-flex gap-4 flex-column justify-content-center align-content-center"
           onSubmit={handleSubmit(onSubmit)}
