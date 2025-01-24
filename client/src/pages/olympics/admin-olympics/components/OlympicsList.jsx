@@ -33,7 +33,7 @@ export default function OlympicsList() {
       }
     };
     getData();
-  }, [show]);
+  }, [show, showDelete]);
 
   const handleLogicDelete = async (olympics_id) => {
     const data = olympics.find(
@@ -144,6 +144,7 @@ export default function OlympicsList() {
         show={showDelete}
         data={olympicsEditData}
         deleteMessage="Olimpiada eliminada correctamente"
+        apiEndpoint={`api/admin/logicalDeleteOlympics/${olympicsEditData.olympics_id}`}
       />
     </section>
   );

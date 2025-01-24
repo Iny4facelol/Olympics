@@ -1,17 +1,34 @@
 import React, { useState } from "react";
 import { CircleX, Search } from "lucide-react";
 import ButtonCustom from "../../../../core/components/Button/Button";
+import { fetchData } from "../../../../utils/axios/axiosHelper";
+import { useAppContext } from "../../../../core/context/AppContext";
 
 export default function NonAuthDashboard() {
+  const { user } = useAppContext();
   const [revision, setRevision] = useState(false);
 
-  const handleUploadDoc = () => {
+  const handleUploadDoc = async () => {
     setRevision(true);
   };
 
-  const handleDownloadDoc = () => {
-    setRevision(false)
-  }
+  const handleDownloadDoc = async () => {
+    try {
+      const response = await fetchData(
+        `api/user/get-authorization/${user.user_id}`
+      );
+      console.log(response)
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", "autorizacion.pdf");
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.error("Error al descargar la autorización:", error);
+    }
+    setRevision(false);
+  };
 
   return (
     <section className="d-flex flex-column gap-3">
@@ -27,7 +44,9 @@ export default function NonAuthDashboard() {
       </article>
       <article className="d-flex flex-column gap-4">
         <div className="d-flex gap-3">
-          <ButtonCustom onClick={handleDownloadDoc} bgColor={"orange"}>Descargar autorización</ButtonCustom>
+          <ButtonCustom onClick={handleDownloadDoc} bgColor={"orange"}>
+            Descargar autorización
+          </ButtonCustom>
           <ButtonCustom onClick={handleUploadDoc} bgColor={"orange"}>
             Subir autorización
           </ButtonCustom>

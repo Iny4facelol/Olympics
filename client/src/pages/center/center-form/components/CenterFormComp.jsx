@@ -10,6 +10,7 @@ import { toast, Toaster } from "sonner";
 
 export default function CenterFormComp() {
   const [authenticating, setAuthenticating] = useState(false);
+  const [errorMsg , setErrorMsg] = useState(null);
   const navigate = useNavigate();
 
   const {
@@ -35,6 +36,8 @@ export default function CenterFormComp() {
       }, 2000)
     } catch (error) {
       toast.error("Ha ocurrido un error");
+      setAuthenticating(false);
+      setErrorMsg(error.response.data.message);
       console.error(error);
     }
   };
@@ -72,6 +75,11 @@ export default function CenterFormComp() {
           {errors.center_email && (
             <Form.Text className="text-danger">
               {errors.center_email.message}
+            </Form.Text>
+          )}
+          {errorMsg && (
+            <Form.Text className="text-danger">
+              {errorMsg}
             </Form.Text>
           )}
         </Col>

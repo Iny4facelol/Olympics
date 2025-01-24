@@ -28,7 +28,7 @@ export default function CenterList() {
       }
     };
     getData();
-  }, [show]);
+  }, [show, showDelete]);
 
   const handleLogicDelete = async (center_id) => {
     const data = centers.find((center) => center.center_id === center_id);
@@ -100,6 +100,8 @@ export default function CenterList() {
         handleShow={handleShowDelete}
         show={showDelete}
         data={centerEditData}
+        deleteMessage="Centro eliminado con éxito"
+        apiEndpoint={`api/admin/logicalDeleteCenter/${centerEditData.center_id}`}
       />
     </section>
   );

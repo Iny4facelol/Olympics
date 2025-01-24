@@ -121,7 +121,7 @@ class AdminController {
         res.status(400).json({ error: error.errors });
       } else {
         console.error(error);
-        return res.status(500).json({ message: "Error al crear el centro" });
+        return res.status(500).json({ message: "El email ya está asociado a un centro" });
       }
     }
   };
