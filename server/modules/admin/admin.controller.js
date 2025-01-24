@@ -291,6 +291,36 @@ class AdminController {
     }
   };
 
+  //busqueda en tiempo real de usuarios
+  searchUsers = async (req, res) => {
+    try {
+      const filter = {};
+      const queryKeys = [
+        'center_name',
+        'user_type',
+        'user_name',
+        'user_lastname',
+        'user_city',
+        'user_phone',
+        'user_email',
+        'user_center_id'
+      ];
+  
+      queryKeys.forEach(key => {
+        if (req.query[key]) {
+          filter[key] = req.query[key];
+        }
+      });
+  
+      
+      const users = await adminDal.searchUsers(filter);
+  
+      res.status(200).json(users);
+    } catch (error) {
+      res.status(500).json({ message: "Error al buscar usuarios", error });
+    }
+  };
+
   // 4º Apartado de Actividades
   // Añadir una Actividad
 
