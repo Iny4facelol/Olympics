@@ -3,11 +3,11 @@ import { Col, Row } from "react-bootstrap";
 
 export default function Section2() {
   return (
-    <section className="p-3 p-sm-2">
+    <section className="p-3 p-sm-2 d-flex flex-column gap-4">
       <Row className="w-100 w-lg-50">
         <Col md={6} sm={12}>
-          <h2>
-            Quienes somos, <br />
+          <h2 className="fs-2 fw-bold">Quienes somos,</h2>
+          <h2 className="fs-2 fw-bold">
             <span className="custom-span">nuestro proyecto</span>
           </h2>
         </Col>

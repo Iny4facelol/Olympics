@@ -6,7 +6,7 @@ export default function AppLayout({ children }) {
   return (
     <>
       <HeaderHome />
-      <main className="main-user flex-grow-1">{children}</main>
+      <main className="main-user flex-grow-1 flex-column custom-container">{children}</main>
       <Footer />
     </>
   );
