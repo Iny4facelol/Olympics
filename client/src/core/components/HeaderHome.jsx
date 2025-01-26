@@ -3,6 +3,7 @@ import ButtonCustom from "./Button/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 
+
 export default function HeaderHome() {
   const { user, setUser, setToken } = useAppContext();
   const navigate = useNavigate();
@@ -33,12 +34,12 @@ export default function HeaderHome() {
 
   return (
     <header className="header-user">
-      <Container className="d-flex gap-5 py-4 justify-content-center justify-content-sm-between align-items-center">
-        <div className="d-none d-sm-block user-select-none">
+      <Container className="d-flex gap-5 py-4 justify-content-center justify-content-sm-between align-items-center flex-column flex-sm-row">
+        <div className="user-select-none">
           <img className="user-select-none" src="/olympicslogo.png" alt="" />
         </div>
-        <nav className="d-flex justify-content-center w-sm-75 w-100 justify-content-sm-between align-content-center py-4">
-          <div className="d-flex w-100 justify-content-evenly align-items-center gap-2 custom-shadow p-3 rounded-4">
+        <nav className="d-flex justify-content-center w-sm-75 w-100 justify-content-sm-between align-content-center py-0 py-sm-4 home-nav">
+          <div className="d-flex w-100 justify-content-center justify-content-sm-evenly align-items-center gap-2 custom-shadow p-3 rounded-4">
             <article className="d-flex justify-content-between align-items-center gap-4 user-select-none d-none d-lg-flex">
               <Link to="/" className="link-hover fw-semibold">
                 Inicio

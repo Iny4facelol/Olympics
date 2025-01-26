@@ -37,3 +37,10 @@
     }
   }
 }
+
+@media (width <= 578px) {
+  .custom-shadow {
+    box-shadow: none;
+  }
+  
+}
