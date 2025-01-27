@@ -249,14 +249,13 @@ class UserController {
       }
 
       // Este bloque simula la inserción
-      const result = {
+      const result = await userDal.addActivityToUser(
         user_id,
         activity_id,
         center_id,
-        olympics_id,
-        message: "Actividad añadida al usuario con éxito.",
-      };
-
+        olympics_id
+      );
+      console.log("Actividad añadida con éxito", result);
       return res.status(200).json(result);
     } catch (error) {
       console.log("Error al añadir actividad al usuario:", error);
