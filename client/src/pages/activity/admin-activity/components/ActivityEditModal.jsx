@@ -43,9 +43,18 @@ function ActivityEditModal({ handleClose, handleShow, show, data }) {
   const onSubmit = async (formData) => {
     try {
       setAuthenticating(true);
+      const newFormData = new FormData();
+      newFormData.append("activity_name", formData.activity_name);
+      newFormData.append("activity_description", formData.activity_description);
+      newFormData.append("max_participants", formData.max_participants);
+
+      if (file) {
+        newFormData.append("img", file);
+      }
+
       const dataWithId = {
         activity_id: data.activity_id,
-        ...formData,
+        ...newFormData,
       };
       await fetchData(`api/admin/editActivity`, "put", dataWithId);
       toast.success("Actividad actualizada correctamente");

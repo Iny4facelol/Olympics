@@ -1,4 +1,4 @@
-import { executeQuery } from "../../config/db.js";
+import { dbPool, executeQuery } from "../../config/db.js";
 
 class UserDal {
   getCenter = async () => {
@@ -187,7 +187,7 @@ class UserDal {
   getUsersToAddActivity = async (user_center_id) => {
     try {
       let sql = `
-          SELECT u.user_id, u.user_name, u.user_lastname, u.user_email, u.user_phone, o.olympics_id
+        SELECT u.user_id, u.user_name, u.user_lastname, u.user_email, u.user_phone, o.olympics_id
           FROM user u
           JOIN center c ON c.center_id = u.user_center_id
           JOIN olympics_center o ON c.center_id = o.center_id
@@ -204,26 +204,42 @@ class UserDal {
   };
 
   // REVISADO CON SANTI
-  addActivityToUser = async (user_id, activity_id, center_id, olympics_id) => {
+  addActivityToUser = async (user_id, activities, center_id, olympics_id) => {
+    const connection = await dbPool.getConnection();
     try {
+      await connection.beginTransaction();
+
       const query = `
-        INSERT INTO reservation (user_id, activity_id, center_id, olympics_id)
-        VALUES (?, ?, ?, ?)
-      `;
-      const result = await executeQuery(query, [
-        user_id,
-        activity_id,
-        center_id,
-        olympics_id,
-      ]);
+      INSERT INTO reservation (user_id, activity_id, center_id, olympics_id)
+      VALUES (?, ?, ?, ?)
+    `;
+
+      // Procesar cada activity_id del array
+      for (const activity_id of activities) {
+        await connection.query(query, [
+          user_id,
+          activity_id,
+          center_id,
+          olympics_id,
+        ]);
+      }
+
+      await connection.commit();
 
       return {
-        message: "Actividad añadida al usuario con éxito.",
-        result,
+        message: `${activities.length} actividades añadidas al usuario con éxito.`,
+        success: true,
       };
     } catch (error) {
+      if (connection) {
+        await connection.rollback();
+      }
       console.error("Error en el DAL:", error);
-      throw new Error("Error al añadir actividad al usuario");
+      throw new Error("Error al añadir actividades al usuario");
+    } finally {
+      if (connection) {
+        connection.release();
+      }
     }
   };
 
@@ -246,36 +262,46 @@ class UserDal {
   searchUserDetails = async (user_id) => {
     try {
       const query = `
-        SELECT 
-            user.user_name,
-            user.user_lastname,
-            center.center_name,
-            center.center_city,
-            center.center_address,
-            responsable.user_name AS responsable_name,
-            responsable.user_lastname AS responsable_lastname,
-            olympics.olympics_name,
-            olympics.olympics_host_name,
-            olympics.olympics_host_city,
-            olympics.olympics_host_address,
-            olympics.olympics_start_date,
-            olympics.olympics_end_date,
-            activity.activity_name,
-            activity.activity_id
-        FROM 
-            user
-        LEFT JOIN 
-            center ON user.user_center_id = center.center_id
-        LEFT JOIN 
-            olympics ON user.user_olympics_id = olympics.olympics_id
-        LEFT JOIN 
-            user AS responsable ON center.center_id = responsable.user_center_id AND responsable.user_type = 2
-        LEFT JOIN 
-            olympics_activity ON olympics.olympics_id = olympics_activity.olympics_id
-        LEFT JOIN 
-            activity ON olympics_activity.activity_id = activity.activity_id
-        WHERE 
-            user.user_id = ?;
+SELECT 
+    user.user_id,
+    user.user_name,
+    user.user_lastname,
+    center.center_id,
+    center.center_name,
+    center.center_city,
+    center.center_address,
+    olympics.olympics_id,
+    olympics.olympics_name,
+    olympics.olympics_host_name,
+    olympics.olympics_host_city,
+    olympics.olympics_host_address,
+    olympics.olympics_start_date,
+    olympics.olympics_end_date,
+    GROUP_CONCAT(DISTINCT activity.activity_name ORDER BY activity.activity_name SEPARATOR ', ') AS activities_names,
+    GROUP_CONCAT(DISTINCT activity.activity_id ORDER BY activity.activity_name SEPARATOR ', ') AS activities_ids,
+    GROUP_CONCAT(DISTINCT activity.activity_image ORDER BY activity.activity_name SEPARATOR ', ') AS activities_images,
+    (
+        SELECT GROUP_CONCAT(CONCAT(u.user_name, ' ', u.user_lastname) ORDER BY u.user_name SEPARATOR ', ')
+        FROM user u
+        WHERE u.user_center_id = center.center_id
+        AND u.user_type = 2
+        AND u.user_is_deleted = 0
+    ) AS responsables
+FROM reservation
+JOIN user ON reservation.user_id = user.user_id
+JOIN center ON reservation.center_id = center.center_id
+JOIN olympics ON reservation.olympics_id = olympics.olympics_id
+JOIN activity ON reservation.activity_id = activity.activity_id
+WHERE user.user_is_deleted = 0
+AND center.center_is_deleted = 0
+AND olympics.olympics_is_deleted = 0
+AND activity.activity_is_deleted = 0
+AND user.user_id = ?
+GROUP BY 
+    user.user_id,
+    center.center_id,
+    olympics.olympics_id;
+
       `;
       const result = await executeQuery(query, [user_id]);
 
@@ -350,6 +376,22 @@ class UserDal {
       return result;
     } catch (error) {
       throw new Error("Error al validar usuario");
+    }
+  };
+
+  getActivitiesFromOlympics = async (olympics_id) => {
+    try {
+      let sql = `
+      SELECT DISTINCT a.activity_id, a.activity_name
+      FROM activity a
+      INNER JOIN olympics_activity oa ON a.activity_id = oa.activity_id
+      WHERE oa.olympics_id = ? AND a.activity_is_deleted = 0;
+      `;
+      const result = await executeQuery(sql, [olympics_id]);
+      console.log("asdadasdsadasd",result)
+      return result;
+    } catch (error) {
+      throw new Error("Error al obtener actividades de la olimpiada");
     }
   };
 }

@@ -232,6 +232,22 @@ class UserController {
     }
   };
 
+  getActivitiesFromOlympics = async (req, res) => {
+    try {
+      const { olympics_id } = req.params;
+      console.log("olympics_id", olympics_id);
+      const result = await userDal.getActivitiesFromOlympics(olympics_id);
+
+      return res.status(200).json(result);
+    } catch (error) {
+      console.error("Error al obtener las actividades de las olimpiadas:", error);
+      return res.status(500).json({
+        message: "Error al obtener las actividades de las olimpiadas.",
+        error,
+      });
+    }
+  }
+
   //REVISADO CON SANTI
   addActivityToUser = async (req, res) => {
     try {
@@ -248,14 +264,12 @@ class UserController {
         });
       }
 
-      // Este bloque simula la inserción
-      const result = {
+      const result = await userDal.addActivityToUser(
         user_id,
         activity_id,
         center_id,
-        olympics_id,
-        message: "Actividad añadida al usuario con éxito.",
-      };
+        olympics_id
+      );
 
       return res.status(200).json(result);
     } catch (error) {
@@ -278,9 +292,7 @@ class UserController {
     } catch (error) {
       res.status(500).json({ error });
     }
-
   };
-
 
   getPendingValidationUsers = async (req, res) => {
     try {
@@ -294,12 +306,10 @@ class UserController {
       return res.status(200).json(pendingUsers);
     } catch (error) {
       console.error("Error al obtener usuarios pendientes de validar:", error);
-      return res
-        .status(500)
-        .json({
-          message: "Error al obtener usuarios pendientes de validar.",
-          error,
-        });
+      return res.status(500).json({
+        message: "Error al obtener usuarios pendientes de validar.",
+        error,
+      });
     }
   };
 
@@ -380,7 +390,6 @@ class UserController {
       }
     });
   };
-
 }
 
 
