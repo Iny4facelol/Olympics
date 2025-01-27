@@ -11,7 +11,7 @@ router.put('/completeCenter/:center_id', multerFile("center_auth") ,userControll
 router.put('/completeResponsible/:user_id', userController.completeResponsible);
 router.get('/usersToAddActivity/:user_center_id', userController.getUsersToAddActivity)
 
-router.put('/responsible/:user_id', userController.editResponsible);
+router.put('/editResponsible/:user_id', userController.editResponsible);
 router.put('/editUser/:user_id', userController.editUserUser);
 
 router.put('/authUser/:user_id', userController.ResponsibleValidateDocument);

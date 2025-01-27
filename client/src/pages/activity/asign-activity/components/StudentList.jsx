@@ -1,23 +1,28 @@
-import React from 'react'
-import { Table } from 'react-bootstrap';
-import { fetchData } from '../../../../utils/axios/axiosHelper';
-import { useEffect, useState } from 'react';
+import React from "react";
+import { Table } from "react-bootstrap";
+import { fetchData } from "../../../../utils/axios/axiosHelper";
+import { useEffect, useState } from "react";
+import { useAppContext } from "../../../../core/context/AppContext";
 
 export default function StudentList() {
+  const { user } = useAppContext();
   const [users, setUsers] = useState([]);
-
+  console.log(user);
 
   useEffect(() => {
     const getData = async () => {
       try {
-        // const response = await fetchData('http://localhost:5000/olympics');
+        const response = await fetchData(
+          `api/user/usersToAddActivity/${user.user_center_id}` , "get"
+        );
+        console.log(response)
         setUsers(response);
       } catch (error) {
         console.error(error);
       }
-    }
+    };
     getData();
-  }, [])
+  }, []);
 
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
@@ -33,18 +38,14 @@ export default function StudentList() {
             <th>Acciones</th>
             <th>Nombre</th>
             <th>Apellidos</th>
-            <th>Actividades</th>
           </tr>
         </thead>
         <tbody>
-          {olympics.map((olympic) => (
-            <tr key={olympic.olympics_id}>
-              <td className="col-name">{olympic.olympics_name}</td>
-              <td className="col-host-name">{olympic.olympics_host_name}</td>
-              <td className="col-host-city">{olympic.olympics_host_city}</td>
-              <td className="col-host-address">
-                {olympic.olympics_host_address}
-              </td>
+          {users.map((user) => (
+            <tr key={user.user_id}>
+              <td className="col-actions">#</td>
+              <td className="col-name">{user.user_name}</td>
+              <td className="col-host-name">{user.user_lastname}</td>
             </tr>
           ))}
         </tbody>

@@ -128,7 +128,7 @@ export default function CenterOlympicsModal({ handleClose, show, data }) {
                   <Col key={olympic.olympics_id}>
                     <Form.Check
                       value={olympic.olympics_id}
-                      type="checkbox"
+                      type="radio"
                       label={olympic.olympics_name}
                       {...register("olympics_id")}
                     />

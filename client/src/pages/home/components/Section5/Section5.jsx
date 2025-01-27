@@ -34,7 +34,7 @@ export default function Section5() {
   });
 
   return (
-    <section className="d-flex gap-4 flex-column p-3 p-sm-2 reveal">
+    <section id="contact" className="d-flex gap-4 flex-column p-3 p-sm-2 reveal">
       <Row>
         <Col md={12} sm={12}>
           <h2 className="fw-bold fs-2">

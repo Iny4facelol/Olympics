@@ -7,8 +7,8 @@ export default function Section3() {
   useEffect(() => {
     ScrollReveal().reveal(".reveal", {
       distance: "50px",
-      duration: 800,
-      delay: 550,
+      duration: 700,
+      delay: 350,
       easing: "ease-in-out",
       interval: 200,
       origin: "bottom",
