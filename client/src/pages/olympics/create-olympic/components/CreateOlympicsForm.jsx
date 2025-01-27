@@ -76,14 +76,14 @@ export default function CreateOlympicsForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicOlympicsHostName">
-            <Form.Label>Nombre del centro*</Form.Label>
+            <Form.Label>Nombre de la sede*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.olympics_host_name ? "is-invalid" : ""
               }`}
               {...register("olympics_host_name")}
               type="text"
-              placeholder="Nombre del centro"
+              placeholder="Nombre de la sede"
             />
           </Form.Group>
           {errors.olympics_host_name && (

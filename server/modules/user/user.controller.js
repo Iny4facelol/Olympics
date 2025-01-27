@@ -4,6 +4,7 @@ import {
   registerSchema,
   completeResponsibleSchema,
   editUserSchema,
+  editResponsibleSchema,
 } from "../../utils/zodSchemas/userSchema.js";
 import { z } from "zod";
 import userDal from "./user.dal.js";
@@ -166,20 +167,18 @@ class UserController {
   editResponsible = async (req, res) => {
     try {
       const { user_id } = req.params;
-      const { user_name, user_lastname, user_phone, user_dni } = req.body;
+      const parsedData = editResponsibleSchema.parse(req.body);
 
-      const result = await userDal.updateResponsible(user_id, {
-        user_name,
-        user_lastname,
-        user_phone,
-        user_dni,
-      });
+      const result = await userDal.updateResponsible(user_id, parsedData);
 
       return res.status(200).json({
         message: "Responsable actualizado con éxito.",
         result,
       });
     } catch (error) {
+      if(error instanceof z.ZodError){
+        res.status(400).json({error: error.errors})
+      }
       console.error("Error en editResponsible:", error);
       return res.status(500).json({
         message: "Error al actualizar responsable.",
@@ -270,6 +269,8 @@ class UserController {
         center_id,
         olympics_id
       );
+
+      console.log("Actividad añadida con éxito", result);
 
       return res.status(200).json(result);
     } catch (error) {
@@ -362,33 +363,59 @@ class UserController {
 
   uploadAuthorizationFile = async (req, res) => {
     try {
-      const { user_id } = req.params;
-
-      const filePath = `/files/authorization/${req.file.filename}`;
-
-      await userDal.updateAuthorizationPath(user_id, filePath);
-
-      res.status(200).json({ message: "Archivo subido con éxito", filePath });
-    } catch (err) {
-      res
-        .status(500)
-        .json({ message: "Error al guardar el archivo", error: err.message });
+      if (!req.file) {
+        console.error("No se ha recibido ningún archivo.");
+        res.status(400).json({
+          message: "No se ha recibido ningún archivo.",
+        });
+      } else {
+        await userDal.saveUserPermissionFile(req.params.user_id, req.file.filename, `/files/authorization/${req.file.filename}`);
+  
+        res.status(200).json({
+          message: "Archivo subido correctamente.",
+          fileName: req.file.filename,
+        });
+      }
+    } catch (error) {
+      console.error("Error al procesar la solicitud:", error);
+      res.status(500).json({
+        message: "Error al procesar la solicitud.",
+        error: error.message,
+      });
     }
+    return;
   };
 
   getAuthorizationFile = async (req, res) => {
-    const user_id = req.params.userId;
-    const userFileName = "auto.menor.doc";
+    try {
+      const user_id = req.params.user_id;
 
-    const filePath = path.resolve(`./public/files/file/${userFileName}`);
-
-    res.download(filePath, userFileName, (err) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ message: "Error al intentar descargar el archivo." });
+      const userFileName = await userDal.getAuthorizationFileFromDB(user_id);
+  
+      if (!userFileName) {
+        res.status(404).json({
+          message: "El archivo de autorización no se encuentra",
+        });
+      } else {
+        const filePath = path.resolve(`./public/files/file/${userFileName}`);
+  
+        res.download(filePath, userFileName, (err) => {
+          if (err) {
+            console.error("Error al intentar descargar el archivo:", err);
+            res.status(500).json({
+              message: "Error al intentar descargar el archivo.",
+            });
+          }
+        });
       }
-    });
+    } catch (error) {
+      console.error("Error en getAuthorizationFile:", error);
+      res.status(500).json({
+        message: "Error al procesar la solicitud.",
+        error: error.message,
+      });
+    }
+    return;
   };
 }
 

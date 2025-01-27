@@ -291,6 +291,44 @@ class AdminController {
     }
   };
 
+  //busqueda en tiempo real de usuarios
+  searchUsers = async (req, res) => {
+    try {
+      // Lista de claves permitidas para los filtros
+      const allowedKeys = [
+        'center_name',
+        'user_type',
+        'user_name',
+        'user_lastname',
+        'user_city',
+        'user_phone',
+        'user_email',
+        'user_center_id'
+      ];
+  
+      // Creamos un objeto filtro a partir de los parámetros de la consulta
+      const filter = {};
+      Object.keys(req.query).forEach((key) => {
+        if (allowedKeys.includes(key)) {
+          filter[key] = req.query[key]; // Añadimos el filtro si la clave es válida
+        }
+      });
+  
+      // Llamamos al DAL para obtener los datos
+      const users = await adminDal.searchUsers(filter);
+  
+      // Respondemos con los datos obtenidos
+      res.status(200).json(users);
+    } catch (error) {
+      console.error('Error en searchUsers:', error);
+      res.status(500).json({
+        message: 'Error al buscar usuarios',
+        error: error.message,
+      });
+    }
+  };
+  
+
   // 4º Apartado de Actividades
   // Añadir una Actividad
 
