@@ -90,7 +90,8 @@ class UserDal {
           user_lastname = ?, 
           user_dni = ?, 
           user_phone = ?, 
-          user_password = ?          
+          user_password = ?,
+          user_is_validated = 1          
         WHERE user_id = ?
       `;
       const result = await executeQuery(sql, values);
@@ -102,18 +103,20 @@ class UserDal {
   };
 
   updateResponsible = async (user_id, userData) => {
-    const { user_name, user_lastname, user_phone, user_dni } = userData;
+    const { user_name, user_lastname, user_dni, user_city, user_phone, user_center_id } = userData;
 
     try {
       const result = await executeQuery(
         `UPDATE user SET
            user_name = ?,
            user_lastname = ?,
+           user_dni = ?,
+           user_city = ?,
            user_phone = ?,
-           user_dni = ?
+           user_center_id = ?
          WHERE user_id = ? 
          AND user_type = 2`,
-        [user_name, user_lastname, user_phone, user_dni, user_id]
+        [user_name, user_lastname, user_dni, user_city, user_phone, user_center_id,user_id]
       );
       return result;
     } catch (err) {

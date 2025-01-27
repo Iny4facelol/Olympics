@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import DashboardLayout from "../../../core/layout/DashboardLayout";
 import { Col, Container, Row } from "react-bootstrap";
 import { useAppContext } from "../../../core/context/AppContext";
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
+import ResponsibleEditModal from "./ResponsibleEditModal";
 
 export default function ResponsibleDashboard() {
   const { user } = useAppContext();
+  const [show, setShow] = useState(false);
+  const [responsibleEditData, setResponsibleEditData] = useState({});
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const handleEdit = (user_id) => {
+    const data = user_id;
+    setResponsibleEditData(data);
+    handleShow();
+  };
+
   return (
     <DashboardLayout>
       <Container>
@@ -22,7 +35,10 @@ export default function ResponsibleDashboard() {
               md={6}
             >
               <p className="d-flex gap-2 fw-bold ">
-                <Link className="link-hover" to="/admin/createNewCenter">
+                <Link
+                  className="link-hover"
+                  onClick={() => handleEdit(user.user_id)}
+                >
                   Editar datos personales <MoveRight color="#ee531e" />
                 </Link>
               </p>
@@ -55,6 +71,12 @@ export default function ResponsibleDashboard() {
             </Col>
           </Row>
         </div>
+        <ResponsibleEditModal
+          handleClose={handleClose}
+          handleShow={handleShow}
+          show={show}
+          data={responsibleEditData}
+        />
       </Container>
     </DashboardLayout>
   );
