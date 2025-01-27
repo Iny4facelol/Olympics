@@ -431,18 +431,52 @@ class AdminDal {
   //Búsqueda en tiempo real usuarios
   searchUsers = async (filter) => {
     try {
-      let query = 'SELECT * FROM user WHERE 1=1';
+      // Lista de claves permitidas para los filtros
+      const allowedKeys = [
+        'center_name',       // Desde la tabla "center"
+        'user_type',         // Desde la tabla "user"
+        'user_name',         // Desde la tabla "user"
+        'user_lastname',     // Desde la tabla "user"
+        'user_city',         // Desde la tabla "user"
+        'user_phone',        // Desde la tabla "user"
+        'user_email',        // Desde la tabla "user"
+        'user_center_id'     // Desde la tabla "user"
+      ];
+  
+      let query = `
+        SELECT 
+          user.user_id, 
+          user.user_name, 
+          user.user_lastname, 
+          user.user_city, 
+          user.user_phone, 
+          user.user_email, 
+          user.user_type,
+          center.center_name,
+          center.center_city
+        FROM 
+          user
+        LEFT JOIN 
+          center ON user.user_center_id = center.center_id
+        WHERE 
+          user.user_is_deleted = 0
+      `;
       const params = [];
   
-      Object.keys(filter).forEach(key => {
-        query += ` AND ${key} = ?`;
-        params.push(filter[key]);
+      // Filtrar las claves permitidas y construir el WHERE dinámico
+      Object.keys(filter).forEach((key) => {
+        if (allowedKeys.includes(key)) {
+          query += ` AND ${key.includes('center_') ? 'center' : 'user'}.${key} = ?`;
+          params.push(filter[key]);
+        }
       });
   
+      // Ejecutar la consulta con los parámetros
       const [result] = await executeQuery(query, params);
       return result;
     } catch (error) {
-      throw new Error('Error al buscar usuarios: ' + error.message);
+      console.error('Error al buscar usuarios en el DAL:', error);
+      throw new Error('Error al buscar usuarios');
     }
   };
 
