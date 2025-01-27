@@ -14,12 +14,15 @@
   box-shadow: 0 0 10px 1px rgba(102, 101, 101, 0.75);
 }
 .header-user {
-  background-color: #fdfdfd;
+  background-color: #fdfdfde5;
+  position: sticky;
+  top: 0;
+  z-index: 100;
   div {
     img {
       width: 200px;
-      pointer-events: none;
       user-select: none;
+      cursor: pointer;
       @media (width <= 768px) {
         width: 150px;
       }
@@ -42,5 +45,4 @@
   .custom-shadow {
     box-shadow: none;
   }
-  
 }

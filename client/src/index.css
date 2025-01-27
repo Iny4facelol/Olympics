@@ -2,6 +2,7 @@ html, body {
   height: 100%;
   margin: 0;
   scrollbar-color: #ee531e #fdfdfd;
+  scroll-behavior: smooth;
 }
 
 #root {
@@ -18,6 +19,11 @@ html, body {
     box-shadow: 0 0 0 0.2rem rgba(238, 83, 30, 0.25);
   }
 }
+
+#valours,#aboutUs,#contact {
+  scroll-margin-top: 180px; 
+}
+
 
 .custom-icon {
   transition: all 0.3s ease-in-out;

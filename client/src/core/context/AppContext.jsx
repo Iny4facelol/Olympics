@@ -4,37 +4,70 @@ import { createContext, useContext, useEffect, useState } from "react";
 export const AppContext = createContext();
 
 export const ContextProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
-  const [user, setUser] = useState(null);
+  const [token, setToken] = useState();
+  const [user, setUser] = useState();
   const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
-    if (rememberMe) {
-      if (token) {
+    if (token) {
+      if (rememberMe) {
         localStorage.setItem("token", token);
+      } else {
+        sessionStorage.setItem("token", token);
       }
     }
-  }, [token]);
+  }, [token, rememberMe]);
 
   useEffect(() => {
-    if (rememberMe) {
-      if (user) {
+    if (user) {
+      if (rememberMe) {
         localStorage.setItem("user", JSON.stringify(user));
+      } else {
+        sessionStorage.setItem("user", JSON.stringify(user));
       }
     }
-  }, [user]);
+  }, [user, rememberMe]);
 
   useEffect(() => {
-    if (!user) {
-      const user = localStorage.getItem("user");
-      if (user) {
-        setUser(JSON.parse(user));
-      }
+    const storedUser = rememberMe
+      ? localStorage.getItem("user")
+      : sessionStorage.getItem("user");
+    const storedToken = rememberMe
+      ? localStorage.getItem("token")
+      : sessionStorage.getItem("token");
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
-  }, [user]);
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, [rememberMe]);
+
+  const logout = () => {
+    setToken(null);
+    setUser(null);
+    if (rememberMe) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    } else {
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("user");
+    }
+  };
 
   return (
-    <AppContext.Provider value={{ token, setToken, user, setUser , rememberMe, setRememberMe}}>
+    <AppContext.Provider
+      value={{
+        token,
+        setToken,
+        user,
+        setUser,
+        rememberMe,
+        setRememberMe,
+        logout,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );

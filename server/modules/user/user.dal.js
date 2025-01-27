@@ -40,7 +40,7 @@ class UserDal {
     try {
       let sql = `SELECT * FROM user WHERE user_email = ? AND user_is_deleted = 0 AND user_is_validated = 1`;
       let result = await executeQuery(sql, [email]);
-      console.log(result)
+      console.log(result);
       return result;
     } catch (error) {
       throw error;
@@ -187,13 +187,13 @@ class UserDal {
   getUsersToAddActivity = async (user_center_id) => {
     try {
       let sql = `
-          SELECT u.user_id, u.user_name, u.user_lastname, a.activity_id, a.activity_name
+          SELECT u.user_id, u.user_name, u.user_lastname, u.user_email, u.user_phone, o.olympics_id
           FROM user u
-          JOIN reservation r ON u.user_id = r.user_id
-          JOIN activity a ON r.activity_id = a.activity_id
-          WHERE u.user_type = 3  
-          AND u.user_is_auth = TRUE  
-          AND u.user_center_id = ?
+          JOIN center c ON c.center_id = u.user_center_id
+          JOIN olympics_center o ON c.center_id = o.center_id
+          WHERE u.user_type = 3
+          AND u.user_is_auth = TRUE
+          AND u.user_center_id = ?;
           `;
 
       const result = await executeQuery(sql, user_center_id);

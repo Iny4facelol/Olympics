@@ -10,8 +10,8 @@ export default function Section4() {
   useEffect(() => {
     ScrollReveal().reveal(".reveal", {
       distance: "50px",
-      duration: 800,
-      delay: 550,
+      duration: 700,
+      delay: 350,
       easing: "ease-in-out",
       interval: 200,
       origin: "bottom",
@@ -19,9 +19,9 @@ export default function Section4() {
   }, []);
 
   return (
-    <Container className="d-flex w-100 justify-content-center">
+    <Container id="valours" className="d-flex w-100 justify-content-center">
       <Container className="container-1 reveal">
-        <Row className="pt-5 reveal">
+        <Row id="valours" className="pt-5 reveal">
           <h2 className="fs-2 fw-bold text-white">Nuestros valores</h2>
         </Row>
         <Row className="d-flex x">
