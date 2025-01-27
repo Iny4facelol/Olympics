@@ -4,6 +4,7 @@ import {
   registerSchema,
   completeResponsibleSchema,
   editUserSchema,
+  editResponsibleSchema,
 } from "../../utils/zodSchemas/userSchema.js";
 import { z } from "zod";
 import userDal from "./user.dal.js";
@@ -166,20 +167,18 @@ class UserController {
   editResponsible = async (req, res) => {
     try {
       const { user_id } = req.params;
-      const { user_name, user_lastname, user_phone, user_dni } = req.body;
+      const parsedData = editResponsibleSchema.parse(req.body);
 
-      const result = await userDal.updateResponsible(user_id, {
-        user_name,
-        user_lastname,
-        user_phone,
-        user_dni,
-      });
+      const result = await userDal.updateResponsible(user_id, parsedData);
 
       return res.status(200).json({
         message: "Responsable actualizado con éxito.",
         result,
       });
     } catch (error) {
+      if(error instanceof z.ZodError){
+        res.status(400).json({error: error.errors})
+      }
       console.error("Error en editResponsible:", error);
       return res.status(500).json({
         message: "Error al actualizar responsable.",
