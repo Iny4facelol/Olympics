@@ -22,6 +22,7 @@ export default function LoginUserForm() {
       setAuthenticating(true);
       const result = await fetchData(`api/user/login`, "post", data);
       toast.success("Acceso correcto");
+      console.log(result)
       setEmailErrorMsg();
       setPasswordErrorMsg();
       setToken(result.token);

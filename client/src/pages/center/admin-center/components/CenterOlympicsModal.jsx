@@ -16,13 +16,11 @@ export default function CenterOlympicsModal({ handleClose, show, data }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      olympics_id: [],
+      olympics_id: "", // Cambiado a string vacío para radio button
     },
   });
 
   useEffect(() => {
-    // fetch de las olimpiadas para mostrarlas en el checkbox
-    // como marcadas si ya están asignadas al centro
     const fetchExistingOlympics = async () => {
       if (data) {
         try {
@@ -30,13 +28,11 @@ export default function CenterOlympicsModal({ handleClose, show, data }) {
             `api/admin/centerOlympics/${data.center_id}`,
             "get"
           );
-          console.log(response);
-          const existingOlympicsIds = response.map((olympics) =>
-            olympics.olympics_id.toString()
-          );
+          // Tomamos solo el primer valor ya que es radio button
+          const existingOlympicsId = response[0]?.olympics_id.toString() || "";
 
           reset({
-            olympics_id: existingOlympicsIds,
+            olympics_id: existingOlympicsId,
           });
         } catch (error) {
           console.error("Error en el fetch de olimpiadas", error);
@@ -48,12 +44,10 @@ export default function CenterOlympicsModal({ handleClose, show, data }) {
   }, [data, reset]);
 
   useEffect(() => {
-    // fetch de todas las olimpiadas para mostrarlas en el checkbox
     const getData = async () => {
       try {
         const response = await fetchData("api/admin/allOlympics", "get");
         setOlympics(response);
-        console.log(response);
       } catch (error) {
         console.error(error);
       }
@@ -64,27 +58,24 @@ export default function CenterOlympicsModal({ handleClose, show, data }) {
   const onSubmit = async (formData) => {
     try {
       setAuthenticating(true);
-      // fetch de las olimpiadas asignadas al centro
       const response = await fetchData(
         `api/admin/centerOlympics/${data.center_id}`,
         "get"
       );
-      // mapeo de las Olimpiadas asignadas al centro
-      const existingCenterOlympics = response.map(
+
+      const existingOlympicsIds = response.map(
         (olympics) => olympics.olympics_id
       );
-      // mapeo de las Olimpiadas seleccionadas en el checkbox
-      const checkedOlympics = formData.olympics_id;
 
-      // filtrado de las Olimpiadas que se han deseleccionado
-      const uncheckedOlympics = existingCenterOlympics.filter(
-        (olympicsId) => !checkedOlympics.includes(String(olympicsId))
+      // Para radio buttons, tratamos el valor único
+      const selectedOlympicId = formData.olympics_id;
+      const olympicsToDelete = existingOlympicsIds.filter(
+        (id) => id.toString() !== selectedOlympicId
       );
 
-      // objeto con las Olimpiadas seleccionadas y deseleccionadas
       const dataToBackend = {
-        olympics_id: checkedOlympics,
-        olympics_id_to_delete: uncheckedOlympics,
+        olympics_id: [selectedOlympicId], // Envuelto en array para mantener compatibilidad
+        olympics_id_to_delete: olympicsToDelete,
       };
 
       await fetchData(
@@ -93,28 +84,25 @@ export default function CenterOlympicsModal({ handleClose, show, data }) {
         dataToBackend
       );
 
-      toast.success("Olimpiadas añadidas correctamente");
+      toast.success("Olimpiada asignada correctamente");
       setTimeout(() => {
         setAuthenticating(false);
         handleClose();
       }, 2000);
     } catch (error) {
-      if (error instanceof axios.AxiosError) {
-        setAuthenticating(false);
-        console.error(error);
-      }
+      setAuthenticating(false);
+      console.error(error);
     }
   };
 
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Añadir olimpiadas a {data.center_name}</Modal.Title>
+        <Modal.Title>Añadir olimpiada a {data.center_name}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p className="fst-italic">
-          Para eliminar las olimpiadas asignadas a este centro, simplemente
-          desmárquelas.
+          Seleccione una olimpiada para asignar a este centro.
         </p>
         <Form
           className="d-flex gap-4 flex-column justify-content-center align-content-center"
@@ -130,14 +118,16 @@ export default function CenterOlympicsModal({ handleClose, show, data }) {
                       value={olympic.olympics_id}
                       type="radio"
                       label={olympic.olympics_name}
-                      {...register("olympics_id")}
+                      {...register("olympics_id", {
+                        required: "Debe seleccionar una olimpiada",
+                      })}
                     />
                   </Col>
                 ))}
               </Form.Group>
-              {errors.activity_id && (
+              {errors.olympics_id && (
                 <Form.Text className="text-danger">
-                  {errors.activity_id.message}
+                  {errors.olympics_id.message}
                 </Form.Text>
               )}
             </Col>
@@ -148,18 +138,15 @@ export default function CenterOlympicsModal({ handleClose, show, data }) {
                   <Col key={olympic.olympics_id}>
                     <Form.Check
                       value={olympic.olympics_id}
-                      type="checkbox"
+                      type="radio"
                       label={olympic.olympics_name}
-                      {...register("olympics_id")}
+                      {...register("olympics_id", {
+                        required: "Debe seleccionar una olimpiada",
+                      })}
                     />
                   </Col>
                 ))}
               </Form.Group>
-              {errors.activity_id && (
-                <Form.Text className="text-danger">
-                  {errors.activity_id.message}
-                </Form.Text>
-              )}
             </Col>
           </Row>
           <div

@@ -1,6 +1,7 @@
 import express from 'express';
 import userController from './user.controller.js'
 import multerFile from '../../middleware/multerfile.js';
+import multerImg from '../../middleware/multerImg.js';
 
 const router = express.Router();
 
@@ -11,14 +12,15 @@ router.put('/completeCenter/:center_id', multerFile("center_auth") ,userControll
 router.put('/completeResponsible/:user_id', userController.completeResponsible);
 router.get('/usersToAddActivity/:user_center_id', userController.getUsersToAddActivity)
 
-router.put('/editResponsible/:user_id', userController.editResponsible);
+router.put('/editResponsible/:user_id', multerImg("activity_image") ,userController.editResponsible);
 router.put('/editUser/:user_id', userController.editUserUser);
 
 router.put('/authUser/:user_id', userController.ResponsibleValidateDocument);
 
+router.get("/activitiesFromOlympics/:olympics_id" , userController.getActivitiesFromOlympics)
 
 //REVISAR CON LOS PROFES
-router.post("/activities/:user_id", userController.addActivityToUser)
+router.post("/addActivityToUser/:user_id", userController.addActivityToUser)
 
 router.put("/validateRegistrationUser/:validationToken" , userController.validateRegistrationUser)
 
