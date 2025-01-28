@@ -9,11 +9,11 @@ export default function AdminDashboard() {
   const { user } = useAppContext();
   return (
     <DashboardLayout>
-      <Container>
+      <Container className="d-flex  flex-column gap-5 px-4 px-sm-2">
         <div className="d-flex flex-column gap-5">
           <Row>
             <h2 className="fs-1">
-              Bienvenido, <span className="custom-span">{user.user_name}</span>{" "}
+              Te damos la bienvenida, <span className="custom-span">{user.user_name}</span>{" "}
             </h2>
           </Row>
           <Row>

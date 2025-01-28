@@ -36,6 +36,16 @@ class UserDal {
     }
   };
 
+  findUserById = async (user_id) => {
+    try {
+      let sql = `SELECT * FROM user WHERE user_id = ? AND user_is_deleted = 0`;
+      let result = await executeQuery(sql, [user_id]);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   getUserByEmail = async (email) => {
     try {
       let sql = `SELECT * FROM user WHERE user_email = ? AND user_is_deleted = 0 AND user_is_validated = 1`;
@@ -103,7 +113,14 @@ class UserDal {
   };
 
   updateResponsible = async (user_id, userData) => {
-    const { user_name, user_lastname, user_dni, user_city, user_phone, user_center_id } = userData;
+    const {
+      user_name,
+      user_lastname,
+      user_dni,
+      user_city,
+      user_phone,
+      user_center_id,
+    } = userData;
 
     try {
       const result = await executeQuery(
@@ -116,7 +133,15 @@ class UserDal {
            user_center_id = ?
          WHERE user_id = ? 
          AND user_type = 2`,
-        [user_name, user_lastname, user_dni, user_city, user_phone, user_center_id,user_id]
+        [
+          user_name,
+          user_lastname,
+          user_dni,
+          user_city,
+          user_phone,
+          user_center_id,
+          user_id,
+        ]
       );
       return result;
     } catch (err) {
@@ -212,14 +237,23 @@ class UserDal {
     try {
       await connection.beginTransaction();
 
-      const query = `
+      // Primero, eliminar las reservaciones existentes para este usuario y olimpiada
+      const deleteQuery = `
+      DELETE FROM reservation 
+      WHERE user_id = ? 
+      AND olympics_id = ?
+    `;
+      await connection.query(deleteQuery, [user_id, olympics_id]);
+
+      // Luego, insertar las nuevas actividades
+      const insertQuery = `
       INSERT INTO reservation (user_id, activity_id, center_id, olympics_id)
       VALUES (?, ?, ?, ?)
     `;
 
       // Procesar cada activity_id del array
       for (const activity_id of activities) {
-        await connection.query(query, [
+        await connection.query(insertQuery, [
           user_id,
           activity_id,
           center_id,
@@ -230,7 +264,7 @@ class UserDal {
       await connection.commit();
 
       return {
-        message: `${activities.length} actividades añadidas al usuario con éxito.`,
+        message: `${activities.length} actividades actualizadas para el usuario con éxito.`,
         success: true,
       };
     } catch (error) {
@@ -238,11 +272,27 @@ class UserDal {
         await connection.rollback();
       }
       console.error("Error en el DAL:", error);
-      throw new Error("Error al añadir actividades al usuario");
+      throw new Error("Error al actualizar actividades del usuario");
     } finally {
       if (connection) {
         connection.release();
       }
+    }
+  };
+
+  getUserActivities = async (user_id, olympics_id) => {
+    try {
+      const query = `
+      SELECT activity_id 
+      FROM reservation 
+      WHERE user_id = ? 
+      AND olympics_id = ?
+    `;
+      const result = await executeQuery(query, [user_id, olympics_id]);
+      return result;
+    } catch (error) {
+      console.error("Error al obtener actividades del usuario:", error);
+      throw new Error("Error al obtener actividades del usuario");
     }
   };
 
@@ -382,7 +432,6 @@ GROUP BY
     }
   };
 
-
   getActivitiesFromOlympics = async (olympics_id) => {
     try {
       let sql = `
@@ -392,10 +441,12 @@ GROUP BY
       WHERE oa.olympics_id = ? AND a.activity_is_deleted = 0;
       `;
       const result = await executeQuery(sql, [olympics_id]);
-      console.log("asdadasdsadasd",result)
+      console.log("asdadasdsadasd", result);
       return result;
     } catch (error) {
       throw new Error("Error al obtener actividades de la olimpiada");
+    }
+  };
 
   getAuthorizationFileFromDB = async (user_id) => {
     try {
@@ -406,7 +457,7 @@ GROUP BY
         WHERE u.user_id = ? AND u.user_is_deleted = 0;
       `;
       const result = await executeQuery(sql, [user_id]);
-  
+
       if (result && result.length > 0) {
         return result[0].center_auth_doc;
       }
@@ -418,7 +469,7 @@ GROUP BY
 
   saveUserPermissionFile = async (user_id, fileName, filePath) => {
     console.log(filePath);
-    
+
     try {
       const query = `
         UPDATE user 
@@ -428,12 +479,11 @@ GROUP BY
       `;
       await executeQuery(query, [filePath, user_id]);
       console.log(filePath);
-  
+
       console.log("Archivo guardado en la base de datos.");
     } catch (error) {
       console.error("Error al guardar el archivo en la base de datos:", error);
       throw error;
-
     }
   };
 }

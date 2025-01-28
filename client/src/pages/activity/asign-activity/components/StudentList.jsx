@@ -10,9 +10,10 @@ import { set } from "react-hook-form";
 export default function StudentList() {
   const { user } = useAppContext();
   const [users, setUsers] = useState([]);
-  const [usersToAdd, setUsersToAdd] = useState([]);
+  const [usersToAdd, setUsersToAdd] = useState({});	
   const [show, setShow] = useState(false);
 
+  console.log(usersToAdd)
 
   const handleClose = () => setShow(false);
 
@@ -52,12 +53,14 @@ export default function StudentList() {
             <th>Acciones</th>
             <th>Nombre</th>
             <th>Apellidos</th>
+            <th>Teléfono</th>
+            <th>Email</th>
           </tr>
         </thead>
         <tbody>
           {users.map((user) => (
             <tr key={user.user_id}>
-              <td className="col-actions">
+              <td className="col-actions" style={{ width: "10%" }}>
                 <CirclePlus
                   onClick={() => handleAddActivities(user.user_id)}
                   size="24"
@@ -65,13 +68,25 @@ export default function StudentList() {
                   style={{ cursor: "pointer" }}
                 />
               </td>
-              <td className="col-name">{user.user_name}</td>
-              <td className="col-host-name">{user.user_lastname}</td>
+              <td className="col-name" style={{ width: "20%" }}>
+                {user.user_name}
+              </td>
+              <td className="col-host-name" style={{ width: "20%" }}>
+                {user.user_lastname}
+              </td>
+              <td className="col-host-name" style={{ width: "20%" }}>
+                {user.user_phone}
+              </td>
+              <td className="col-host-name">{user.user_email}</td>
             </tr>
           ))}
         </tbody>
       </Table>
-      <AsignActivityModal handleClose={handleClose} show={show} data={usersToAdd} />
+      <AsignActivityModal
+        handleClose={handleClose}
+        show={show}
+        data={usersToAdd}
+      />
     </section>
   );
 }

@@ -13,6 +13,7 @@ import {
   editCenterSchema,
 } from "../../utils/zodSchemas/centerSchema.js";
 import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
+import { getUserTypeAndValidateToken } from "../../utils/tokenUtils.js";
 
 class AdminController {
   // 1º Apartado de Olimpiadas
@@ -130,6 +131,14 @@ class AdminController {
 
   allCenters = async (req, res) => {
     try {
+      const { authorization } = req.headers;
+      const userType = getUserTypeAndValidateToken(authorization);
+
+
+      if(userType !== 1){
+        return res.status(401).json({message: "No tienes permisos para acceder a esta información"})
+      }
+
       const centers = await adminDal.getAllCenters();
 
       res.status(200).json(centers);

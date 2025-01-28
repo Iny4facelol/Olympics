@@ -20,7 +20,7 @@ export default function Section1() {
           <p>1ª</p>
           <p>Edición</p>
         </div>
-        <img className="rounded-5 w-100" src="/baloncesto.jpg" alt="" />
+        <img className="rounded-5 w-100" src="/fotofondo.webp" alt="" />
       </article>
     </section>
   );
