@@ -2,8 +2,9 @@ import { Container } from "react-bootstrap";
 import ButtonCustom from "./Button/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
+import { Moon, Sun } from "lucide-react";
 
-export default function HeaderHome() {
+export default function HeaderHome({ lightDarkHandler, icon }) {
   const { user, setUser, setToken } = useAppContext();
   const navigate = useNavigate();
 
@@ -41,7 +42,7 @@ export default function HeaderHome() {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
             className="user-select-none"
-            src="/olympicslogo.png"
+            src={icon ? "/olympicslogo.png" :  "/logodark.png"}
             alt=""
           />
         </div>
@@ -69,6 +70,9 @@ export default function HeaderHome() {
               </a>
             </article>
             <article className="d-flex justify-content-between align-items-center gap-2">
+              <ButtonCustom onClick={lightDarkHandler} bgColor={"white"}>
+                {icon ? <Moon /> : <Sun />}
+              </ButtonCustom>
               <ButtonCustom onClick={handleNavigate} bgColor={"white"}>
                 {user ? "Ir al Perfil" : "Regístrate"}
               </ButtonCustom>

@@ -1,8 +1,8 @@
 .main-user {
-  background-color: #fdfdfd;
   display: flex;
   padding-block: 6rem;
 }
+
 
 @media (width <= 768px) {
   .main-user {
@@ -14,7 +14,6 @@
   box-shadow: 0 0 10px 1px rgba(102, 101, 101, 0.75);
 }
 .header-user {
-  background-color: #fdfdfdf8;
   position: sticky;
   top: 0;
   z-index: 100;
