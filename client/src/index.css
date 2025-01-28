@@ -1,8 +1,35 @@
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
-  scrollbar-color: #ee531e #fdfdfd;
+  scrollbar-color: #fdfdfd;
   scroll-behavior: smooth;
+}
+
+.main-user,
+.header-user {
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+
+html.light .main-user {
+  background-color: #fdfdfd;
+  color: #2e2e2e;
+}
+
+html.light .header-user {
+  background-color: #fdfdfdf8;
+  color: #2e2e2e;
+}
+
+html.dark .main-user {
+  background-color: #2e2e2e;
+  color: white;
+}
+
+html.dark .header-user {
+  background-color: #2e2e2e;
+  color: white;
 }
 
 #root {
@@ -20,10 +47,11 @@ html, body {
   }
 }
 
-#valours,#aboutUs,#contact {
-  scroll-margin-top: 180px; 
+#valours,
+#aboutUs,
+#contact {
+  scroll-margin-top: 180px;
 }
-
 
 .custom-icon {
   transition: all 0.3s ease-in-out;
@@ -57,7 +85,8 @@ html, body {
   -webkit-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
-.link-hover:hover:before, .link-hover:focus:before, .link-hover:active:before {
+.link-hover:hover:before,
+.link-hover:focus:before,
+.link-hover:active:before {
   right: 0;
 }
-

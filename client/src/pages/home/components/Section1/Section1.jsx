@@ -17,10 +17,10 @@ export default function Section1() {
       </article>
       <article className="w-100 w-lg-50 user-select-none">
         <div className="custom-badge">
-          <p>1ª</p>
-          <p>Edición</p>
+          <p className="diagonal-text fs-1">1ª</p>
+          <p className="diagonal-text">Edición</p>
         </div>
-        <img className="rounded-5 w-100" src="/fotofondo.webp" alt="" />
+        <img className="rounded-5 w-100" src="/baloncestofinal.webp" alt="" />
       </article>
     </section>
   );

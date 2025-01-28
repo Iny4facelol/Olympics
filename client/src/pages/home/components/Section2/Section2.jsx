@@ -12,7 +12,7 @@ export default function Section2() {
           </h2>
         </Col>
       </Row>
-      <Row>
+      <Row className="d-flex">
         <Col md={6} sm={12}>
           <p className="pretty">
             Somos un proyecto educativo-deportivo que busca inspirar a niños y
