@@ -25,7 +25,7 @@ export default function CompleteResponsableForm() {
   const verifyToken = async (token) => {
     try {
       const response = await fetchData(
-        `api/admin/verifyTokenResponsible/${token}`,
+        `api/admin/verifyTokenUser/${token}`,
         "get"
       );
       console.log(response);

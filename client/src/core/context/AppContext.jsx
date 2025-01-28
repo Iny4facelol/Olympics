@@ -4,56 +4,70 @@ import { createContext, useContext, useEffect, useState } from "react";
 export const AppContext = createContext();
 
 export const ContextProvider = ({ children }) => {
-  const [token, setToken] = useState();
-  const [user, setUser] = useState();
-  const [rememberMe, setRememberMe] = useState(false);
+  const [token, setToken] = useState(() => {
+    // Inicialización con lazy loading
+    const rememberedState = localStorage.getItem("rememberMe") === "true";
+    const storage = rememberedState ? localStorage : sessionStorage;
+    return storage.getItem("token") || null;
+  });
 
+  const [user, setUser] = useState(() => {
+    const rememberedState = localStorage.getItem("rememberMe") === "true";
+    const storage = rememberedState ? localStorage : sessionStorage;
+    const storedUser = storage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+
+  const [rememberMe, setRememberMe] = useState(() => {
+    return localStorage.getItem("rememberMe") === "true";
+  });
+
+  // Efecto para manejar el cambio de rememberMe
+  useEffect(() => {
+    localStorage.setItem("rememberMe", rememberMe);
+
+    // Si cambiamos rememberMe, transferimos los datos al storage correspondiente
+    if (token || user) {
+      const oldStorage = rememberMe ? sessionStorage : localStorage;
+      const newStorage = rememberMe ? localStorage : sessionStorage;
+
+      // Transferir token
+      if (token) {
+        newStorage.setItem("token", token);
+        oldStorage.removeItem("token");
+      }
+
+      // Transferir user
+      if (user) {
+        newStorage.setItem("user", JSON.stringify(user));
+        oldStorage.removeItem("user");
+      }
+    }
+  }, [rememberMe]);
+
+  // Efecto para actualizar token en storage
   useEffect(() => {
     if (token) {
-      if (rememberMe) {
-        localStorage.setItem("token", token);
-      } else {
-        sessionStorage.setItem("token", token);
-      }
+      const storage = rememberMe ? localStorage : sessionStorage;
+      storage.setItem("token", token);
     }
   }, [token, rememberMe]);
 
+  // Efecto para actualizar user en storage
   useEffect(() => {
     if (user) {
-      if (rememberMe) {
-        localStorage.setItem("user", JSON.stringify(user));
-      } else {
-        sessionStorage.setItem("user", JSON.stringify(user));
-      }
+      const storage = rememberMe ? localStorage : sessionStorage;
+      storage.setItem("user", JSON.stringify(user));
     }
   }, [user, rememberMe]);
-
-  useEffect(() => {
-    const storedUser = rememberMe
-      ? localStorage.getItem("user")
-      : sessionStorage.getItem("user");
-    const storedToken = rememberMe
-      ? localStorage.getItem("token")
-      : sessionStorage.getItem("token");
-
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, [rememberMe]);
 
   const logout = () => {
     setToken(null);
     setUser(null);
-    if (rememberMe) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-    } else {
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("user");
-    }
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
   };
 
   return (

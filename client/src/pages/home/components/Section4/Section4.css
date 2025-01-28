@@ -13,14 +13,26 @@
 
 .container-1 {
   width: 30%;
+  z-index: 3;
 }
 
 .container-2 {
   width: 70%;
 }
 
+.card-container {
+  z-index: 2;
+}
+
+.img-container {
+  z-index: 1;
+
+}
+
 .fut-img {
-  height: 500px;
+  position: absolute;
+  bottom: 0%;
+  height: 600px;
 }
 
 @media (width <= 1200px) {

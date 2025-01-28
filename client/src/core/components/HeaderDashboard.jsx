@@ -5,13 +5,10 @@ import { useAppContext } from "../context/AppContext";
 
 export default function HeaderDashboard() {
   const navigate = useNavigate();
-  const {setUser, setToken} = useAppContext();
+  const {logout} = useAppContext();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    setToken(null);
+    logout();
     navigate("/");
   }
 
