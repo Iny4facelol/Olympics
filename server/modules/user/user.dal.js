@@ -396,6 +396,8 @@ GROUP BY
       return result;
     } catch (error) {
       throw new Error("Error al obtener actividades de la olimpiada");
+    }
+  };
 
   getAuthorizationFileFromDB = async (user_id) => {
     try {
