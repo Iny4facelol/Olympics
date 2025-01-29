@@ -1,8 +1,8 @@
 .main-user {
-  background-color: #fdfdfd;
   display: flex;
   padding-block: 6rem;
 }
+
 
 @media (width <= 768px) {
   .main-user {
@@ -13,8 +13,8 @@
 .custom-shadow {
   box-shadow: 0 0 10px 1px rgba(102, 101, 101, 0.75);
 }
+
 .header-user {
-  background-color: #fdfdfde5;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -28,7 +28,7 @@
       }
 
       @media (width <= 576px) {
-        width: 100px;
+        width: 150px;
       }
     }
   }
@@ -42,6 +42,9 @@
 }
 
 @media (width <= 578px) {
+  .header-user {
+    position: static;
+  }
   .custom-shadow {
     box-shadow: none;
   }

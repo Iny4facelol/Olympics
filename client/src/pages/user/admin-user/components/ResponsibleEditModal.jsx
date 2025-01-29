@@ -7,8 +7,10 @@ import { Toaster, toast } from "sonner";
 import ButtonCustom from "../../../../core/components/Button/Button";
 import { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
+import { useAppContext } from "../../../../core/context/AppContext";
 
 function ResponsibleEditModal({ handleClose,  show, data }) {
+  const { themeSwitcher } = useAppContext();
   const [authenticating, setAuthenticating] = useState(false);
   const [centerList, setCenterList] = useState([]);
 
@@ -78,10 +80,13 @@ function ResponsibleEditModal({ handleClose,  show, data }) {
   return (
     <>
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header
+          className={themeSwitcher ? "" : "bg-dark text-white"}
+          closeButton
+        >
           <Modal.Title>Editar Usuario</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={themeSwitcher ? "" : "bg-dark text-white"}>
           <Form
             className="d-flex gap-4 flex-column justify-content-center align-content-center"
             onSubmit={handleSubmit(onSubmit)}

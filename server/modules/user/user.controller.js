@@ -89,7 +89,7 @@ class UserController {
         const match = await comparePassword(user_password, user.user_password);
 
         if (match) {
-          const token = generateToken(user.user_id);
+          const token = generateToken(user.user_id, user.user_type);
           res.status(200).json({ token, user });
         } else {
           res.status(401).json({ passwordError: "La contraseña no es válida" });
@@ -103,6 +103,17 @@ class UserController {
       }
     }
   };
+
+  findUserById = async (req, res) => {
+    try {
+      const user_id = getIdFromToken(req.token);
+      const result = await userDal.findUserById(user_id);
+      const userData = result[0];
+      return res.status(200).json(userData);
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
+  }
 
   completeCenter = async (req, res) => {
     const parsedData = completeCenterSchema.parse(req.body);
@@ -285,6 +296,30 @@ class UserController {
         .json({ message: "Error al añadir actividad al usuario.", error });
     }
   };
+
+  getUserActivities = async (req, res) => {
+    try {
+      const { user_id, olympics_id } = req.params;
+      console.log("user_id", user_id);
+      console.log("olympics_id", olympics_id);
+
+      if (!user_id || !olympics_id) {
+        return res
+          .status(400)
+          .json({ message: "El id del usuario y el id de las olimpiadas son requeridos" });
+      }
+
+      const userActivities = await userDal.getUserActivities(user_id, olympics_id);
+
+      return res.status(200).json(userActivities);
+    } catch (error) {
+      console.error("Error al obtener las actividades del usuario:", error);
+      return res.status(500).json({
+        message: "Error al obtener las actividades del usuario.",
+        error,
+      });
+    }
+  }
 
   validateRegistrationUser = async (req, res) => {
     try {

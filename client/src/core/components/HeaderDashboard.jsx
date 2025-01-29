@@ -5,13 +5,10 @@ import { useAppContext } from "../context/AppContext";
 
 export default function HeaderDashboard() {
   const navigate = useNavigate();
-  const {setUser, setToken} = useAppContext();
+  const {logout, themeSwitcher} = useAppContext();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    setToken(null);
+    logout();
     navigate("/");
   }
 
@@ -20,7 +17,7 @@ export default function HeaderDashboard() {
       <Container>
         <nav className="d-flex justify-content-center justify-content-sm-between align-content-center py-4">
           <article className="d-none d-sm-block user-select-none">
-            <img className="user-select-none " src="/olympicslogo.png" alt="" />
+            <img className="user-select-none " src={themeSwitcher ? "/olympicslogo.png" : "/logodark.png"} alt="" />
           </article>
           <article className="d-flex justify-content-between align-items-center gap-2">
             <ButtonCustom onClick={() => navigate(-1)} bgColor={"white"}>

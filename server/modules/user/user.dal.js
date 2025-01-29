@@ -37,6 +37,16 @@ class UserDal {
     }
   };
 
+  findUserById = async (user_id) => {
+    try {
+      let sql = `SELECT * FROM user WHERE user_id = ? AND user_is_deleted = 0`;
+      let result = await executeQuery(sql, [user_id]);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   getUserByEmail = async (email) => {
     try {
       let sql = `SELECT * FROM user WHERE user_email = ? AND user_is_deleted = 0 AND user_is_validated = 1`;
@@ -228,14 +238,23 @@ class UserDal {
     try {
       await connection.beginTransaction();
 
-      const query = `
+      // Primero, eliminar las reservaciones existentes para este usuario y olimpiada
+      const deleteQuery = `
+      DELETE FROM reservation 
+      WHERE user_id = ? 
+      AND olympics_id = ?
+    `;
+      await connection.query(deleteQuery, [user_id, olympics_id]);
+
+      // Luego, insertar las nuevas actividades
+      const insertQuery = `
       INSERT INTO reservation (user_id, activity_id, center_id, olympics_id)
       VALUES (?, ?, ?, ?)
     `;
 
       // Procesar cada activity_id del array
       for (const activity_id of activities) {
-        await connection.query(query, [
+        await connection.query(insertQuery, [
           user_id,
           activity_id,
           center_id,
@@ -246,7 +265,7 @@ class UserDal {
       await connection.commit();
 
       return {
-        message: `${activities.length} actividades añadidas al usuario con éxito.`,
+        message: `${activities.length} actividades actualizadas para el usuario con éxito.`,
         success: true,
       };
     } catch (error) {
@@ -254,11 +273,27 @@ class UserDal {
         await connection.rollback();
       }
       console.error("Error en el DAL:", error);
-      throw new Error("Error al añadir actividades al usuario");
+      throw new Error("Error al actualizar actividades del usuario");
     } finally {
       if (connection) {
         connection.release();
       }
+    }
+  };
+
+  getUserActivities = async (user_id, olympics_id) => {
+    try {
+      const query = `
+      SELECT activity_id 
+      FROM reservation 
+      WHERE user_id = ? 
+      AND olympics_id = ?
+    `;
+      const result = await executeQuery(query, [user_id, olympics_id]);
+      return result;
+    } catch (error) {
+      console.error("Error al obtener actividades del usuario:", error);
+      throw new Error("Error al obtener actividades del usuario");
     }
   };
 

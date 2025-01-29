@@ -6,6 +6,7 @@ import { ForgotPasswordForm } from "./components/ForgotPasswordForm";
 
 export default function LoginUser() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+
   return (
     <AppLayout>
       <Container className="d-flex flex-column gap-5 px-4 px-sm-2">

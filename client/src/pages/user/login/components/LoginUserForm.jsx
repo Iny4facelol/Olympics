@@ -10,8 +10,9 @@ import { useAppContext } from "../../../../core/context/AppContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+
 export default function LoginUserForm({ setShowForgotPassword }) {
-  const { setToken, setUser, setRememberMe, rememberMe } = useAppContext();
+  const { setToken, setUser, setRememberMe, rememberMe, themeSwitcher } = useAppContext();
   const [emailErrorMsg, setEmailErrorMsg] = useState();
   const [passwordErrorMsg, setPasswordErrorMsg] = useState();
   const [authenticating, setAuthenticating] = useState(false);
@@ -21,18 +22,19 @@ export default function LoginUserForm({ setShowForgotPassword }) {
     try {
       setAuthenticating(true);
       const result = await fetchData(`api/user/login`, "post", data);
+      const userResult = await fetchData("api/user/findUserById", "get", null, {Authorization: `Bearer ${result.token}`} )
       toast.success("Acceso correcto");
-      console.log(result);
+
       setEmailErrorMsg();
       setPasswordErrorMsg();
       setToken(result.token);
-      setUser(result.user);
+      setUser(userResult);
       setTimeout(() => {
-        if (result.user.user_type === 1) {
+        if (userResult.user_type === 1) {
           navigate("/admin/dashboard");
-        } else if (result.user.user_type === 2) {
+        } else if (userResult.user_type === 2) {
           navigate("/user/res_dashboard");
-        } else if (result.user.user_type === 3) {
+        } else if (userResult.user_type === 3) {
           navigate("/user/dashboard");
         }
         setAuthenticating(false);
@@ -115,11 +117,12 @@ export default function LoginUserForm({ setShowForgotPassword }) {
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
           />
-          <Form.Text>Recordar Usuario</Form.Text>
+          <Form.Text className={`${themeSwitcher ? "text-secondary" : "text-white"}`}>Recordar Usuario</Form.Text>
         </Col>
         <Col md={6} sm={12}>
-          <Form.Text className="cursor-pointer" onClick={() => setShowForgotPassword(true)}>
-            ¿Olvidaste tu contraseña?
+
+          <Form.Text className={`${themeSwitcher ? "text-secondary" : "text-white"}`} onClick={() => setShowForgotPassword(true)}>
+            ¿Olvidaste tu contraseña?          
           </Form.Text>
         </Col>
       </Row>

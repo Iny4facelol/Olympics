@@ -1,7 +1,6 @@
 h1 {
   font-size: clamp(2rem, 2.5vw + 1rem, 4rem) !important;
-  font-weight: bold !important; 
-  
+  font-weight: bold !important;
 }
 
 .section-1 {
@@ -22,17 +21,18 @@ h1 {
     padding: 0.5rem 1rem;
     border-radius: 100%;
     margin-top: 1rem;
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     position: absolute;
     z-index: 1;
-    left: 50%;
-    top: 50%;
+    left: 48%;
+    top: 11%;
     transition: all 0.3s ease;
+    transform: rotate(-25deg);
     &:hover {
       border: 2px solid #ee531e;
       color: #ee531e;
@@ -54,8 +54,8 @@ span {
     .custom-badge {
       background-color: #ee531e;
       position: absolute;
-      top: 95%;
-      left: 10%;
+      top: 25%;
+      left: -5%;
     }
   }
 }
@@ -65,12 +65,11 @@ span {
     .custom-badge {
       background-color: #ee531e;
       position: absolute;
-      top: 75%;
-      left: 10%;
+      top: 20%;
+      left: -5%;
     }
   }
 }
-
 
 @media (width <= 476px) {
   .section-1 {
@@ -79,7 +78,7 @@ span {
       position: absolute;
       width: 100px;
       height: 100px;
-      top: 95%;
+      top: 20%;
       left: 10%;
     }
   }

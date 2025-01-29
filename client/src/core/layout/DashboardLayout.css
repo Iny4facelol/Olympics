@@ -2,10 +2,14 @@
   background-color: #EAEAEA;
   display: flex;
   padding-block: 6rem;
-
 }
+
+.dark-span {
+  color: #2e2e2e;
+}
+
+
 .dashboard-header {
-  background-color: #EAEAEA;
   nav {
     article {
       img {
