@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 export const AppContext = createContext();
 
 export const ContextProvider = ({ children }) => {
-  const [themeSwitcher, setThemeSwitcher] = useState(false);
+  const [themeSwitcher, setThemeSwitcher] = useState(true);
 
   const [token, setToken] = useState(() => {
     // Inicialización con lazy loading

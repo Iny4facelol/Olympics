@@ -28,11 +28,10 @@ export default function UserDashboard() {
     getData();
   }, []);
 
-
   return (
     <DashboardLayout>
       <Container className="d-flex justify-content-center flex-column gap-5 px-4 px-sm-2">
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between align-items-center">
           <h2 className="fs-1">
             Te damos la bienvenida,{" "}
             <span className="custom-span">{userDetails.name}</span>
@@ -41,12 +40,20 @@ export default function UserDashboard() {
             placement="right"
             delay={{ show: 250, hide: 400 }}
             overlay={
-              <Tooltip id="tooltip-id">La cuenta ha sido autorizada correctamente</Tooltip>
+              <Tooltip id="tooltip-id">
+                La cuenta ha sido autorizada correctamente.
+              </Tooltip>
             }
           >
-
-            <ShieldCheck className="bg-success rounded-3 p-1" color="white" size={36} />
-
+            <div className="d-flex gap-1 bg-success justify-content-center align-align-items-center rounded-4 py-2  px-3 m-0 text-white">
+              <p
+                style={{ fontSize: "12px" }}
+                className="bg-success justify-content-center align-align-items-center m-0 text-white d-none d-sm-flex"
+              >
+                Cuenta verificada
+              </p>
+              <ShieldCheck color="white" size={18} />
+            </div>
           </OverlayTrigger>
         </div>
         {userDetails.authorized ? (

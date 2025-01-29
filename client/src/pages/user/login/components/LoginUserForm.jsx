@@ -65,8 +65,8 @@ export default function LoginUserForm({ setShowForgotPassword }) {
   });
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <Row>
+    <Form className="d-flex flex-column gap-2" onSubmit={handleSubmit(onSubmit)}>
+      <Row className="row-gap-2">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicUserEmail">
             <Form.Label>Email*</Form.Label>
@@ -110,19 +110,25 @@ export default function LoginUserForm({ setShowForgotPassword }) {
           </Form.Group>
         </Col>
       </Row>
-      <Row>
+      <Row className="row-gap-2">
         <Col className="d-flex gap-2" md={6} sm={12}>
           <Form.Check // prettier-ignore
             type="checkbox"
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
           />
-          <Form.Text className={`${themeSwitcher ? "text-secondary" : "text-white"}`}>Recordar Usuario</Form.Text>
+          <Form.Text
+            className={`${themeSwitcher ? "text-secondary" : "text-white"}`}
+          >
+            Recordar Usuario
+          </Form.Text>
         </Col>
         <Col md={6} sm={12}>
-
-          <Form.Text className={`${themeSwitcher ? "text-secondary" : "text-white"}`} onClick={() => setShowForgotPassword(true)}>
-            ¿Olvidaste tu contraseña?          
+          <Form.Text style={{ cursor: "pointer" }}
+            className={`${themeSwitcher ? "text-secondary" : "text-white"}`}
+            onClick={() => setShowForgotPassword(true)}
+          >
+            ¿Olvidaste tu contraseña?
           </Form.Text>
         </Col>
       </Row>

@@ -71,7 +71,21 @@ span {
   }
 }
 
-@media (width <= 476px) {
+@media (width <= 576px) {
+  .section-1 {
+    .custom-badge {
+      background-color: #ee531e;
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      top: 28%;
+      left: 10%;
+    }
+  }
+}
+
+
+@media (width <= 500px) {
   .section-1 {
     .custom-badge {
       background-color: #ee531e;

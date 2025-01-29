@@ -1,4 +1,3 @@
-import { hash } from "crypto";
 import { dbPool, executeQuery } from "../../config/db.js";
 
 class UserDal {
