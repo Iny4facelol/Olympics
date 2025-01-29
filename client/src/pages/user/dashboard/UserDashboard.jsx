@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../../core/layout/DashboardLayout";
-import { Badge, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Container, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useAppContext } from "../../../core/context/AppContext";
 import NonAuthDashboard from "./components/NonAuthDashboard";
 import AuthDashboard from "./components/AuthDashboard";
 import { fetchData } from "../../../utils/axios/axiosHelper";
 import { ShieldCheck } from "lucide-react";
-import ButtonCustom from "../../../core/components/Button/Button";
+
 
 export default function UserDashboard() {
   const { user } = useAppContext();
