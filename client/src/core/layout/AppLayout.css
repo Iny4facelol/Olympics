@@ -43,7 +43,7 @@
 
 @media (width <= 578px) {
   .header-user {
-    position: static;
+    position: static !important;
   }
   .custom-shadow {
     box-shadow: none;

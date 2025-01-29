@@ -3,6 +3,7 @@ import AppLayout from "../../../core/layout/AppLayout";
 import { Container } from "react-bootstrap";
 import LoginUserForm from "./components/LoginUserForm";
 import { ForgotPasswordForm } from "./components/ForgotPasswordForm";
+import { MailWarning } from "lucide-react";
 
 export default function LoginUser() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -17,8 +18,14 @@ export default function LoginUser() {
           </>
         ) : (
           <>
-            <h2>Recuperar contraseña</h2>
-            <p>Te enviaremos un email con instrucciones para recuperarla</p>
+            <div>
+              <h2>Recuperar contraseña</h2>
+              <p>
+                Ingresa tu correo electrónico y te enviaremos un enlace con
+                instrucciones para <br /> restablecer tu contraseña{" "}
+                <MailWarning color="#ee531e" size={18} />
+              </p>
+            </div>
             <ForgotPasswordForm setShowForgotPassword={setShowForgotPassword} />
           </>
         )}
