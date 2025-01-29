@@ -139,6 +139,39 @@ class EmailService {
       throw error;
     }
   }
+
+  async sendResetPasswordEmail(userData, token) {
+    try {
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = dirname(__filename);
+      const templatePath = path.join(
+        __dirname,
+        "../emailUtils/emailTemplateResetPassword.mjml"
+      );
+      const mjmlTemplate = await fs.readFile(templatePath, "utf8");
+      const template = Handlebars.compile(mjmlTemplate);
+
+      const mjmlWithData = template({
+        logoUrl: "https://i.ibb.co/GWBdBcw/Olympics-removebg-preview.png",
+        userName: userData.user_name,
+        registrationUrl: `${process.env.FRONTEND_URL}/user/resetPassword/${token}`,
+      });
+
+      const { html } = mjml2html(mjmlWithData);
+
+      await this.transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: userData.user_email,
+        subject: "Restablezca su contraseña",
+        html,
+      });
+
+      return true;
+    } catch (error) {
+      console.error("Error sending email:", error);
+      throw error;
+    }
+  }
 }
 
 export default new EmailService();

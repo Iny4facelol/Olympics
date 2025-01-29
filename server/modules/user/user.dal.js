@@ -1,3 +1,4 @@
+import { hash } from "crypto";
 import { dbPool, executeQuery } from "../../config/db.js";
 
 class UserDal {
@@ -103,7 +104,14 @@ class UserDal {
   };
 
   updateResponsible = async (user_id, userData) => {
-    const { user_name, user_lastname, user_dni, user_city, user_phone, user_center_id } = userData;
+    const {
+      user_name,
+      user_lastname,
+      user_dni,
+      user_city,
+      user_phone,
+      user_center_id,
+    } = userData;
 
     try {
       const result = await executeQuery(
@@ -116,7 +124,15 @@ class UserDal {
            user_center_id = ?
          WHERE user_id = ? 
          AND user_type = 2`,
-        [user_name, user_lastname, user_dni, user_city, user_phone, user_center_id,user_id]
+        [
+          user_name,
+          user_lastname,
+          user_dni,
+          user_city,
+          user_phone,
+          user_center_id,
+          user_id,
+        ]
       );
       return result;
     } catch (err) {
@@ -382,7 +398,6 @@ GROUP BY
     }
   };
 
-
   getActivitiesFromOlympics = async (olympics_id) => {
     try {
       let sql = `
@@ -392,10 +407,12 @@ GROUP BY
       WHERE oa.olympics_id = ? AND a.activity_is_deleted = 0;
       `;
       const result = await executeQuery(sql, [olympics_id]);
-      console.log("asdadasdsadasd",result)
+      console.log("asdadasdsadasd", result);
       return result;
     } catch (error) {
       throw new Error("Error al obtener actividades de la olimpiada");
+    }
+  };
 
   getAuthorizationFileFromDB = async (user_id) => {
     try {
@@ -406,7 +423,7 @@ GROUP BY
         WHERE u.user_id = ? AND u.user_is_deleted = 0;
       `;
       const result = await executeQuery(sql, [user_id]);
-  
+
       if (result && result.length > 0) {
         return result[0].center_auth_doc;
       }
@@ -418,7 +435,7 @@ GROUP BY
 
   saveUserPermissionFile = async (user_id, fileName, filePath) => {
     console.log(filePath);
-    
+
     try {
       const query = `
         UPDATE user 
@@ -428,14 +445,24 @@ GROUP BY
       `;
       await executeQuery(query, [filePath, user_id]);
       console.log(filePath);
-  
+
       console.log("Archivo guardado en la base de datos.");
     } catch (error) {
       console.error("Error al guardar el archivo en la base de datos:", error);
       throw error;
-
     }
   };
+
+  updatePassword = async (hash, user_id) => {
+    try {
+      let sql = "UPDATE user SET user_password = ? WHERE user_id = ?";
+      let values = [hash, user_id]
+      const result = await executeQuery(sql, values);
+      return result;
+    } catch (error) {
+      throw new Error("Error al actualizar la contraseña")
+    }
+  }
 }
 
 export default new UserDal();

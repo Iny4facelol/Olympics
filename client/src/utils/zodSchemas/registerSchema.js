@@ -160,3 +160,22 @@ export const completeRegisterResponsibleSchema = z
         .regex(/^[0-9]{9}$/, "El teléfono debe tener 9 números"),
     user_center_id: z.any()
   })
+
+  export const emailSchema = z.object({
+    user_email: z.string().email("El email no es válido"),
+  });
+  
+  export const passwordSchema = z
+  .object({
+    user_password: z
+        .string()
+        .min(8, "La contraseña debe tener al menos 8 caracteres")
+        .regex(/[A-Z]/, "La contraseña debe tener al menos una mayúscula")
+        .regex(/[a-z]/, "La contraseña debe tener al menos una minúscula")
+        .regex(/[0-9]/, "La contraseña debe tener al menos un número"),
+      user_confirm_password: z.string()
+  })
+  .refine((data) => data.user_password === data.user_confirm_password, {
+    message: "Las contraseñas no coinciden",
+    path: ["user_confirm_password"],
+  });

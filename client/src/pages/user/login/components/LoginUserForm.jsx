@@ -10,7 +10,7 @@ import { useAppContext } from "../../../../core/context/AppContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function LoginUserForm() {
+export default function LoginUserForm({ setShowForgotPassword }) {
   const { setToken, setUser, setRememberMe, rememberMe } = useAppContext();
   const [emailErrorMsg, setEmailErrorMsg] = useState();
   const [passwordErrorMsg, setPasswordErrorMsg] = useState();
@@ -22,7 +22,7 @@ export default function LoginUserForm() {
       setAuthenticating(true);
       const result = await fetchData(`api/user/login`, "post", data);
       toast.success("Acceso correcto");
-      console.log(result)
+      console.log(result);
       setEmailErrorMsg();
       setPasswordErrorMsg();
       setToken(result.token);
@@ -118,8 +118,8 @@ export default function LoginUserForm() {
           <Form.Text>Recordar Usuario</Form.Text>
         </Col>
         <Col md={6} sm={12}>
-          <Form.Text>
-            <a href="/user/recover">¿Olvidaste tu contraseña?</a>
+          <Form.Text className="cursor-pointer" onClick={() => setShowForgotPassword(true)}>
+            ¿Olvidaste tu contraseña?
           </Form.Text>
         </Col>
       </Row>

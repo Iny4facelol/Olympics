@@ -24,7 +24,7 @@ router.post('/addOlympicsToCenter/:center_id', adminController.addOlympicsToCent
 
 // Rutas de Usuarios
 router.post('/addResponsible', adminController.addResponsible);
-router.get('/verifyTokenResponsible/:token', adminController.verifyTokenResponsible);
+router.get('/verifyTokenUser/:token', adminController.verifyTokenUser);
 router.get('/allResponsibles', adminController.getResponsibles);
 router.get('/allUser', adminController.allUser);
 router.put('/editUser', adminController.editUser); 

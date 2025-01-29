@@ -20,6 +20,7 @@ import AdminUser from "../../pages/user/admin-user/AdminUser";
 import AsignActivity from "../../pages/activity/asign-activity/AsignActivity";
 import ValidationPage from "../../pages/user/validation/ValidationPage";
 import AuthUsers from "../../pages/responsable/auth-users/AuthUsers";
+import { ResetPassword } from "../../pages/user/reset-password/ResetPassword";
 
 export default function AppRoutes() {
   const { user } = useAppContext();
@@ -86,6 +87,7 @@ export default function AppRoutes() {
         <Route path="/user/validateUser/:validationToken" element={<ValidationPage />} />
         <Route path="/user/register" element={<RegisterUser />} />
         <Route path="/user/login" element={<LoginUser />} />
+        <Route path="/user/resetPassword/:idToken" element={< ResetPassword/>} />       
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
