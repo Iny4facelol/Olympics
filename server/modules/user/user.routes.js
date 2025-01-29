@@ -6,46 +6,48 @@ import { tokenVerify } from '../../middleware/verifyToken.js';
 
 const router = express.Router();
 
+// Rutas de Usuarios
 router.post('/register', userController.register);
 router.post('/login', userController.login);
+router.post('/findUserByEmail', userController.findUserByEmail);
 router.get('/findUserById', tokenVerify, userController.findUserById);
-
-router.put('/completeCenter/:center_id', multerFile("center_auth") ,userController.completeCenter);
-router.put('/completeResponsible/:user_id', userController.completeResponsible);
-router.get('/usersToAddActivity/:user_center_id', userController.getUsersToAddActivity)
-
-router.put('/editResponsible/:user_id', multerImg("activity_image") ,userController.editResponsible);
-router.put('/editUser/:user_id', userController.editUserUser);
-
-router.put('/authUser/:user_id', userController.ResponsibleValidateDocument);
-
-router.get("/activitiesFromOlympics/:olympics_id" , userController.getActivitiesFromOlympics)
-
 router.get("/userActivities/:user_id/:olympics_id", userController.getUserActivities)
-
-//REVISAR CON LOS PROFES
-router.post("/addActivityToUser/:user_id", userController.addActivityToUser)
-
-router.put("/validateRegistrationUser/:validationToken" , userController.validateRegistrationUser)
-
-
 router.get("/details/:user_id", userController.userDetails);
+router.put('/editResponsible/:user_id', multerImg("activity_image") ,userController.editResponsible);
+router.put('/completeResponsible/:user_id', userController.completeResponsible);
+router.put('/editUser/:user_id', userController.editUserUser);
+router.put('/restorePassword/:user_id', userController.restorePassword)
 
-
-router.put('/upload-authorization/:user_id',multerFile("authorization"),userController.uploadAuthorizationFile);
-
-router.get("/authorization-file/:user_id", userController.getAuthorizationFile);
-
+// Rutas de Actividades
+router.get('/usersToAddActivity/:user_center_id', userController.getUsersToAddActivity)
+router.get("/activitiesFromOlympics/:olympics_id" , userController.getActivitiesFromOlympics)
+router.post("/addActivityToUser/:user_id", userController.addActivityToUser)
 router.post("/activities/:user_id", userController.addActivityToUser);
 
+// Rutas de Centros
+router.put('/completeCenter/:center_id', multerFile("center_auth") ,userController.completeCenter);
 
-//ruta de alumnos pendientes de validacion
+// Rutas de Validaciones y Autorizaciones
+router.put('/authUser/:user_id', userController.ResponsibleValidateDocument);
+router.put("/validateRegistrationUser/:validationToken" , userController.validateRegistrationUser)
+router.put('/upload-authorization/:user_id',multerFile("authorization"),userController.uploadAuthorizationFile);
+router.get("/authorization-file/:user_id", userController.getAuthorizationFile);
+  // Ruta de alumnos pendientes de validación
 router.get('/pendingValidationUsers/:user_center_id', userController.getPendingValidationUsers);
-
-//ruta de perfil usuario no autorizado
+  // Ruta de perfil usuario no autorizado
 router.get('/NonAuthProfile/:user_id', userController.getUnauthorizedUserProfile);
-router.post('/findUserByEmail', userController.findUserByEmail);
-router.put('/restorePassword/:user_id', userController.restorePassword)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 export default router;

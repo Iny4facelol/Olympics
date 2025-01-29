@@ -3,7 +3,7 @@ import { dbPool } from "../../config/db.js";
 
 class AdminDal {
   // 1º Apartado de Olimpiadas
-  // Añadir Olimpiada
+    // Añadir Olimpiada
 
   addOlympics = async (olympicsData) => {
     const {
@@ -44,7 +44,7 @@ class AdminDal {
     }
   };
 
-  // Seleccionar todas las Olimpiadas
+    // Seleccionar todas las Olimpiadas
 
   allOlympics = async () => {
     try {
@@ -57,7 +57,7 @@ class AdminDal {
     }
   };
 
-  // Editar Olimpiada
+    // Editar Olimpiada
 
   editOlympics = async (data, olympics_id) => {
     try {
@@ -92,7 +92,8 @@ class AdminDal {
     }
   };
 
-  //borrado logico de olimpiada
+    //borrado logico de olimpiada
+
   logicalDeleteOlympics = async (olympics_id) => {
     let sql = ` UPDATE olympics SET olympics_is_deleted = 1 WHERE olympics_id = ?`;
 
@@ -110,37 +111,37 @@ class AdminDal {
 
     // Seleccionar las Actividades de una Olimpiada
 
-    getOlympicsWithActivity = async (olympics_id) => {
-      const query = `
-        SELECT 
-          olympics.olympics_id,
-          olympics.olympics_name,
-          olympics.olympics_description,
-          activity.activity_id,
-          activity.activity_name,
-          activity.activity_description
-        FROM 
-          olympics
-        LEFT JOIN 
-          olympics_activity ON olympics.olympics_id = olympics_activity.olympics_id
-        LEFT JOIN 
-          activity ON olympics_activity.activity_id = activity.activity_id
-        WHERE 
-          olympics.olympics_id = ?;
-      `;
-    
-      try {
-        const results = await executeQuery(query, [olympics_id]);
-    
-        return results;
-      } catch (error) {
-        throw new Error("Error al obtener la olimpiada y actividades: " + error.message);
-      }
-    };
+  getOlympicsWithActivity = async (olympics_id) => {
+    const query = `
+      SELECT 
+        olympics.olympics_id,
+        olympics.olympics_name,
+        olympics.olympics_description,
+        activity.activity_id,
+        activity.activity_name,
+        activity.activity_description
+      FROM 
+        olympics
+      LEFT JOIN 
+        olympics_activity ON olympics.olympics_id = olympics_activity.olympics_id
+      LEFT JOIN 
+        activity ON olympics_activity.activity_id = activity.activity_id
+      WHERE 
+        olympics.olympics_id = ?;
+    `;
+  
+    try {
+      const results = await executeQuery(query, [olympics_id]);
+  
+      return results;
+    } catch (error) {
+      throw new Error("Error al obtener la olimpiada y actividades: " + error.message);
+    }
+  };
 
 
   // 2º Apartado de Centro
-  // Crear Centro
+    // Crear Centro
 
   createCenter = async (centerData) => {
     const { center_name, center_email } = centerData;
@@ -159,7 +160,7 @@ class AdminDal {
     }
   };
 
-  // Seleccionar todos los Centros
+    // Seleccionar todos los Centros
 
   getAllCenters = async () => {
     const query = `
@@ -183,7 +184,7 @@ class AdminDal {
     }
   };
 
-  // Editar Centro
+    // Editar Centro
 
   editCenter = async (data, file) => {
     const {
@@ -228,7 +229,7 @@ class AdminDal {
     }
   };
 
-  // Seleccionar Centro por ID (Recordar Duda)
+    // Seleccionar Centro por ID (Recordar Duda)
 
   getCenterById = async (centerId) => {
     try {
@@ -243,7 +244,7 @@ class AdminDal {
     }
   };
 
-  // Eliminar centro
+    // Eliminar centro
 
   deleteCenter = async (center_id) => {
     let sql = "UPDATE center SET center_is_deleted = 1 WHERE center_id = ?";
@@ -256,7 +257,7 @@ class AdminDal {
   };
 
   // 3º Apartado de Usuarios
-  // Añadir Responsable user_type = 2
+    // Añadir Responsable user_type = 2
 
   getUserById = async (userId) => {
     try {
@@ -287,7 +288,7 @@ class AdminDal {
     }
   };
 
-  // Seleccionar Responsables user_type = 2
+    // Seleccionar Responsables user_type = 2
 
   getAllResponsibles = async () => {
     try {
@@ -301,7 +302,7 @@ class AdminDal {
     }
   };
 
-  // Actualizar Usuario user_type = 3
+    // Actualizar Usuario user_type = 3
 
   updateUser = async (userData, user_id) => {
     try {
@@ -352,7 +353,7 @@ class AdminDal {
     }
   };
 
-  // Actualizar Usuario user_type = 2
+    // Actualizar Usuario user_type = 2
 
   updateResponsible = async (userData, user_id) => {
     try {
@@ -391,7 +392,7 @@ class AdminDal {
     }
   };
 
-  // Ver todos los Usuarios
+    // Ver todos los Usuarios
 
   allUser = async () => {
     try {
@@ -416,7 +417,7 @@ class AdminDal {
     }
   };
 
-  // Borrado lógico Usuario
+    // Borrado lógico Usuario
 
   deleteUserLogically = async (user_id) => {
     const query = "UPDATE user SET user_is_deleted = 1 WHERE user_id = ?";
@@ -428,7 +429,8 @@ class AdminDal {
     }
   };
 
-  //Búsqueda en tiempo real usuarios
+    //Búsqueda en tiempo real usuarios
+
   searchUsers = async (filter) => {
     try {
       // Lista de claves permitidas para los filtros
@@ -464,6 +466,7 @@ class AdminDal {
       const params = [];
   
       // Filtrar las claves permitidas y construir el WHERE dinámico
+
       Object.keys(filter).forEach((key) => {
         if (allowedKeys.includes(key)) {
           query += ` AND ${key.includes('center_') ? 'center' : 'user'}.${key} = ?`;
@@ -472,6 +475,7 @@ class AdminDal {
       });
   
       // Ejecutar la consulta con los parámetros
+
       const [result] = await executeQuery(query, params);
       return result;
     } catch (error) {
@@ -481,7 +485,7 @@ class AdminDal {
   };
 
   // 4º Apartado de Actividades
-  // Añadir Actividad
+    // Añadir Actividad
 
   addActivity = async (data) => {
     const {
@@ -509,7 +513,7 @@ class AdminDal {
     }
   };
 
-  // Seleccionar Actividades
+    // Seleccionar Actividades
 
   allActivity = async () => {
     try {
@@ -579,7 +583,7 @@ class AdminDal {
     }
   }
 
-  // Editar Actividad
+    // Editar Actividad
 
   editActivity = async (data, activity_id) => {
     const {
@@ -588,8 +592,6 @@ class AdminDal {
       max_participants_number,
       img,
     } = data;
-
-    console.log("data en dal", data);
 
     try {
       let sql =
@@ -620,7 +622,7 @@ class AdminDal {
     }
   };
 
-  // Añadir Actividad a Olimpiada
+    // Añadir Actividad a Olimpiada
 
   saveActivity = async (olympics_id, activity_id) => {
     try {
@@ -636,7 +638,7 @@ class AdminDal {
     }
   };
 
-  // Eliminar Actividad de Olimpiada
+    // Eliminar Actividad de Olimpiada
 
   updateOlympicsActivities = async (
     olympicsId,
@@ -677,7 +679,8 @@ class AdminDal {
     }
   };
 
-  //borrado logico de actividad
+    //borrado logico de actividad
+    
   logicalDeleteActivity = async (activity_id) => {
     let sql = ` UPDATE activity SET activity_is_deleted = 1 WHERE activity_id = ?`;
 
