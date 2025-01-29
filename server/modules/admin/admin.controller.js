@@ -1,6 +1,8 @@
 import adminDal from "./admin.dal.js";
 import jwt from "jsonwebtoken";
 import emailService from "../../utils/emailUtils/emailService.js";
+import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
+import { getUserTypeAndValidateToken } from "../../utils/tokenUtils.js";
 import {
   editResponsibleSchema,
   editUserSchema,
@@ -12,8 +14,6 @@ import {
   createCenterSchema,
   editCenterSchema,
 } from "../../utils/zodSchemas/centerSchema.js";
-import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
-import { getUserTypeAndValidateToken } from "../../utils/tokenUtils.js";
 
 class AdminController {
   // 1º Apartado de Olimpiadas
@@ -441,6 +441,8 @@ class AdminController {
       res.status(500).json({ message: "Error al actualizar actividades" });
     }
   };
+
+    // Añade Olimpiada al centro
 
   addOlympicsToCenter = async (req, res) => {
     try {
