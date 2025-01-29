@@ -43,7 +43,9 @@ function ActivityEditModal({ handleClose, handleShow, show, data }) {
   const onSubmit = async (formData) => {
     try {
       setAuthenticating(true);
+
       const newFormData = new FormData();
+      newFormData.append("activity_id", data.activity_id);
       newFormData.append("activity_name", formData.activity_name);
       newFormData.append("activity_description", formData.activity_description);
       newFormData.append("max_participants", formData.max_participants);
@@ -52,20 +54,25 @@ function ActivityEditModal({ handleClose, handleShow, show, data }) {
         newFormData.append("img", file);
       }
 
-      const dataWithId = {
-        activity_id: data.activity_id,
-        ...newFormData,
-      };
-      await fetchData(`api/admin/editActivity`, "put", dataWithId);
+      await fetchData("api/admin/editActivity", "put", newFormData, {
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      });
+
       toast.success("Actividad actualizada correctamente");
       setTimeout(() => {
         setAuthenticating(false);
         handleClose();
       }, 2000);
     } catch (error) {
-      console.error(error);
+      console.error("Error actualizando actividad:", error);
+      toast.error("Hubo un error al actualizar la actividad.");
     }
   };
+
 
   return (
     <>
