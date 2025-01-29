@@ -50,9 +50,6 @@ export default function AuthDashboard({ userData }) {
     <section className="d-flex flex-column gap-5">
       <Row>
         <Col>
-          <h3 className="text-success">
-            Cuenta validada correctamente <ShieldCheck />
-          </h3>
           <p className="d-flex gap-2 fw-bold ">
             <Link className="link-hover" to="/admin/createNewCenter">
               Editar datos del perfil <MoveRight color="#ee531e" />
@@ -60,23 +57,23 @@ export default function AuthDashboard({ userData }) {
           </p>
         </Col>
       </Row>
-      <Row>
+      <Row className="d-flex row-gap-5">
         <Col md={6} sm={12}>
           <h3 className="fs-2 fw-bold">Centro de estudios: </h3>
           <p className="fs-5 pretty">
-            <span className="fw-bold">Nombre:</span>{" "}
+            <span className="fw-bold dark-span">Nombre:</span>{" "}
             {userDetails[0]?.center_name}
           </p>
           <p className="fs-5 pretty">
-            <span className="fw-bold">Dirección:</span>{" "}
+            <span className="fw-bold dark-span">Dirección:</span>{" "}
             {userDetails[0]?.center_address}
           </p>
           <p className="fs-5 pretty">
-            <span className="fw-bold">Localidad:</span>{" "}
+            <span className="fw-bold dark-span">Localidad:</span>{" "}
             {userDetails[0]?.center_city}
           </p>
           <p className="fs-5">
-            <span className="fw-bold">Responsables del centro: </span>
+            <span className="fw-bold dark-span">Responsables del centro: </span>
             {userDetails[0]?.responsables}
           </p>
         </Col>
@@ -85,19 +82,19 @@ export default function AuthDashboard({ userData }) {
             <>
               <h3 className="fs-2 fw-bold">Información sobre la Olimpiada: </h3>
               <p className="fs-5 pretty">
-                <span className="fw-bold">Nombre: </span>
+                <span className="fw-bold dark-span">Nombre: </span>
                 {userDetails[0]?.olympics_name}
               </p>
               <p className="fs-5 pretty">
-                <span className="fw-bold">Nombre de la sede:</span>{" "}
+                <span className="fw-bold dark-span">Nombre de la sede:</span>{" "}
                 {userDetails[0]?.olympics_host_name}
               </p>
               <p className="fs-5 pretty">
-                <span className="fw-bold">Dirección: </span>
+                <span className="fw-bold dark-span">Dirección: </span>
                 {userDetails[0]?.olympics_host_address}
               </p>
               <p className="fs-5">
-                <span className="fw-bold">Localidad: </span>
+                <span className="fw-bold dark-span">Localidad: </span>
                 {userDetails[0]?.olympics_host_city}
               </p>
             </>
@@ -108,7 +105,7 @@ export default function AuthDashboard({ userData }) {
           )}
         </Col>
       </Row>
-      <Row>
+      <Row className="d-flex row-gap-3">
         <h3 className="fs-2 fw-bold">Actividades</h3>
         {activities.map((activity, index) => (
           <Col md={4} sm={12} key={index}>

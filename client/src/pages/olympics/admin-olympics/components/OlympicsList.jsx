@@ -5,8 +5,10 @@ import { CirclePlus, SquarePen, Trash2 } from "lucide-react";
 import OlympicsEditModal from "./OlympicsEditModal";
 import DeleteModal from "../../../../core/components/DeleteModal";
 import OlympicsActivityModal from "./OlympicsActivityModal";
+import { useAppContext } from "../../../../core/context/AppContext";
 
 export default function OlympicsList() {
+  const { themeSwitcher } = useAppContext();
   const [olympics, setOlympics] = useState([]);
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -63,6 +65,7 @@ export default function OlympicsList() {
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
       <Table
+        variant={themeSwitcher ? "" : "dark"}
         striped
         bordered
         hover

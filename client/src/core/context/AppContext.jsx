@@ -4,6 +4,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 export const AppContext = createContext();
 
 export const ContextProvider = ({ children }) => {
+  const [themeSwitcher, setThemeSwitcher] = useState(false);
+
   const [token, setToken] = useState(() => {
     // Inicialización con lazy loading
     const rememberedState = localStorage.getItem("rememberMe") === "true";
@@ -80,6 +82,8 @@ export const ContextProvider = ({ children }) => {
         rememberMe,
         setRememberMe,
         logout,
+        themeSwitcher,
+        setThemeSwitcher,
       }}
     >
       {children}

@@ -30,7 +30,7 @@ h1 {
     position: absolute;
     z-index: 1;
     left: 48%;
-    top: 50%;
+    top: 11%;
     transition: all 0.3s ease;
     transform: rotate(-25deg);
     &:hover {
@@ -54,8 +54,8 @@ span {
     .custom-badge {
       background-color: #ee531e;
       position: absolute;
-      top: 95%;
-      left: 10%;
+      top: 25%;
+      left: -5%;
     }
   }
 }
@@ -65,8 +65,8 @@ span {
     .custom-badge {
       background-color: #ee531e;
       position: absolute;
-      top: 75%;
-      left: 10%;
+      top: 20%;
+      left: -5%;
     }
   }
 }
@@ -78,7 +78,7 @@ span {
       position: absolute;
       width: 100px;
       height: 100px;
-      top: 100%;
+      top: 20%;
       left: 10%;
     }
   }
