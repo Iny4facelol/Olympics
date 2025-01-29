@@ -5,6 +5,8 @@ import {
   completeResponsibleSchema,
   editUserSchema,
   editResponsibleSchema,
+  emailSchema,
+  passwordSchema,
 } from "../../utils/zodSchemas/userSchema.js";
 import { z } from "zod";
 import userDal from "./user.dal.js";
@@ -187,8 +189,8 @@ class UserController {
         result,
       });
     } catch (error) {
-      if(error instanceof z.ZodError){
-        res.status(400).json({error: error.errors})
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
       }
       console.error("Error en editResponsible:", error);
       return res.status(500).json({
@@ -250,13 +252,16 @@ class UserController {
 
       return res.status(200).json(result);
     } catch (error) {
-      console.error("Error al obtener las actividades de las olimpiadas:", error);
+      console.error(
+        "Error al obtener las actividades de las olimpiadas:",
+        error
+      );
       return res.status(500).json({
         message: "Error al obtener las actividades de las olimpiadas.",
         error,
       });
     }
-  }
+  };
 
   //REVISADO CON SANTI
   addActivityToUser = async (req, res) => {
@@ -404,8 +409,12 @@ class UserController {
           message: "No se ha recibido ningún archivo.",
         });
       } else {
-        await userDal.saveUserPermissionFile(req.params.user_id, req.file.filename, `/files/authorization/${req.file.filename}`);
-  
+        await userDal.saveUserPermissionFile(
+          req.params.user_id,
+          req.file.filename,
+          `/files/authorization/${req.file.filename}`
+        );
+
         res.status(200).json({
           message: "Archivo subido correctamente.",
           fileName: req.file.filename,
@@ -426,14 +435,14 @@ class UserController {
       const user_id = req.params.user_id;
 
       const userFileName = await userDal.getAuthorizationFileFromDB(user_id);
-  
+
       if (!userFileName) {
         res.status(404).json({
           message: "El archivo de autorización no se encuentra",
         });
       } else {
         const filePath = path.resolve(`./public/files/file/${userFileName}`);
-  
+
         res.download(filePath, userFileName, (err) => {
           if (err) {
             console.error("Error al intentar descargar el archivo:", err);
@@ -452,7 +461,55 @@ class UserController {
     }
     return;
   };
-}
 
+  findUserByEmail = async (req, res) => {
+    const parsedData = emailSchema.parse(req.body);
+    const { user_email } = parsedData;
+    try {      
+      const result = await userDal.getUserByEmail(user_email);
+      
+      if (result.length === 0) {
+        res.status(401).json({ emailError: "El email introducido no existe" });
+      } else {        
+        const token = jwt.sign(
+          { user_id: result[0].user_id },
+          process.env.TOKEN_KEY,
+          { expiresIn: "24h" }
+        );        
+        await emailService.sendResetPasswordEmail(parsedData, token);
+      }
+      
+      return res.status(201).json({
+        message: "Token creado",
+        insertId: result[0].user_id
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json({ msg: "Error al hacer petición ", error });
+      }
+    }
+  };
+
+  restorePassword = async (req, res) => {
+    const parsedData = passwordSchema.parse(req.body);
+    try {
+      const { user_password } = parsedData;
+      const { user_id } = req.params;
+      const hash = await hashPassword(user_password);
+      await userDal.updatePassword(hash, user_id);
+      res.status(200).json({ msg: "Contraseña actualizada con éxito."})
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        console.log(error);
+        
+        res.status(400).json({ message: error.message })
+      }
+    }
+  }
+}
 
 export default new UserController();

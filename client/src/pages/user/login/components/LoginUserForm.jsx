@@ -10,7 +10,8 @@ import { useAppContext } from "../../../../core/context/AppContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function LoginUserForm() {
+
+export default function LoginUserForm({ setShowForgotPassword }) {
   const { setToken, setUser, setRememberMe, rememberMe, themeSwitcher } = useAppContext();
   const [emailErrorMsg, setEmailErrorMsg] = useState();
   const [passwordErrorMsg, setPasswordErrorMsg] = useState();
@@ -23,6 +24,7 @@ export default function LoginUserForm() {
       const result = await fetchData(`api/user/login`, "post", data);
       const userResult = await fetchData("api/user/findUserById", "get", null, {Authorization: `Bearer ${result.token}`} )
       toast.success("Acceso correcto");
+
       setEmailErrorMsg();
       setPasswordErrorMsg();
       setToken(result.token);
@@ -118,8 +120,9 @@ export default function LoginUserForm() {
           <Form.Text className={`${themeSwitcher ? "text-secondary" : "text-white"}`}>Recordar Usuario</Form.Text>
         </Col>
         <Col md={6} sm={12}>
-          <Form.Text className={`${themeSwitcher ? "text-secondary" : "text-white"}`}>
-            <a href="/user/recover">¿Olvidaste tu contraseña?</a>
+
+          <Form.Text className={`${themeSwitcher ? "text-secondary" : "text-white"}`} onClick={() => setShowForgotPassword(true)}>
+            ¿Olvidaste tu contraseña?          
           </Form.Text>
         </Col>
       </Row>

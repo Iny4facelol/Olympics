@@ -44,6 +44,8 @@ router.get('/pendingValidationUsers/:user_center_id', userController.getPendingV
 
 //ruta de perfil usuario no autorizado
 router.get('/NonAuthProfile/:user_id', userController.getUnauthorizedUserProfile);
+router.post('/findUserByEmail', userController.findUserByEmail);
+router.put('/restorePassword/:user_id', userController.restorePassword)
 
 
 export default router;

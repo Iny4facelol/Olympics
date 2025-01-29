@@ -514,10 +514,13 @@ class AdminController {
     }
   };
 
-  verifyTokenResponsible = async (req, res) => {
+  verifyTokenUser = async (req, res) => {
+    
     try {
       const { token } = req.params;
       const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+      console.log("verify", decoded);
+      
       const user = await adminDal.getUserById(decoded.user_id);
 
       if (!user) {

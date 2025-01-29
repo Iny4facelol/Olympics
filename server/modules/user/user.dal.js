@@ -1,3 +1,4 @@
+import { hash } from "crypto";
 import { dbPool, executeQuery } from "../../config/db.js";
 
 class UserDal {
@@ -486,6 +487,17 @@ GROUP BY
       throw error;
     }
   };
+
+  updatePassword = async (hash, user_id) => {
+    try {
+      let sql = "UPDATE user SET user_password = ? WHERE user_id = ?";
+      let values = [hash, user_id]
+      const result = await executeQuery(sql, values);
+      return result;
+    } catch (error) {
+      throw new Error("Error al actualizar la contraseña")
+    }
+  }
 }
 
 export default new UserDal();
