@@ -6,11 +6,76 @@ body {
   scroll-behavior: smooth;
 }
 
-.main-user,
-.header-user {
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+.theme-transition {
+  position: relative;
+  overflow: hidden;
+  transition: background-color 1.5s ease, color 1.5s ease;
 }
 
+.theme-transition.header-user,
+.theme-transition.main-user {
+  position: sticky;
+  overflow: hidden;
+}
+
+.light-mode {
+  --bg-color: #fdfdfd;
+  --text-color: #2e2e2e;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.dark-mode {
+  --bg-color: #2e2e2e;
+  --text-color: #fdfdfd;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.header-user.theme-transition::before,
+.main-user.theme-transition::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-color);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+  z-index: 0;
+}
+
+.transitioning.light-mode::before {
+  background-color: var(--bg-color);
+  transform: translateX(0);
+}
+
+.transitioning.dark-mode::before {
+  background-color: var(--bg-color);
+  transform: translateX(0);
+}
+
+
+.theme-transition > * {
+  position: relative;
+  z-index: 1;
+}
+
+html.dark .dark-span {
+  color: #fdfdfd;
+}
+
+html.light .main-admin,
+html.light .dashboard-header {
+  background-color: #eaeaea;
+}
+
+html.dark .main-admin,
+html.dark .dashboard-header {
+  background-color: #2e2e2e;
+  color: #fdfdfd;
+}
 
 html.light .main-user {
   background-color: #fdfdfd;

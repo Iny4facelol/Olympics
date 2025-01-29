@@ -5,7 +5,7 @@ import { useAppContext } from "../context/AppContext";
 import { Moon, Sun } from "lucide-react";
 
 export default function HeaderHome({ lightDarkHandler, icon }) {
-  const { user, setUser, setToken } = useAppContext();
+  const { user, setUser, setToken, themeSwitcher } = useAppContext();
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -42,7 +42,7 @@ export default function HeaderHome({ lightDarkHandler, icon }) {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
             className="user-select-none"
-            src={icon ? "/olympicslogo.png" :  "/logodark.png"}
+            src={icon ? "/olympicslogo.png" : "/logodark.png"}
             alt=""
           />
         </div>
@@ -70,10 +70,16 @@ export default function HeaderHome({ lightDarkHandler, icon }) {
               </a>
             </article>
             <article className="d-flex justify-content-between align-items-center gap-2">
-              <ButtonCustom onClick={lightDarkHandler} bgColor={"white"}>
+              <ButtonCustom
+                onClick={lightDarkHandler}
+                bgColor={themeSwitcher ? "white" : "dark"}
+              >
                 {icon ? <Moon /> : <Sun />}
               </ButtonCustom>
-              <ButtonCustom onClick={handleNavigate} bgColor={"white"}>
+              <ButtonCustom
+                onClick={handleNavigate}
+                bgColor={themeSwitcher ? "white" : "dark"}
+              >
                 {user ? "Ir al Perfil" : "Regístrate"}
               </ButtonCustom>
               <ButtonCustom onClick={handleLogout} bgColor={"orange"}>

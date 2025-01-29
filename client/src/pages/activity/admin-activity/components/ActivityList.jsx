@@ -5,10 +5,12 @@ import "./ActivityList.css";
 import { SquarePen, Trash2 } from "lucide-react";
 import  ActivityEditModal  from "./ActivityEditModal";
 import DeleteModal from "../../../../core/components/DeleteModal";
+import { useAppContext } from "../../../../core/context/AppContext";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_IMAGE_URL;
 
 export default function ActivityList() {
+  const { themeSwitcher } = useAppContext();
   const [activities, setActivities] = useState([]);
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -52,6 +54,7 @@ export default function ActivityList() {
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
       <Table
+        variant={themeSwitcher ? "" : "dark"}
         striped
         bordered
         hover

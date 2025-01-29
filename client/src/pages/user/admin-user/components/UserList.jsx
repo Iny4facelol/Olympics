@@ -5,8 +5,10 @@ import { SquarePen, Trash2 } from "lucide-react";
 import UserEditModal from "./UserEditModal";
 import DeleteModal from "../../../../core/components/DeleteModal";
 import ResponsibleEditModal from "./ResponsibleEditModal";
+import { useAppContext } from "../../../../core/context/AppContext";
 
 export default function UserList() {
+  const { themeSwitcher } = useAppContext();
   const [users, setUsers] = useState([]);
   const [showUserModal, setShowUserModal] = useState(false);
   const [showResponsibleModal, setShowResponsibleModal] = useState(false);
@@ -34,7 +36,7 @@ export default function UserList() {
       }
     };
     getData();
-  }, [showUserModal, showResponsibleModal]);
+  }, [showUserModal, showResponsibleModal, showDelete]);
 
   const handleLogicDelete = async (user_id) => {
     const data = users.find((user) => user.user_id === user_id);
@@ -55,6 +57,7 @@ export default function UserList() {
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
       <Table
+        variant={themeSwitcher ? "" : "dark"}
         striped
         bordered
         hover
@@ -89,9 +92,9 @@ export default function UserList() {
                     }
                   }}
                   size="24"
-                  className="text-success"
+                  className="text-primary"
                   style={{ cursor: "pointer" }}
-                />                
+                />
               </td>
               <td className="col-name">
                 {user.user_name} {user.user_lastname}
@@ -131,6 +134,8 @@ export default function UserList() {
         handleShow={handleShowDelete}
         show={showDelete}
         data={userEditData}
+        deleteMessage={"Usuario eliminado correctamente"}
+        apiEndpoint={`api/admin/delete-user/${userEditData.user_id}`}
       />
     </section>
   );

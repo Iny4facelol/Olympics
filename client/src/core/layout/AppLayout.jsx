@@ -2,35 +2,60 @@ import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import HeaderHome from "../components/HeaderHome";
 import "./AppLayout.css";
+import { useAppContext } from "../context/AppContext";
 
 export default function AppLayout({ children }) {
-  
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("theme") || "light";
-  });
-
-  const [icon, setIcon] = useState(false);
+  const { themeSwitcher, setThemeSwitcher } = useAppContext();
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("theme") || "light"
+  );
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleIcon = () => {
-    setIcon(!icon);
-  }
+    setThemeSwitcher(!themeSwitcher);
+  };
 
   useEffect(() => {
-    document.documentElement.className = theme; 
+    document.documentElement.className = theme;
     localStorage.setItem("theme", theme);
-  }, [theme]);
+    localStorage.setItem("themeSwitcher", String(themeSwitcher));
+  }, [theme, themeSwitcher]);
 
   const toggleTheme = () => {
+    setIsTransitioning(true);
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
     handleIcon();
+
+    // Remove transitioning class after animation completes
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 500);
   };
-  return (
+
+
+ return (
     <>
-      <HeaderHome lightDarkHandler={toggleTheme} theme={theme} icon={icon} />
-      <main className="main-user flex-grow-1 flex-column custom-container">
+      <header 
+        className={`header-user theme-transition
+          ${theme === "light" ? "light-mode" : "dark-mode"}
+          ${isTransitioning ? "transitioning" : ""}`}
+      >
+        <HeaderHome
+          lightDarkHandler={toggleTheme}
+          theme={theme}
+          icon={themeSwitcher}
+        />
+      </header>
+      <main
+        className={`main-user theme-transition flex-grow-1 flex-column custom-container
+          ${theme === "light" ? "light-mode" : "dark-mode"}
+          ${isTransitioning ? "transitioning" : ""}`}
+      >
         {children}
       </main>
+
       <Footer />
     </>
   );
 }
+

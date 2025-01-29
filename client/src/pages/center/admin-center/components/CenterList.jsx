@@ -8,7 +8,7 @@ import CenterOlympicsModal from "./CenterOlympicsModal";
 import { useAppContext } from "../../../../core/context/AppContext";
 
 export default function CenterList() {
-  const {token} = useAppContext();
+  const { token, themeSwitcher } = useAppContext();
   const [centers, setCenters] = useState([]);
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -27,7 +27,9 @@ export default function CenterList() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetchData("api/admin/allCenters", "get", null, {Authorization: `Bearer ${token}`});
+        const response = await fetchData("api/admin/allCenters", "get", null, {
+          Authorization: `Bearer ${token}`,
+        });
         setCenters(response);
         console.log(response);
       } catch (error) {
@@ -58,6 +60,7 @@ export default function CenterList() {
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
       <Table
+        variant={themeSwitcher ? "" : "dark"}
         striped
         bordered
         hover

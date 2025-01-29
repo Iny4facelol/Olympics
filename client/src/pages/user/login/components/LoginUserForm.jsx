@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function LoginUserForm() {
-  const { setToken, setUser, setRememberMe, rememberMe } = useAppContext();
+  const { setToken, setUser, setRememberMe, rememberMe, themeSwitcher } = useAppContext();
   const [emailErrorMsg, setEmailErrorMsg] = useState();
   const [passwordErrorMsg, setPasswordErrorMsg] = useState();
   const [authenticating, setAuthenticating] = useState(false);
@@ -115,10 +115,10 @@ export default function LoginUserForm() {
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
           />
-          <Form.Text>Recordar Usuario</Form.Text>
+          <Form.Text className={`${themeSwitcher ? "text-secondary" : "text-white"}`}>Recordar Usuario</Form.Text>
         </Col>
         <Col md={6} sm={12}>
-          <Form.Text>
+          <Form.Text className={`${themeSwitcher ? "text-secondary" : "text-white"}`}>
             <a href="/user/recover">¿Olvidaste tu contraseña?</a>
           </Form.Text>
         </Col>
