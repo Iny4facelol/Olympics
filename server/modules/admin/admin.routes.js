@@ -24,6 +24,7 @@ router.get("/centerOlympics/:center_id", adminController.getCenterOlympics);
 
 // Rutas de Usuarios
 router.post('/addResponsible', adminController.addResponsible);
+router.post('/contactUs', adminController.contactUs);
 router.put('/editResponsible', adminController.editResponsible);
 router.put('/editUser', adminController.editUser); 
 router.put('/delete-user/:user_id', adminController.deleteUserLogically);

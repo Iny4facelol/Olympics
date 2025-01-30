@@ -92,6 +92,7 @@ export default function UserList() {
           aria-label="Default"
           aria-describedby="inputGroup-sizing-sm"
           onChange={handleChange}
+          placeholder="Escribe para buscar..."
         />
       </InputGroup>
       <Table
