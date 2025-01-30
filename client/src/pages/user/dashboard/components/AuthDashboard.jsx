@@ -4,15 +4,20 @@ import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import UserEditModal from "./UserEditModal";
+import { useAppContext } from "../../../../core/context/AppContext";
+
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_IMAGE_URL;
 
 export default function AuthDashboard({ userData }) {
   const { t } = useTranslation();
+  const {user} = useAppContext();
   const [userDetails, setUserDetails] = useState([]);
   const [activities, setActivities] = useState([]);
-
-  console.log(activities);
+  const [show, setShow] = useState(false);
+  const [userEditData, setUserEditData] = useState({});
+  
 
   useEffect(() => {
     const getData = async () => {
@@ -46,15 +51,25 @@ export default function AuthDashboard({ userData }) {
     getData();
   }, []);
 
-  console.log(userDetails);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const handleEdit = (user_id) => {
+    const data = user_id;
+    setUserEditData(data);
+    handleShow();
+  };
 
   return (
     <section className="d-flex flex-column gap-5">
       <Row>
         <Col>
           <p className="d-flex gap-2 fw-bold ">
-            <Link className="link-hover" to="/admin/createNewCenter">
-              {t("user_dashboard.editUser")} <MoveRight color="#ee531e" />
+            <Link
+              className="link-hover"
+              onClick={() => handleEdit(user.user_id)}
+            >
+              Editar datos del perfil <MoveRight color="#ee531e" />
             </Link>
           </p>
         </Col>
@@ -147,6 +162,12 @@ export default function AuthDashboard({ userData }) {
           </Col>
         ))}
       </Row>
+      <UserEditModal
+        handleClose={handleClose}
+        handleShow={handleShow}
+        show={show}
+        data={userEditData}
+      />
     </section>
   );
 }

@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import ButtonCustom from "../../../../core/components/Button/Button";
-import { Toaster } from "sonner";
+import { toast, Toaster } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../../../../utils/zodSchemas/loginSchema";
+import { contactSchema } from "../../../../utils/zodSchemas/contactSchema";
 import ScrollReveal from "scrollreveal";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { fetchData } from "../../../../utils/axios/axiosHelper";
+import axios from "axios";
 
 export default function Section5() {
   const {t} = useTranslation()
   const [authenticating, setAuthenticating] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     ScrollReveal().reveal(".reveal", {
       distance: "50px",
@@ -28,12 +31,29 @@ export default function Section5() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(contactSchema),
     defaultValues: {
       user_email: "",
-      user_password: "",
+      user_name: "",
+      user_message: ""
     },
   });
+
+  const onSubmit = async (data) => {
+     try {
+      setAuthenticating(true);
+      await fetchData(`api/admin/contactUs`, "post", data);
+      toast.success("Email enviado");
+      setTimeout(() => {
+        setAuthenticating(false);
+        navigate("/");
+      }, 2000);
+    } catch (error) {
+      if (error instanceof axios.AxiosError) {
+        setAuthenticating(false);        
+      }
+    } 
+  };
 
   return (
     <section id="contact" className="d-flex gap-4 flex-column p-3 p-sm-2 reveal">
@@ -47,7 +67,7 @@ export default function Section5() {
           </p>
         </Col>
       </Row>
-      <Form className="d-flex flex-column gap-4">
+      <Form className="d-flex flex-column gap-4" onSubmit={handleSubmit(onSubmit)}>
         <Row>
           <Col md={6} sm={12}>
             <Form.Group controlId="formBasicUserName">

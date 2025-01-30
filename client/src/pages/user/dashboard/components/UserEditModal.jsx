@@ -1,6 +1,5 @@
 import { Col, Form, Row } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
-import { editResponsibleSchema } from "../../../../utils/zodSchemas/registerSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from "sonner";
@@ -8,9 +7,10 @@ import ButtonCustom from "../../../../core/components/Button/Button";
 import { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { useAppContext } from "../../../../core/context/AppContext";
+import { editUserSchema } from "../../../../utils/zodSchemas/registerSchema";
 
-function ResponsibleEditModal({ handleClose, show, data }) {
-  const { user, themeSwitcher } = useAppContext();
+function UserEditModal({ handleClose, show, data }) {
+  const { user } = useAppContext();
   const [authenticating, setAuthenticating] = useState(false);
   const [centerList, setCenterList] = useState([]);
   const editUser = { ...user };
@@ -21,13 +21,17 @@ function ResponsibleEditModal({ handleClose, show, data }) {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(editResponsibleSchema),
+    resolver: zodResolver(editUserSchema),
     defaultValues: {
       user_id: "",
       user_name: "",
       user_lastname: "",
+      user_tutor_name: "",
+      user_tutor_lastname: "",
       user_dni: "",
       user_city: "",
+      user_address: "",
+      user_birth_date: "",
       user_phone: "",
       user_center_id: "",
     },
@@ -39,8 +43,12 @@ function ResponsibleEditModal({ handleClose, show, data }) {
         user_id: editUser.user_id,
         user_name: editUser.user_name,
         user_lastname: editUser.user_lastname,
+        user_tutor_name: editUser.user_tutor_name,
+        user_tutor_lastname: editUser.user_tutor_lastname,
         user_dni: editUser.user_dni,
         user_city: editUser.user_city,
+        user_address: editUser.user_address,
+        user_birth_date: editUser.user_birth_date,
         user_phone: editUser.user_phone,
         user_center_id: editUser.user_center_id,
       });
@@ -61,15 +69,9 @@ function ResponsibleEditModal({ handleClose, show, data }) {
   }, []);
 
   const onSubmit = async (formData) => {
-<<<<<<< HEAD:client/src/pages/responsable/dashboard-responsible/components/ResponsibleEditModal.jsx
     try {
       setAuthenticating(true);
-=======
-    try {   
-      
-      setAuthenticating(true);     
->>>>>>> main:client/src/pages/responsable/dashboard-responsible/ResponsibleEditModal.jsx
-      await fetchData(`api/user/editResponsible/${data}`, "put", formData);
+      await fetchData(`api/user/editUser/${data}`, "put", formData);
       toast.success("Usuario actualizado correctamente");
       setTimeout(() => {
         setAuthenticating(false);
@@ -83,13 +85,10 @@ function ResponsibleEditModal({ handleClose, show, data }) {
   return (
     <>
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header
-          className={themeSwitcher ? "" : "bg-dark text-white"}
-          closeButton
-        >
+        <Modal.Header closeButton>
           <Modal.Title>Editar Usuario</Modal.Title>
         </Modal.Header>
-        <Modal.Body className={themeSwitcher ? "" : "bg-dark text-white"}>
+        <Modal.Body>
           <Form
             className="d-flex gap-4 flex-column justify-content-center align-content-center"
             onSubmit={handleSubmit(onSubmit)}
@@ -134,6 +133,40 @@ function ResponsibleEditModal({ handleClose, show, data }) {
             </Row>
             <Row className="row-gap-4">
               <Col md={6} sm={12}>
+                <Form.Group controlId="formBasicTutorName">
+                  <Form.Label>Nombre del tutor*</Form.Label>
+                  <Form.Control
+                    className={errors.user_tutor_name ? "is-invalid" : ""}
+                    {...register("user_tutor_name")}
+                    type="text"
+                    placeholder="Nombre del tutor"
+                  />
+                  {errors.user_tutor_name && (
+                    <Form.Text className="text-danger">
+                      {errors.user_tutor_name.message}
+                    </Form.Text>
+                  )}
+                </Form.Group>
+              </Col>
+              <Col md={6} sm={12}>
+                <Form.Group controlId="formBasicTutorLastname">
+                  <Form.Label>Apellidos del tutor*</Form.Label>
+                  <Form.Control
+                    className={errors.user_tutor_lastname ? "is-invalid" : ""}
+                    {...register("user_tutor_lastname")}
+                    type="text"
+                    placeholder="Apellidos del tutor"
+                  />
+                  {errors.user_tutor_lastname && (
+                    <Form.Text className="text-danger">
+                      {errors.user_tutor_lastname.message}
+                    </Form.Text>
+                  )}
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="row-gap-4">
+              <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicDNI">
                   <Form.Label>DNI*</Form.Label>
                   <Form.Control
@@ -168,6 +201,22 @@ function ResponsibleEditModal({ handleClose, show, data }) {
             </Row>
             <Row className="row-gap-4">
               <Col md={6} sm={12}>
+                <Form.Group controlId="formBasicAddress">
+                  <Form.Label>Dirección*</Form.Label>
+                  <Form.Control
+                    className={errors.user_address ? "is-invalid" : ""}
+                    {...register("user_address")}
+                    type="text"
+                    placeholder="Dirección"
+                  />
+                  {errors.user_address && (
+                    <Form.Text className="text-danger">
+                      {errors.user_address.message}
+                    </Form.Text>
+                  )}
+                </Form.Group>
+              </Col>
+              <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicPhone">
                   <Form.Label>Nº de Teléfono*</Form.Label>
                   <Form.Control
@@ -179,6 +228,23 @@ function ResponsibleEditModal({ handleClose, show, data }) {
                   {errors.user_phone && (
                     <Form.Text className="text-danger">
                       {errors.user_phone.message}
+                    </Form.Text>
+                  )}
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="row-gap-4">
+              <Col md={6} sm={12}>
+                <Form.Group controlId="formBasicBirthDate">
+                  <Form.Label>Fecha de Nacimiento*</Form.Label>
+                  <Form.Control
+                    className={errors.user_birth_date ? "is-invalid" : ""}
+                    {...register("user_birth_date")}
+                    type="date"
+                  />
+                  {errors.user_birth_date && (
+                    <Form.Text className="text-danger">
+                      {errors.user_birth_date.message}
                     </Form.Text>
                   )}
                 </Form.Group>
@@ -205,7 +271,11 @@ function ResponsibleEditModal({ handleClose, show, data }) {
                 </Form.Group>
               </Col>
             </Row>
-            <div>
+
+            <div
+              style={{ width: "100%", height: "2px", backgroundColor: "gray" }}
+            ></div>
+            <div className="">
               <Toaster richColors position="top-center" />
               <ButtonCustom type={"submit"} bgColor={"orange"}>
                 {authenticating ? "Actualizando..." : "Actualizar Usuario"}
@@ -218,4 +288,4 @@ function ResponsibleEditModal({ handleClose, show, data }) {
   );
 }
 
-export default ResponsibleEditModal;
+export default UserEditModal;

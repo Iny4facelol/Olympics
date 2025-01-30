@@ -1,7 +1,10 @@
 import adminDal from "./admin.dal.js";
 import jwt from "jsonwebtoken";
 import emailService from "../../utils/emailUtils/emailService.js";
+import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
+import { getUserTypeAndValidateToken } from "../../utils/tokenUtils.js";
 import {
+  contactSchema,
   editResponsibleSchema,
   editUserSchema,
   registerResponsibleSchema,
@@ -12,8 +15,6 @@ import {
   createCenterSchema,
   editCenterSchema,
 } from "../../utils/zodSchemas/centerSchema.js";
-import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
-import { getUserTypeAndValidateToken } from "../../utils/tokenUtils.js";
 
 class AdminController {
   // 1º Apartado de Olimpiadas
@@ -336,6 +337,22 @@ class AdminController {
       });
     }
   };
+
+  // Formulario de contacto
+
+  contactUs = async (req, res) => {
+    const parsedData = contactSchema.parse(req.body)
+    try {
+      await emailService.sendContactEmail(parsedData);
+      return res.status(201).json({message: "Email enviado"})
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(400).json({msg: "Error al enviar email", error})
+      } 
+    }
+  }
   
 
   // 4º Apartado de Actividades
@@ -441,6 +458,8 @@ class AdminController {
       res.status(500).json({ message: "Error al actualizar actividades" });
     }
   };
+
+    // Añade Olimpiada al centro
 
   addOlympicsToCenter = async (req, res) => {
     try {

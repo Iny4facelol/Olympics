@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../../core/layout/DashboardLayout";
-import { Badge, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Container, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useAppContext } from "../../../core/context/AppContext";
 import NonAuthDashboard from "./components/NonAuthDashboard";
 import AuthDashboard from "./components/AuthDashboard";

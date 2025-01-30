@@ -1,22 +1,25 @@
+import userDal from "./user.dal.js";
+import emailService from "../../utils/emailUtils/emailService.js";
+import jwt from "jsonwebtoken";
+import path from "path";
 import { comparePassword, hashPassword } from "../../utils/hashUtils.js";
 import { generateToken, getIdFromToken } from "../../utils/tokenUtils.js";
+import { z } from "zod";
+import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
+import { completeCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
 import {
-  registerSchema,
-  completeResponsibleSchema,
+registerSchema,
+completeResponsibleSchema,
   editUserSchema,
   editResponsibleSchema,
   emailSchema,
   passwordSchema,
 } from "../../utils/zodSchemas/userSchema.js";
-import { z } from "zod";
-import userDal from "./user.dal.js";
-import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
-import emailService from "../../utils/emailUtils/emailService.js";
-import jwt from "jsonwebtoken";
-import path from "path";
-import { completeCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
 
 class UserController {
+  // 1º Apartado de Usuarios
+    // Registro de usuario
+
   register = async (req, res) => {
     const parsedData = registerSchema.parse(req.body);
 
@@ -55,8 +58,6 @@ class UserController {
 
       const result = await userDal.register(values);
 
-      console.log("EL RESULT", result);
-
       const token = jwt.sign(
         { user_id: result.insertId },
         process.env.TOKEN_KEY,
@@ -74,6 +75,8 @@ class UserController {
       }
     }
   };
+
+    // Login de Usuario
 
   login = async (req, res) => {
     const parsedData = loginSchema.parse(req.body);
@@ -104,6 +107,8 @@ class UserController {
     }
   };
 
+    // Buscar Usuario por ID
+
   findUserById = async (req, res) => {
     try {
       const user_id = getIdFromToken(req.token);
@@ -114,6 +119,206 @@ class UserController {
       return res.status(400).json({ message: error.message });
     }
   }
+
+    // Completas Responsable 
+
+  completeResponsible = async (req, res) => {
+    const parsedData = completeResponsibleSchema.parse(req.body);
+    try {
+      const { user_name, user_lastname, user_dni, user_phone, user_password } =
+        parsedData;
+
+      const { user_id } = req.params;
+
+      const hash = await hashPassword(user_password);
+
+      const values = [
+        user_name,
+        user_lastname,
+        user_dni,
+        user_phone,
+        hash,
+        user_id,
+      ];
+
+      await userDal.completeResponsible(values);
+      res.status(200).json({ msg: "Responsable completado con éxito." });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(400).json({ message: error.message });
+      }
+    }
+  };
+
+    // Editar Responsable
+
+  editResponsible = async (req, res) => {
+    try {
+      const { user_id } = req.params;
+      const parsedData = editResponsibleSchema.parse(req.body);
+
+      const result = await userDal.updateResponsible(user_id, parsedData);
+
+      return res.status(200).json({
+        message: "Responsable actualizado con éxito.",
+        result,
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      }
+      console.error("Error en editResponsible:", error);
+      return res.status(500).json({
+        message: "Error al actualizar responsable.",
+        error: error.message,
+      });
+    }
+  };
+
+    // Editar Usuario
+
+  editUserUser = async (req, res) => {
+    const parsedData = editUserSchema.parse(req.body);
+    try {
+      const { user_id } = req.params;
+      const result = await userDal.updateUserUser(user_id, parsedData);
+      return res
+        .status(200)
+        .json({ message: "Usuario actualizado con éxito.", result });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        throw error;
+      }
+    }
+  };
+
+    //LISTADO PARA VER (EL RESPONSABLE, USER TYPE =2) ALUMNOS Y POSTERIORMENTE ASIGNAR ACTIVIDADES
+
+  getUsersToAddActivity = async (req, res) => {
+    try {
+      const { user_center_id } = req.params;
+
+      const result = await userDal.getUsersToAddActivity(user_center_id);
+      return res.status(200).json(result);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  };
+
+    // Añadir actividad a Usuario
+
+  addActivityToUser = async (req, res) => {
+    try {
+      const { user_id } = req.params;
+      const { activity_id, center_id, olympics_id } = req.body;
+
+      if (!user_id || !activity_id || !center_id || !olympics_id) {
+        return res.status(400).json({
+          message:
+            "Todos los campos son requeridos: user_id, activity_id, center_id, olympics_id",
+        });
+      }
+
+      const result = await userDal.addActivityToUser(
+        user_id,
+        activity_id,
+        center_id,
+        olympics_id
+      );
+
+      return res.status(200).json(result);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Error al añadir actividad al usuario.", error });
+    }
+  };
+
+    // Detalles de Usuario
+
+  userDetails = async (req, res) => {
+    try {
+      const { user_id } = req.params;
+      const result = await userDal.searchUserDetails(user_id);
+
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Error al obtener los detalles del usuario", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  };
+
+    // Restaurar Contraseña de Usuario
+
+  restorePassword = async (req, res) => {
+    const parsedData = passwordSchema.parse(req.body);
+    try {
+      const { user_password } = parsedData;
+      const { user_id } = req.params;
+      const hash = await hashPassword(user_password);
+      await userDal.updatePassword(hash, user_id);
+      res.status(200).json({ msg: "Contraseña actualizada con éxito."})
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(400).json({ message: error.message })
+      }
+    }
+  }
+
+  // 2º Apartado de Actividades
+    // Ver Actividades de un Usuario
+
+  getUserActivities = async (req, res) => {
+    try {
+      const { user_id, olympics_id } = req.params;
+
+      if (!user_id || !olympics_id) {
+        return res
+          .status(400)
+          .json({ message: "El id del usuario y el id de las olimpiadas son requeridos" });
+      }
+
+      const userActivities = await userDal.getUserActivities(user_id, olympics_id);
+
+      return res.status(200).json(userActivities);
+    } catch (error) {
+      console.error("Error al obtener las actividades del usuario:", error);
+      return res.status(500).json({
+        message: "Error al obtener las actividades del usuario.",
+        error,
+      });
+    }
+  }
+
+    // Ver Actividades de una Olimpiada
+
+  getActivitiesFromOlympics = async (req, res) => {
+    try {
+      const { olympics_id } = req.params;
+      console.log("olympics_id", olympics_id);
+      const result = await userDal.getActivitiesFromOlympics(olympics_id);
+
+      return res.status(200).json(result);
+    } catch (error) {
+      console.error(
+        "Error al obtener las actividades de las olimpiadas:",
+        error
+      );
+      return res.status(500).json({
+        message: "Error al obtener las actividades de las olimpiadas.",
+        error,
+      });
+    }
+  };
+
+  // 3º Apartado Centro
+    // Completar Centro
 
   completeCenter = async (req, res) => {
     const parsedData = completeCenterSchema.parse(req.body);
@@ -147,76 +352,9 @@ class UserController {
     }
   };
 
-  completeResponsible = async (req, res) => {
-    const parsedData = completeResponsibleSchema.parse(req.body);
-    try {
-      const { user_name, user_lastname, user_dni, user_phone, user_password } =
-        parsedData;
+  // 4º Apartado de Validaciones
+    // Validar documento desde Responsable
 
-      const { user_id } = req.params;
-
-      const hash = await hashPassword(user_password);
-
-      const values = [
-        user_name,
-        user_lastname,
-        user_dni,
-        user_phone,
-        hash,
-        user_id,
-      ];
-
-      await userDal.completeResponsible(values);
-      res.status(200).json({ msg: "Responsable completado con éxito." });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ error: error.errors });
-      } else {
-        res.status(400).json({ message: error.message });
-      }
-    }
-  };
-
-  editResponsible = async (req, res) => {
-    try {
-      const { user_id } = req.params;
-      const parsedData = editResponsibleSchema.parse(req.body);
-
-      const result = await userDal.updateResponsible(user_id, parsedData);
-
-      return res.status(200).json({
-        message: "Responsable actualizado con éxito.",
-        result,
-      });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ error: error.errors });
-      }
-      console.error("Error en editResponsible:", error);
-      return res.status(500).json({
-        message: "Error al actualizar responsable.",
-        error: error.message,
-      });
-    }
-  };
-
-  editUserUser = async (req, res) => {
-    const parsedData = editUserSchema.parse(req.body);
-    try {
-      const { user_id } = req.params;
-      const result = await userDal.updateUserUser(user_id, parsedData);
-      return res
-        .status(200)
-        .json({ message: "Usuario actualizado con éxito.", result });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ error: error.errors });
-      } else {
-        throw error;
-      }
-    }
-  };
-  //REVISADO CON SANTI
   ResponsibleValidateDocument = async (req, res) => {
     try {
       const { user_id } = req.params;
@@ -231,95 +369,7 @@ class UserController {
     }
   };
 
-  //LISTADO PARA VER (EL RESPONSABLE, USER TYPE =2) ALUMNOS Y POSTERIORMENTE ASIGNAR ACTIVIDADES
-
-  getUsersToAddActivity = async (req, res) => {
-    try {
-      const { user_center_id } = req.params;
-
-      const result = await userDal.getUsersToAddActivity(user_center_id);
-      return res.status(200).json(result);
-    } catch (error) {
-      res.status(400).json({ message: error.message });
-    }
-  };
-
-  getActivitiesFromOlympics = async (req, res) => {
-    try {
-      const { olympics_id } = req.params;
-      console.log("olympics_id", olympics_id);
-      const result = await userDal.getActivitiesFromOlympics(olympics_id);
-
-      return res.status(200).json(result);
-    } catch (error) {
-      console.error(
-        "Error al obtener las actividades de las olimpiadas:",
-        error
-      );
-      return res.status(500).json({
-        message: "Error al obtener las actividades de las olimpiadas.",
-        error,
-      });
-    }
-  };
-
-  //REVISADO CON SANTI
-  addActivityToUser = async (req, res) => {
-    try {
-      const { user_id } = req.params;
-      const { activity_id, center_id, olympics_id } = req.body;
-
-      console.log("Body:", req.body);
-      console.log("Params:", req.params);
-
-      if (!user_id || !activity_id || !center_id || !olympics_id) {
-        return res.status(400).json({
-          message:
-            "Todos los campos son requeridos: user_id, activity_id, center_id, olympics_id",
-        });
-      }
-
-      const result = await userDal.addActivityToUser(
-        user_id,
-        activity_id,
-        center_id,
-        olympics_id
-      );
-
-      console.log("Actividad añadida con éxito", result);
-
-      return res.status(200).json(result);
-    } catch (error) {
-      console.log("Error al añadir actividad al usuario:", error);
-      return res
-        .status(500)
-        .json({ message: "Error al añadir actividad al usuario.", error });
-    }
-  };
-
-  getUserActivities = async (req, res) => {
-    try {
-      const { user_id, olympics_id } = req.params;
-      console.log("user_id", user_id);
-      console.log("olympics_id", olympics_id);
-
-      if (!user_id || !olympics_id) {
-        return res
-          .status(400)
-          .json({ message: "El id del usuario y el id de las olimpiadas son requeridos" });
-      }
-
-      const userActivities = await userDal.getUserActivities(user_id, olympics_id);
-
-      return res.status(200).json(userActivities);
-    } catch (error) {
-      console.error("Error al obtener las actividades del usuario:", error);
-      return res.status(500).json({
-        message: "Error al obtener las actividades del usuario.",
-        error,
-      });
-    }
-  }
+    // Validar Registro de Usuario
 
   validateRegistrationUser = async (req, res) => {
     try {
@@ -334,6 +384,8 @@ class UserController {
       res.status(500).json({ error });
     }
   };
+
+    // Validación pendiente 
 
   getPendingValidationUsers = async (req, res) => {
     try {
@@ -354,10 +406,11 @@ class UserController {
     }
   };
 
+    // Obtener la validación 
+
   getUnauthorizedUserProfile = async (req, res) => {
     try {
       const { user_id } = req.params;
-      console.log("user_id", user_id);
 
       if (!user_id) {
         return res
@@ -366,7 +419,6 @@ class UserController {
       }
 
       const user = await userDal.getUnauthorizedUserById(user_id);
-      console.log("user", user);
 
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });
@@ -378,8 +430,6 @@ class UserController {
         authorized: user.user_is_auth,
       };
 
-      console.log("userProfile", userProfile);
-
       return res.status(200).json(userProfile);
     } catch (error) {
       console.error("Error al obtener el perfil del usuario:", error);
@@ -389,17 +439,7 @@ class UserController {
     }
   };
 
-  userDetails = async (req, res) => {
-    try {
-      const { user_id } = req.params;
-      const result = await userDal.searchUserDetails(user_id);
-
-      res.status(200).json(result);
-    } catch (error) {
-      console.error("Error al obtener los detalles del usuario", error);
-      res.status(500).json({ message: "Error interno del servidor" });
-    }
-  };
+    // Subir la validación
 
   uploadAuthorizationFile = async (req, res) => {
     try {
@@ -428,6 +468,8 @@ class UserController {
     }
     return;
   };
+
+    // Descargar la Validación
 
   getAuthorizationFile = async (req, res) => {
     try {
@@ -481,25 +523,6 @@ class UserController {
       }
     }
   };
-
-  restorePassword = async (req, res) => {
-    const parsedData = passwordSchema.parse(req.body);
-    try {
-      const { user_password } = parsedData;
-      const { user_id } = req.params;
-      const hash = await hashPassword(user_password);
-      await userDal.updatePassword(hash, user_id);
-      res.status(200).json({ msg: "Contraseña actualizada con éxito."})
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ error: error.errors });
-      } else {
-        console.log(error);
-        
-        res.status(400).json({ message: error.message })
-      }
-    }
-  }
 }
 
 export default new UserController();
