@@ -13,11 +13,7 @@ class EmailService {
     this.transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
-<<<<<<< HEAD
       secure: true, 
-=======
-      secure: true,
->>>>>>> main
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD, 
@@ -27,7 +23,6 @@ class EmailService {
 
   async sendRegistrationEmail(centerData, token) {
     try {
-      console.log(centerData, token);
       
       // 1. Leer la plantilla MJML
       const __filename = fileURLToPath(import.meta.url);
