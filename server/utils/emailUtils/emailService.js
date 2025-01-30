@@ -6,13 +6,17 @@ import Handlebars from "handlebars";
 import nodemailer from "nodemailer";
 import fs from "fs/promises";
 
+console.log("EMAIL SERVICE", process.env.EMAIL_USER, process.env.EMAIL_PASSWORD);
+
 class EmailService {
   constructor() {
     this.transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, 
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
+        pass: process.env.EMAIL_PASSWORD, 
       },
     });
   }

@@ -7,8 +7,10 @@ import AuthDashboard from "./components/AuthDashboard";
 import { fetchData } from "../../../utils/axios/axiosHelper";
 import { ShieldCheck } from "lucide-react";
 import ButtonCustom from "../../../core/components/Button/Button";
+import { useTranslation } from "react-i18next";
 
 export default function UserDashboard() {
+  const { t} = useTranslation();
   const { user } = useAppContext();
   const [userDetails, setUserDetails] = useState([]);
 
@@ -33,28 +35,22 @@ export default function UserDashboard() {
       <Container className="d-flex justify-content-center flex-column gap-5 px-4 px-sm-2">
         <div className="d-flex justify-content-between align-items-center">
           <h2 className="fs-1">
-            Te damos la bienvenida,{" "}
-            <span className="custom-span">{userDetails.name}</span>
+           {t("user_dashboard.welcomeUser")}{" "}
+            <span style={{ fontWeight: "bold" }} className="custom-span">
+              {userDetails.name}
+            </span>
           </h2>
-          <OverlayTrigger
-            placement="right"
-            delay={{ show: 250, hide: 400 }}
-            overlay={
-              <Tooltip id="tooltip-id">
-                La cuenta ha sido autorizada correctamente.
-              </Tooltip>
-            }
-          >
-            <div className="d-flex gap-1 bg-success justify-content-center align-align-items-center rounded-4 py-2  px-3 m-0 text-white">
+          {userDetails.authorized ? (
+            <div className="user-select-none d-flex gap-1 bg-success justify-content-center align-align-items-center rounded-4 py-2  px-3 m-0 text-white">
               <p
                 style={{ fontSize: "12px" }}
                 className="bg-success justify-content-center align-align-items-center m-0 text-white d-none d-sm-flex"
               >
-                Cuenta verificada
+                {t("user_dashboard.verifiedAccount")}
               </p>
               <ShieldCheck color="white" size={18} />
             </div>
-          </OverlayTrigger>
+          ) : ""}
         </div>
         {userDetails.authorized ? (
           <AuthDashboard userData={userDetails} />

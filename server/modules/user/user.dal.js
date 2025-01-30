@@ -467,19 +467,14 @@ GROUP BY
     }
   };
 
-  saveUserPermissionFile = async (user_id, fileName, filePath) => {
-    console.log(filePath);
-
+  saveUserPermissionFile = async (user_id,fileName) => {
     try {
       const query = `
-        UPDATE user 
+        UPDATE user   
         SET user_permission_file = ?, 
-            user_is_auth = true
         WHERE user_id = ?
       `;
-      await executeQuery(query, [filePath, user_id]);
-      console.log(filePath);
-
+      await executeQuery(query, [fileName, user_id]);
       console.log("Archivo guardado en la base de datos.");
     } catch (error) {
       console.error("Error al guardar el archivo en la base de datos:", error);

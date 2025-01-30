@@ -43,3 +43,18 @@
     background-color: #eb754e;
   }
 }
+
+.button-custom-lang {
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+
+
+
