@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
-import { Table } from "react-bootstrap";
-import { SquarePen, Trash2 } from "lucide-react";
+import { Form, InputGroup, Table } from "react-bootstrap";
+import { Search, SquarePen, Trash2 } from "lucide-react";
 import UserEditModal from "./UserEditModal";
 import DeleteModal from "../../../../core/components/DeleteModal";
 import ResponsibleEditModal from "./ResponsibleEditModal";
@@ -9,6 +9,7 @@ import { useAppContext } from "../../../../core/context/AppContext";
 
 export default function UserList() {
   const { themeSwitcher } = useAppContext();
+  const [allUsers, setAllUsers] = useState([]);
   const [users, setUsers] = useState([]);
   const [showUserModal, setShowUserModal] = useState(false);
   const [showResponsibleModal, setShowResponsibleModal] = useState(false);
@@ -29,6 +30,7 @@ export default function UserList() {
     const getData = async () => {
       try {
         const response = await fetchData("api/admin/allUser", "get");
+        setAllUsers(response);
         setUsers(response);
         console.log(response);
       } catch (error) {
@@ -37,6 +39,32 @@ export default function UserList() {
     };
     getData();
   }, [showUserModal, showResponsibleModal, showDelete]);
+
+  const userTypeMap = {
+    1: "Admin",
+    2: "Responsable",
+    3: "Alumno",
+  };
+
+  const handleChange = (e) => {
+    const searchUsers = e.target.value.toLowerCase();
+
+    if (searchUsers === "") {
+      setUsers(allUsers);
+    } else {
+      const filteredUsers = allUsers.filter((user) => {
+        const userType = userTypeMap[user.user_type] || "";
+
+        return (
+          `${user.user_name} ${user.user_lastname} ${user.user_city} ${user.center_name} ${user.user_phone} ${user.user_email}`
+            .toLowerCase()
+            .includes(searchUsers) ||
+          userType.toLowerCase().includes(searchUsers)
+        );
+      });
+      setUsers(filteredUsers);
+    }
+  };
 
   const handleLogicDelete = async (user_id) => {
     const data = users.find((user) => user.user_id === user_id);
@@ -56,6 +84,16 @@ export default function UserList() {
 
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
+      <InputGroup className="mb-3" style={{width: "45%"}}>
+        <InputGroup.Text id="inputGroup-sizing-sm">
+          <Search />
+        </InputGroup.Text>
+        <Form.Control
+          aria-label="Default"
+          aria-describedby="inputGroup-sizing-sm"
+          onChange={handleChange}
+        />
+      </InputGroup>
       <Table
         variant={themeSwitcher ? "" : "dark"}
         striped
