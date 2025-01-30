@@ -1,0 +1,138 @@
+{
+  "auth": {
+    "login": "Login",
+    "forgotPassword": "Forgot Password",
+    "forgotPasswordInfo": "Enter your email and we'll send you a link to reset your password.",
+    "sending": "Sending...",
+    "send": "Send",
+    "rememberUser": "Remember User",
+    "forgotPasswordLink": "Did you forget your password?",
+    "accessing": "Accessing...",
+    "access": "Access",
+    "cancel": "Cancel",
+    "toastMessage": "User logged in successfully!"
+  },
+  "register": {
+    "registerTitle": "Register",
+    "name": "Name",
+    "namePlaceholder": "Ex: John",
+    "lastname": "Lastname",
+    "lastnamePlaceholder": "Ex: Doe",
+    "tutorName": "Tutor's Name",
+    "tutorNamePlaceholder": "Ex: Mary",
+    "tutorLastname": "Tutor's Lastname",
+    "tutorLastnamePlaceholder": "Ex: Smith",
+    "dni": "ID",
+    "dniPlaceholder": "Ex: 12345678A",
+    "city": "City",
+    "cityPlaceholder": "Ex: Birmingham",
+    "address": "Address",
+    "addressPlaceholder": "Ex: Main Street, 1",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Ex: 654321123",
+    "birthdate": "Birthdate",
+    "email": "Email",
+    "emailPlaceholder": "Ex: youremail@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "center": "Center",
+    "centerSelect": "Select your center",
+    "registerButton": "Sign Up",
+    "registering": "Registering...",
+    "toastMessage": "User registered successfully! We've send you an email to confirm your account."
+  },
+  "header": {
+    "home": "Home",
+    "aboutUs": "About Us",
+    "contact": "Contact",
+    "values": "Values",
+    "signUp": "Sign Up",
+    "login": "Login",
+    "logout": "Logout",
+    "goToProfile": "Go to Profile",
+    "back": "Back"
+  },
+  "footer": {
+    "copyrightText": "Olympics. All rights reserved"
+  },
+  "home": {
+    "section1": {
+      "mainTitle": "Creating bonds and values",
+      "mainTitle2": "through sports",
+      "mainSubtitle": "Inspiring children and young people through sport and education by providing inclusive experiences that promote their personal growth and values",
+      "firstEdition": "1st",
+      "edition": "Edition"
+    },
+    "section2": {
+      "whoWeAre": "Who we are,",
+      "ourProject": "our project",
+      "text1": "We are an educational-sports project that seeks to inspire school-age children. Through inclusive and fun competitions, we promote cooperation, respect and excellence in each sports activity. Our mission is to promote the integral development of young people while enjoying sports.",
+      "text2": "Our goal is for children to learn values such as teamwork, personal improvement, empathy and solidarity through sports. We want them to have fun and enjoy physical activity, to feel part of a team and to learn to respect their classmates."
+    },
+    "section3": {
+      "discover": "Discover all the sports",
+      "discover2": "waiting for you",
+      "athletics": "Athletics",
+      "basketball": "Basketball",
+      "volleyball": "Volleyball",
+      "handball": "Handball"
+    },
+    "section4": {
+      "ourValues": "Our Values",
+      "missionTitle": "Mission",
+      "missionText": "Motivate children with sports and education promoting their development and values.",
+      "visionTitle": "Vision",
+      "visionText": "Become a regional event with annual growth",
+      "pillarsTitle": "Pillars",
+      "pillarsText": "Sportsmanship, equality, respect, teamwork, effort and improvement.",
+      "commitmentTitle": "Commitment",
+      "commitmentText": "We believe in sports as a tool for inclusion and integral development."
+    },
+    "section5": {
+      "contactUs": "Contact",
+      "us": "us",
+      "text": "If you have any questions or suggestions, do not hesitate to contact us. We are here to help you.",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "messagePlaceholder": "Ex: I would like to know more about the event...",
+      "sendButton": "Send",
+      "sendingMessage": "Sending..."
+    }
+  },
+  "user_dashboard": {
+    "welcomeUser": "Welcome,",
+    "verifiedAccount": "Verified Account",
+    "editUser": "Edit User",
+    "center": "Center",
+    "name": "Name",
+    "address": "Address",
+    "city": "City",
+    "centerResponsible": "Center Responsible/s",
+    "olympicsInfo": "Olympics Information",
+    "olympicsName": "Olympics Name",
+    "olympicsHostName": "Center Host",
+    "olympicsHostAddress": "Host Address",
+    "olympicsHostCity": "Host City",
+    "activities": "Activities",
+    "nonAuthMessage": "Authorization needed to unlock profile",
+    "nonAuthText": "To continue with the process, it is essential to download the corresponding authorization, sign it, and upload it back to the platform using the buttons indicated below.",
+    "downloadButton": "Download Authorization",
+    "uploadButton": "Upload Authorization",
+    "uploadingButton" : "Uploading...",
+    "toastMessage": "Doc uploaded successfully!",
+    "check": " Authorization under review by the responsible of your center"
+  },
+  "admin_dashboard": {
+    "createNewCenter": "Create New Center",
+    "adminCenters": "Admin Centers",
+    "createNewResp": "Create New Responsible",
+    "adminUsers": "Admin Users",
+    "createNewOlympics": "Create New Olympics",
+    "adminOlympics": "Admin Olympics",
+    "createNewActivity": "Create New Activity",
+    "adminActivities": "Admin Activities"
+  }
+}

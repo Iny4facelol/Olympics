@@ -1,0 +1,10 @@
+.dropdown-item {
+ width: max-content;
+  &:hover {
+    background-color: #ee531e !important;
+  }
+}
+
+.dropdown-toggle::after {
+  display: none !important;
+}

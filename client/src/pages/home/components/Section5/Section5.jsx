@@ -6,18 +6,20 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema } from "../../../../utils/zodSchemas/contactSchema";
 import ScrollReveal from "scrollreveal";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import axios from "axios";
 
 export default function Section5() {
+  const {t} = useTranslation()
   const [authenticating, setAuthenticating] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     ScrollReveal().reveal(".reveal", {
       distance: "50px",
-      duration: 800,
-      delay: 550,
+      duration: 500,
+      delay: 200,
       easing: "ease-in-out",
       interval: 200,
       origin: "bottom",
@@ -58,11 +60,10 @@ export default function Section5() {
       <Row>
         <Col md={12} sm={12}>
           <h2 className="fw-bold fs-2">
-            Contacta con <span className="custom-span">nosotros</span>
+            {t("home.section5.contactUs")} <span className="custom-span">{t("home.section5.us")}</span>
           </h2>
           <p>
-            Si tienes alguna duda o sugerencia, no dudes en contactar con
-            nosotros. Estamos aquí para ayudarte.
+            {t("home.section5.text")}
           </p>
         </Col>
       </Row>
@@ -70,7 +71,7 @@ export default function Section5() {
         <Row>
           <Col md={6} sm={12}>
             <Form.Group controlId="formBasicUserName">
-              <Form.Label>Nombre*</Form.Label>
+              <Form.Label>{t("home.section5.name")}*</Form.Label>
               <Form.Control
                 className={`custom-input ${
                   errors.user_name ? "is-invalid" : ""
@@ -88,7 +89,7 @@ export default function Section5() {
           </Col>
           <Col md={6} sm={12}>
             <Form.Group controlId="formBasicUserEmail">
-              <Form.Label>Email*</Form.Label>
+              <Form.Label>{t("home.section5.email")}*</Form.Label>
               <Form.Control
                 className={`custom-input ${
                   errors.user_email ? "is-invalid" : ""
@@ -108,7 +109,7 @@ export default function Section5() {
         <Row>
           <Col md={12} sm={12}>
             <Form.Group controlId="formBasicUserMessage">
-              <Form.Label>Mensaje*</Form.Label>
+              <Form.Label>{t("home.section5.message")}*</Form.Label>
               <Form.Control
                 as="textarea"
                 className={`custom-input ${
@@ -116,7 +117,7 @@ export default function Section5() {
                 }`}
                 {...register("user_message")}
                 type="text"
-                placeholder="Ej: Hola, quería saber más información sobre..."
+                placeholder={t("home.section5.messagePlaceholder")}
               />
               {errors.user_message && (
                 <Form.Text className="text-danger">
@@ -129,7 +130,7 @@ export default function Section5() {
         <div className="mt-4">
           <Toaster richColors position="top-center" />
           <ButtonCustom type={"submit"} bgColor={"orange"}>
-            {authenticating ? "Enviando..." : "Enviar"}
+            {authenticating ? t("home.section5.sendingMessage") : t("home.section5.sendButton")}
           </ButtonCustom>
         </div>
       </Form>

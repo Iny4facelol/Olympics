@@ -1,0 +1,139 @@
+{
+  "auth": {
+    "login": "Acceso",
+    "forgotPassword": "Recuperar Contraseña",
+    "forgotPasswordInfo": "Introduce tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+    "sending": "Enviando...",
+    "send": "Enviar",
+    "rememberUser": "Recordar Usuario",
+    "forgotPasswordLink": "¿Olvidaste tu contraseña?",
+    "accessing": "Accediendo...",
+    "access": "Acceder",
+    "cancel" : "Cancelar",
+    "toastMessage" : "¡Credenciales correctas!"
+  },
+  "register": {
+    "registerTitle": "Registro",
+    "name": "Nombre",
+    "namePlaceholder": "Ej: Juan",
+    "lastname": "Apellidos",
+    "lastnamePlaceholder": "Ej: Pérez",
+    "tutorName": "Nombre del Tutor",
+    "tutorNamePlaceholder": "Ej: María",
+    "tutorLastname": "Apellidos del Tutor",
+    "tutorLastnamePlaceholder": "Ej: García",
+    "dni" : "DNI",
+    "dniPlaceholder": "Ej: 12345678A",
+    "city": "Localidad",
+    "cityPlaceholder": "Ej: València",
+    "address": "Dirección",
+    "addressPlaceholder": "Ej: Calle Mayor, 1",
+    "phone": "Nº de Teléfono",
+    "phonePlaceholder": "Ej: 654321123",
+    "birthdate": "Fecha de Nacimiento",
+    "email": "Correo Electrónico",
+    "emailPlaceholder": "Ej: tucorreo@email.com",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Introduce tu contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "confirmPasswordPlaceholder": "Confirma tu contraseña",
+    "center" : "Centro",
+    "centerSelect": "Selecciona tu centro",
+    "registerButton": "Darse de alta",
+    "registering": "Registrando...",
+    "toastMessage": "Usuario registrado correctamente. Te hemos enviado un correo para confirmar tu cuenta."
+  },
+  "header": {
+    "home": "Inicio",
+    "aboutUs": "Sobre Nosotros",
+    "contact": "Contacto",
+    "values": "Valores",
+    "signUp": "Regístrate",
+    "login": "Accede",
+    "logout": "Cerrar Sesión",
+    "goToProfile": "Ir a Perfil",
+    "back": "Atrás"
+  },
+  "footer": {
+    "copyrightText": "Olympics. Todos los derechos reservados"
+  },
+  "home": {
+    "section1": {
+      "mainTitle": "Creando lazos y valores",
+      "mainTitle2": "a través del deporte",
+      "mainSubtitle": "Inspirar a niños y jóvenes a través del deporte y la educación proporcionando experiencias inclusivas que favorezcan su crecimiento personal y valores",
+      "firstEdition": "1ª",
+      "edition": "Edición"
+    },
+    "section2": {
+      "whoWeAre": "Quiénes somos,",
+      "ourProject": "nuestro proyecto",
+      "text1": "Somos un proyecto educativo-deportivo que busca inspirar a niños y niñas en edad escolar. A través de competencias inclusivas y divertidas, promovemos la cooperación, el respeto y la excelencia en cada actividad deportiva. Nuestra misión es fomentar el desarrollo integral de los jóvenes mientras disfrutan del deporte.",
+      "text2": "Nuestro objetivo es que los niños y niñas aprendan a través del deporte valores como el trabajo en equipo, la superación personal, la empatía y la solidaridad. Queremos que se diviertan y disfruten de la actividad física, que se sientan parte de un equipo y que aprendan a respetar a sus compañeros y compañeras."
+    },
+    "section3": {
+      "discover": "Descubre todos los deportes",
+      "discover2": "que te esperan",
+      "athletics": "Atletismo",
+      "basketball": "Baloncesto",
+      "volleyball": "Voleibol",
+      "handball": "Balonmano"
+    },
+    "section4": {
+      "ourValues": "Nuestros Valores",
+      "missionTitle": "Misión",
+      "missionText": "Motivar a niños y niñas con deporte y educación fomentando su desarrollo y valores.",
+      "visionTitle": "Visión",
+      "visionText": "Convertirse en un evento autonómico con crecimiento anual",
+      "pillarsTitle": "Pilares",
+      "pillarsText": "Deportividad, igualdad, respeto, trabajo en equipo, esfuerzo y superación.",
+      "commitmentTitle": "Compromiso",
+      "commitmentText": "Creemos en el deporte como herramienta de inclusión y desarrollo integral."
+    },
+    "section5": {
+      "contactUs": "Contacta con",
+      "us": "nosotros",
+      "text": "Si tienes alguna duda o sugerencia, no dudes en contactar con nosotros. Estamos aquí para ayudarte.",
+      "name": "Nombre",
+      "email": "Correo Electrónico",
+      "message": "Mensaje",
+      "messagePlaceholder": "Ej: Hola, quería saber más información sobre...",
+      "sendButton": "Enviar",
+      "sendingMessage": "Enviando..."
+    }
+  },
+  "user_dashboard" : {
+    "welcomeUser": "Te damos la bienvenida,",
+    "verifiedAccount": "Cuenta verificada",
+    "editUser": "Editar datos del perfil",
+    "center": "Centro de estudios",
+    "name": "Nombre",
+    "address": "Dirección",
+    "city": "Localidad",
+    "centerResponsible": "Responsable/s del centro",
+    "olympicsInfo": "Información sobre las Olimpiadas",
+    "olympicsName": "Nombre de las Olimpiadas",
+    "olympicsHostName": "Centro sede",
+    "olympicsHostAddress": "Dirección de la sede",
+    "olympicsHostCity": "Localidad de la sede",
+    "activities": "Actividades",
+    "nonAuthMessage": "Autorización necesaria para desbloquear perfil",
+    "nonAuthText": "Para continuar con el proceso, es indispensable que descarguen la autorización correspondiente, la firmen y la suban nuevamente a la plataforma mediante los botones que se indican a continuación.",
+    "downloadButton" : "Descargar autorización",
+    "uploadButton" : "Subir autorización",
+    "uploadingButton" : "Subiendo...",
+    "toastMessage" : "Archivo subido con éxito",
+    "check" : " Autorización en revisión por el responsable de su centro"
+  },
+  "admin_dashboard" : {
+    "createNewCenter" : "Crear nuevo centro",
+    "adminCenters" : "Administrar Centros",
+    "createNewResp" : "Crear nuevo responsable",
+    "adminUsers" : "Administrar Usuarios",
+    "createNewOlympics" : "Crear nuevas Olimpiadas",
+    "adminOlympics" : "Administrar Olimpiadas",
+    "createNewActivity" : "Crear nueva actividad",
+    "adminActivities" : "Administrar Actividades"
+  }
+  
+}

@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { emailSchema } from "../../../../../../server/utils/zodSchemas/userSchema";
 import { Col, Form, Row } from "react-bootstrap";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import ButtonCustom from "../../../../core/components/Button/Button";
 import { useForm } from "react-hook-form";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
-export const ForgotPasswordForm = ({setShowForgotPassword}) => {
+export const ForgotPasswordForm = ({ setShowForgotPassword }) => {
   const [authenticating, setAuthenticating] = useState(false);
-  const [emailErrorMsg, setEmailErrorMsg] = useState();  
+  const { t } = useTranslation();
+  const [emailErrorMsg, setEmailErrorMsg] = useState();
   const navigate = useNavigate();
   const {
     register,
@@ -27,11 +29,11 @@ export const ForgotPasswordForm = ({setShowForgotPassword}) => {
   const onSubmit = async (data) => {
     try {
       setAuthenticating(true);
-      setShowForgotPassword(false);
       await fetchData(`api/user/findUserByEmail`, "post", data);
       toast.success("Email enviado");
       setEmailErrorMsg();
       setTimeout(() => {
+        setShowForgotPassword(false);
         setAuthenticating(false);
         navigate("/user/login");
       }, 2000);
@@ -48,14 +50,14 @@ export const ForgotPasswordForm = ({setShowForgotPassword}) => {
       <Row>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicUserEmail">
-            <Form.Label>Email*</Form.Label>
+            <Form.Label>{t("register.email")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.user_email ? "is-invalid" : ""
               }`}
               {...register("user_email")}
               type="text"
-              placeholder="Email"
+              placeholder={t("register.emailPlaceholder")}
             />
           </Form.Group>
           {emailErrorMsg && (
@@ -69,10 +71,16 @@ export const ForgotPasswordForm = ({setShowForgotPassword}) => {
         </Col>
       </Row>
 
-      <div className="mt-4">
-        <Toaster richColors position="top-center" />
+      <div className="mt-4 d-flex gap-2">
         <ButtonCustom type={"submit"} bgColor={"orange"}>
-          {authenticating ? "Enviando..." : "Enviar"}
+          {authenticating ? t("auth.sending") : t("auth.send")}
+        </ButtonCustom>
+        <ButtonCustom
+          type={"button"}
+          onClick={() => setShowForgotPassword(false)}
+          bgColor={"orange"}
+        >
+          {t("auth.cancel")}
         </ButtonCustom>
       </div>
     </Form>

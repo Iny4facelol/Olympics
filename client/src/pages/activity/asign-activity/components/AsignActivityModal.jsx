@@ -7,7 +7,7 @@ import { toast, Toaster } from "sonner";
 import { useForm } from "react-hook-form";
 
 export default function AsignActivityModal({ show, handleClose, data }) {
-  const { user } = useAppContext();
+  const { user, themeSwitcher } = useAppContext();
   const [authenticating, setAuthenticating] = useState(false);
   const [activities, setActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -107,14 +107,17 @@ export default function AsignActivityModal({ show, handleClose, data }) {
 
   return (
     <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
+      <Modal.Header
+        className={themeSwitcher ? "" : "bg-dark text-white"}
+        closeButton
+      >
         <Modal.Title>
           {data?.user_name
             ? `Asignar actividad a ${data.user_name}`
             : "Asignar actividad"}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={themeSwitcher ? "" : "bg-dark text-white"}>
         <p className="fst-italic">
           Para eliminar las actividades asignadas a este alumno, simplemente
           desmárquelas.
@@ -159,7 +162,6 @@ export default function AsignActivityModal({ show, handleClose, data }) {
               </Col>
             </Row>
             <div className="d-flex flex-column">
-              <Toaster richColors position="top-center" />
               <div>
                 <ButtonCustom type="submit" bgColor="orange">
                   {authenticating ? "Actualizando..." : "Actualizar"}

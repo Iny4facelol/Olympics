@@ -4,7 +4,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useAppContext } from "../../../core/context/AppContext";
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
-import ResponsibleEditModal from "./ResponsibleEditModal";
+import ResponsibleEditModal from "./components/ResponsibleEditModal";
 
 export default function ResponsibleDashboard() {
   const { user } = useAppContext();
@@ -26,7 +26,10 @@ export default function ResponsibleDashboard() {
         <div className="d-flex flex-column gap-5">
           <Row>
             <h2 className="fs-1">
-             Te damos la bienvenida, <span className="custom-span">{user.user_name}</span>{" "}
+              Te damos la bienvenida,{" "}
+              <span style={{ fontWeight: "bold" }} className="custom-span">
+                {user.user_name}
+              </span>{" "}
             </h2>
           </Row>
           <Row>
