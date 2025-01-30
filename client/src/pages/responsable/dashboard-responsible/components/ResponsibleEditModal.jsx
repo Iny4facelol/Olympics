@@ -61,14 +61,8 @@ function ResponsibleEditModal({ handleClose, show, data }) {
   }, []);
 
   const onSubmit = async (formData) => {
-<<<<<<< HEAD:client/src/pages/responsable/dashboard-responsible/components/ResponsibleEditModal.jsx
     try {
       setAuthenticating(true);
-=======
-    try {   
-      
-      setAuthenticating(true);     
->>>>>>> main:client/src/pages/responsable/dashboard-responsible/ResponsibleEditModal.jsx
       await fetchData(`api/user/editResponsible/${data}`, "put", formData);
       toast.success("Usuario actualizado correctamente");
       setTimeout(() => {
