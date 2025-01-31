@@ -1,20 +1,20 @@
 import { Col, Form, Row } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
-import { editResponsibleSchema } from "../../../utils/zodSchemas/registerSchema";
+import { editResponsibleSchema } from "../../../../utils/zodSchemas/registerSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from "sonner";
-import ButtonCustom from "../../../core/components/Button/Button";
+import ButtonCustom from "../../../../core/components/Button/Button";
 import { useEffect, useState } from "react";
-import { fetchData } from "../../../utils/axios/axiosHelper";
-import { useAppContext } from "../../../core/context/AppContext";
+import { fetchData } from "../../../../utils/axios/axiosHelper";
+import { useAppContext } from "../../../../core/context/AppContext";
 
-function ResponsibleEditModal({ handleClose,  show, data }) {
-  const {user} = useAppContext()
+function ResponsibleEditModal({ handleClose, show, data }) {
+  const { user, themeSwitcher } = useAppContext();
   const [authenticating, setAuthenticating] = useState(false);
   const [centerList, setCenterList] = useState([]);
-  const editUser = {...user}
-  
+  const editUser = { ...user };
+
   const {
     register,
     handleSubmit,
@@ -61,9 +61,8 @@ function ResponsibleEditModal({ handleClose,  show, data }) {
   }, []);
 
   const onSubmit = async (formData) => {
-    try {   
-      
-      setAuthenticating(true);     
+    try {
+      setAuthenticating(true);
       await fetchData(`api/user/editResponsible/${data}`, "put", formData);
       toast.success("Usuario actualizado correctamente");
       setTimeout(() => {
@@ -78,10 +77,13 @@ function ResponsibleEditModal({ handleClose,  show, data }) {
   return (
     <>
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header
+          className={themeSwitcher ? "" : "bg-dark text-white"}
+          closeButton
+        >
           <Modal.Title>Editar Usuario</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={themeSwitcher ? "" : "bg-dark text-white"}>
           <Form
             className="d-flex gap-4 flex-column justify-content-center align-content-center"
             onSubmit={handleSubmit(onSubmit)}
@@ -197,11 +199,7 @@ function ResponsibleEditModal({ handleClose,  show, data }) {
                 </Form.Group>
               </Col>
             </Row>
-
-            <div
-              style={{ width: "100%", height: "2px", backgroundColor: "gray" }}
-            ></div>
-            <div className="">
+            <div>
               <Toaster richColors position="top-center" />
               <ButtonCustom type={"submit"} bgColor={"orange"}>
                 {authenticating ? "Actualizando..." : "Actualizar Usuario"}

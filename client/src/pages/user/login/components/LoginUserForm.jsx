@@ -10,23 +10,29 @@ import { useAppContext } from "../../../../core/context/AppContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { signInWithGoogle, logOutGoogle } from "../../../../firebase/fireBaseAuth";  // Asegúrate de importar correctamente las funciones
+import { useTranslation } from "react-i18next";
 
 
 export default function LoginUserForm({ setShowForgotPassword }) {
-  const { setToken, setUser, setRememberMe, rememberMe, themeSwitcher } = useAppContext();
+  const { t } = useTranslation();
+  const { setToken, setUser, setRememberMe, rememberMe, themeSwitcher } =
+    useAppContext();
   const [emailErrorMsg, setEmailErrorMsg] = useState();
   const [passwordErrorMsg, setPasswordErrorMsg] = useState();
   const [authenticating, setAuthenticating] = useState(false);
   const [googleUser, setGoogleUser] = useState(null);  // Estado para el usuario de Google
   const navigate = useNavigate();
-  console.log(rememberMe);
+
+  
+
   const onSubmit = async (data) => {
     try {
       setAuthenticating(true);
       const result = await fetchData(`api/user/login`, "post", data);
-      const userResult = await fetchData("api/user/findUserById", "get", null, {Authorization: `Bearer ${result.token}`} )
-      toast.success("Acceso correcto");
-
+      const userResult = await fetchData("api/user/findUserById", "get", null, {
+        Authorization: `Bearer ${result.token}`,
+      });
+      toast.success(t("auth.toastMessage"));
       setEmailErrorMsg();
       setPasswordErrorMsg();
       setToken(result.token);
@@ -118,78 +124,85 @@ export default function LoginUserForm({ setShowForgotPassword }) {
   });
 
   return (
-    <Form className="d-flex flex-column gap-2" onSubmit={handleSubmit(onSubmit)}>
-      <Row className="row-gap-2">
-        <Col md={6} sm={12}>
-          <Form.Group controlId="formBasicUserEmail">
-            <Form.Label>Email*</Form.Label>
-            <Form.Control
-              className={`custom-input ${
-                errors.user_email ? "is-invalid" : ""
-              }`}
-              {...register("user_email")}
-              type="text"
-              placeholder="Email"
-            />
-          </Form.Group>
-          {emailErrorMsg && (
-            <Form.Text className="text-danger">{emailErrorMsg}</Form.Text>
-          )}
-          {errors.user_email && (
-            <Form.Text className="text-danger">
-              {errors.user_email.message}
-            </Form.Text>
-          )}
-        </Col>
-        <Col md={6} sm={12}>
-          <Form.Group controlId="formBasicUserPassword">
-            <Form.Label>Password*</Form.Label>
-            <Form.Control
-              className={`custom-input ${
-                errors.user_password ? "is-invalid" : ""
-              }`}
-              {...register("user_password")}
-              type="password"
-              placeholder="Contraseña"
-            />
-            {passwordErrorMsg && (
-              <Form.Text className="text-danger">{passwordErrorMsg}</Form.Text>
+    <>
+      <Form
+        className="d-flex flex-column gap-2"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Row className="row-gap-2">
+          <Col md={6} sm={12}>
+            <Form.Group controlId="formBasicUserEmail">
+              <Form.Label>Email*</Form.Label>
+              <Form.Control
+                className={`custom-input ${
+                  errors.user_email ? "is-invalid" : ""
+                }`}
+                {...register("user_email")}
+                type="text"
+                placeholder="Email"
+              />
+            </Form.Group>
+            {emailErrorMsg && (
+              <Form.Text className="text-danger">{emailErrorMsg}</Form.Text>
             )}
-            {errors.user_password && (
+            {errors.user_email && (
               <Form.Text className="text-danger">
-                {errors.user_password.message}
+                {errors.user_email.message}
               </Form.Text>
             )}
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row className="row-gap-2">
-        <Col className="d-flex gap-2" md={6} sm={12}>
-          <Form.Check // prettier-ignore
-            type="checkbox"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-          />
-          <Form.Text
-            className={`${themeSwitcher ? "text-secondary" : "text-white"}`}
-          >
-            Recordar Usuario
-          </Form.Text>
-        </Col>
-        <Col md={6} sm={12}>
-          <Form.Text style={{ cursor: "pointer" }}
-            className={`${themeSwitcher ? "text-secondary" : "text-white"}`}
-            onClick={() => setShowForgotPassword(true)}
-          >
-            ¿Olvidaste tu contraseña?
-          </Form.Text>
-        </Col>
-      </Row>
+          </Col>
+          <Col md={6} sm={12}>
+            <Form.Group controlId="formBasicUserPassword">
+              <Form.Label>Password*</Form.Label>
+              <Form.Control
+                className={`custom-input ${
+                  errors.user_password ? "is-invalid" : ""
+                }`}
+                {...register("user_password")}
+                type="password"
+                placeholder="Contraseña"
+              />
+              {passwordErrorMsg && (
+                <Form.Text className="text-danger">
+                  {passwordErrorMsg}
+                </Form.Text>
+              )}
+              {errors.user_password && (
+                <Form.Text className="text-danger">
+                  {errors.user_password.message}
+                </Form.Text>
+              )}
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="row-gap-2">
+          <Col className="d-flex gap-2" md={6} sm={12}>
+            <Form.Check // prettier-ignore
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
+            <Form.Text
+              className={`${themeSwitcher ? "text-secondary" : "text-white"}`}
+            >
+             {t("auth.rememberUser")}
+            </Form.Text>
+          </Col>
+          <Col md={6} sm={12}>
+            <Form.Text
+              style={{ cursor: "pointer" }}
+              className={`${themeSwitcher ? "text-secondary" : "text-white"}`}
+              onClick={() => setShowForgotPassword(true)}
+            >
+               {t("auth.forgotPasswordLink")}
+            </Form.Text>
+          </Col>
+        </Row>
 
       <div className="mt-4">
         <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
-          {authenticating ? "Accediendo..." : "Acceder"}
+            {authenticating ? t("auth.accessing") : t("auth.access")}
         </ButtonCustom>
       </div>
      

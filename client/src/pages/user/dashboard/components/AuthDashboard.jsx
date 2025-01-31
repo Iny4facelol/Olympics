@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import UserEditModal from "./UserEditModal";
 import { useAppContext } from "../../../../core/context/AppContext";
 
@@ -10,6 +11,7 @@ import { useAppContext } from "../../../../core/context/AppContext";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_IMAGE_URL;
 
 export default function AuthDashboard({ userData }) {
+  const { t } = useTranslation();
   const {user} = useAppContext();
   const [userDetails, setUserDetails] = useState([]);
   const [activities, setActivities] = useState([]);
@@ -74,42 +76,63 @@ export default function AuthDashboard({ userData }) {
       </Row>
       <Row className="d-flex row-gap-5">
         <Col md={6} sm={12}>
-          <h3 className="fs-2 fw-bold">Centro de estudios: </h3>
+          <h3 className="fs-2 fw-bold">{t("user_dashboard.center")}: </h3>
           <p className="fs-5 pretty">
-            <span className="fw-bold dark-span">Nombre:</span>{" "}
+            <span className="fw-bold dark-span">
+              {t("user_dashboard.name")}:
+            </span>{" "}
             {userDetails[0]?.center_name}
           </p>
           <p className="fs-5 pretty">
-            <span className="fw-bold dark-span">Dirección:</span>{" "}
+            <span className="fw-bold dark-span">
+              {t("user_dashboard.address")}:
+            </span>{" "}
             {userDetails[0]?.center_address}
           </p>
           <p className="fs-5 pretty">
-            <span className="fw-bold dark-span">Localidad:</span>{" "}
+            <span className="fw-bold dark-span">
+              {t("user_dashboard.city")}:
+            </span>{" "}
             {userDetails[0]?.center_city}
           </p>
           <p className="fs-5">
-            <span className="fw-bold dark-span">Responsables del centro: </span>
+            <span className="fw-bold dark-span">
+              {t("user_dashboard.centerResponsible")}:{" "}
+            </span>
             {userDetails[0]?.responsables}
           </p>
         </Col>
         <Col md={6} sm={12}>
           {userDetails[0]?.olympics_name ? (
             <>
-              <h3 className="fs-2 fw-bold">Información sobre la Olimpiada: </h3>
+              <h3 className="fs-2 fw-bold">
+                {t("user_dashboard.olympicsInfo")}
+              </h3>
               <p className="fs-5 pretty">
-                <span className="fw-bold dark-span">Nombre: </span>
+                <span className="fw-bold dark-span">
+                  {t("user_dashboard.olympicsName")}:{" "}
+                </span>
                 {userDetails[0]?.olympics_name}
               </p>
               <p className="fs-5 pretty">
-                <span className="fw-bold dark-span">Nombre de la sede:</span>{" "}
+                <span className="fw-bold dark-span">
+                  {" "}
+                  {t("user_dashboard.olympicsHostName")}:
+                </span>{" "}
                 {userDetails[0]?.olympics_host_name}
               </p>
               <p className="fs-5 pretty">
-                <span className="fw-bold dark-span">Dirección: </span>
+                <span className="fw-bold dark-span">
+                  {" "}
+                  {t("user_dashboard.olympicsHostAddress")}:{" "}
+                </span>
                 {userDetails[0]?.olympics_host_address}
               </p>
               <p className="fs-5">
-                <span className="fw-bold dark-span">Localidad: </span>
+                <span className="fw-bold dark-span">
+                  {" "}
+                  {t("user_dashboard.olympicsHostCity")}:{" "}
+                </span>
                 {userDetails[0]?.olympics_host_city}
               </p>
             </>
@@ -121,7 +144,7 @@ export default function AuthDashboard({ userData }) {
         </Col>
       </Row>
       <Row className="d-flex row-gap-3">
-        <h3 className="fs-2 fw-bold">Actividades</h3>
+        <h3 className="fs-2 fw-bold"> {t("user_dashboard.activities")}</h3>
         {activities.map((activity, index) => (
           <Col md={4} sm={12} key={index}>
             <article

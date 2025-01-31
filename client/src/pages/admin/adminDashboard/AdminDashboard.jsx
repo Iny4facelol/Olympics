@@ -4,16 +4,22 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useAppContext } from "../../../core/context/AppContext";
 import { MoveRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function AdminDashboard() {
   const { user } = useAppContext();
+  const { t } = useTranslation();
+
   return (
     <DashboardLayout>
       <Container className="d-flex  flex-column gap-5 px-4 px-sm-2">
         <div className="d-flex flex-column gap-5">
           <Row>
             <h2 className="fs-1">
-              Te damos la bienvenida, <span className="custom-span">{user.user_name}</span>{" "}
+              {t("user_dashboard.welcomeUser")}{" "}
+              <span style={{ fontWeight: "bold" }} className="custom-span">
+                {user.user_name}
+              </span>{" "}
             </h2>
           </Row>
           <Row>
@@ -23,7 +29,8 @@ export default function AdminDashboard() {
             >
               <p className="d-flex gap-2 fw-bold ">
                 <Link className="link-hover" to="/admin/createNewCenter">
-                  Crear nuevo centro <MoveRight color="#ee531e" />
+                  {t("admin_dashboard.createNewCenter")}{" "}
+                  <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
@@ -33,7 +40,8 @@ export default function AdminDashboard() {
             >
               <p className="d-flex gap-2 fw-bold">
                 <Link className="link-hover" to={"/admin/manageCenters"}>
-                  Administrar Centros <MoveRight color="#ee531e" />
+                  {t("admin_dashboard.adminCenters")}{" "}
+                  <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
@@ -43,7 +51,8 @@ export default function AdminDashboard() {
             >
               <p className="d-flex gap-2 fw-bold">
                 <Link className="link-hover" to={"/admin/createNewResponsable"}>
-                  Crear nuevo responsable <MoveRight color="#ee531e" />
+                  {t("admin_dashboard.createNewResp")}{" "}
+                  <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
@@ -53,7 +62,8 @@ export default function AdminDashboard() {
             >
               <p className="d-flex gap-2 fw-bold">
                 <Link className="link-hover" to={"/admin/manageUsers"}>
-                  Administrar Usuarios <MoveRight color="#ee531e" />
+                  {t("admin_dashboard.adminUsers")}{" "}
+                  <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
@@ -63,7 +73,8 @@ export default function AdminDashboard() {
             >
               <p className="d-flex gap-2 fw-bold">
                 <Link className="link-hover" to={"/admin/createNewActivity"}>
-                  Crear nueva Actividad <MoveRight color="#ee531e" />
+                  {t("admin_dashboard.createNewActivity")}{" "}
+                  <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
@@ -73,7 +84,8 @@ export default function AdminDashboard() {
             >
               <p className="d-flex gap-2 fw-bold">
                 <Link className="link-hover" to={"/admin/manageActivities"}>
-                  Administrar Actividades <MoveRight color="#ee531e" />
+                  {t("admin_dashboard.adminActivities")}{" "}
+                  <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
@@ -83,7 +95,8 @@ export default function AdminDashboard() {
             >
               <p className="d-flex gap-2 fw-bold">
                 <Link className="link-hover" to={"/admin/createNewOlympics"}>
-                  Crear nueva Olimpiada <MoveRight color="#ee531e" />
+                  {t("admin_dashboard.createNewOlympics")}{" "}
+                  <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
@@ -93,7 +106,8 @@ export default function AdminDashboard() {
             >
               <p className="d-flex gap-2 fw-bold">
                 <Link className="link-hover" to={"/admin/manageOlympics"}>
-                  Administrar Olimpiadas <MoveRight color="#ee531e" />
+                  {t("admin_dashboard.adminOlympics")}{" "}
+                  <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>

@@ -504,7 +504,6 @@ class UserController {
         await userDal.saveUserPermissionFile(
           req.params.user_id,
           req.file.filename,
-          `/files/authorization/${req.file.filename}`
         );
 
         res.status(200).json({
@@ -535,16 +534,7 @@ class UserController {
           message: "El archivo de autorización no se encuentra",
         });
       } else {
-        const filePath = path.resolve(`./public/files/file/${userFileName}`);
-
-        res.download(filePath, userFileName, (err) => {
-          if (err) {
-            console.error("Error al intentar descargar el archivo:", err);
-            res.status(500).json({
-              message: "Error al intentar descargar el archivo.",
-            });
-          }
-        });
+        res.status(200).json({userFileName})
       }
     } catch (error) {
       console.error("Error en getAuthorizationFile:", error);

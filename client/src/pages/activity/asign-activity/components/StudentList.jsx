@@ -8,7 +8,7 @@ import AsignActivityModal from "./AsignActivityModal";
 import { set } from "react-hook-form";
 
 export default function StudentList() {
-  const { user } = useAppContext();
+  const { user, themeSwitcher } = useAppContext();
   const [users, setUsers] = useState([]);
   const [usersToAdd, setUsersToAdd] = useState({});	
   const [show, setShow] = useState(false);
@@ -42,6 +42,7 @@ export default function StudentList() {
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
       <Table
+      variant={themeSwitcher ? "" : "dark"}
         striped
         bordered
         hover

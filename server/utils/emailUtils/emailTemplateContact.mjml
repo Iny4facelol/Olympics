@@ -1,0 +1,26 @@
+<mjml>
+  <mj-head>
+    <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto" />
+    <mj-attributes>
+      <mj-all font-family="Roboto, Helvetica, sans-serif" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f4f4f4">
+    <mj-section background-color="#ffffff" padding="20px 0">
+      <mj-column>
+        <mj-image width="200px" src="{{logoUrl}}"></mj-image>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" padding="0 20px">
+      <mj-column>
+        <mj-text font-size="16px" color="#4a5568" line-height="24px">
+          Email de contacto: {{contactEmail}}. 
+        </mj-text>        
+        <mj-text font-size="24px" color="#1B2733" align="center">
+          {{contactMessage}}           
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

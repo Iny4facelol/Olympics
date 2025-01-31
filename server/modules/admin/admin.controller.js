@@ -4,6 +4,7 @@ import emailService from "../../utils/emailUtils/emailService.js";
 import { activitySchema } from "../../utils/zodSchemas/activitySchema.js";
 import { getUserTypeAndValidateToken } from "../../utils/tokenUtils.js";
 import {
+  contactSchema,
   editResponsibleSchema,
   editUserSchema,
   registerResponsibleSchema,
@@ -336,6 +337,22 @@ class AdminController {
       });
     }
   };
+
+  // Formulario de contacto
+
+  contactUs = async (req, res) => {
+    const parsedData = contactSchema.parse(req.body)
+    try {
+      await emailService.sendContactEmail(parsedData);
+      return res.status(201).json({message: "Email enviado"})
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(400).json({msg: "Error al enviar email", error})
+      } 
+    }
+  }
   
 
   // 4º Apartado de Actividades

@@ -4,7 +4,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 export const AppContext = createContext();
 
 export const ContextProvider = ({ children }) => {
-  const [themeSwitcher, setThemeSwitcher] = useState(true);
+  const [themeSwitcher, setThemeSwitcher] = useState(() => {
+    const storedTheme = localStorage.getItem("theme") || "light";
+    return storedTheme === "light";
+  });
 
   const [token, setToken] = useState(() => {
     // Inicialización con lazy loading
@@ -62,6 +65,13 @@ export const ContextProvider = ({ children }) => {
       storage.setItem("user", JSON.stringify(user));
     }
   }, [user, rememberMe]);
+
+  useEffect(() => {
+    const theme = themeSwitcher ? "light" : "dark";
+    localStorage.setItem("theme", theme);
+    localStorage.setItem("themeSwitcher", themeSwitcher);
+    document.documentElement.className = theme;
+  }, [themeSwitcher]);
 
   const logout = () => {
     setToken(null);

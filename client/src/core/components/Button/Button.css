@@ -44,6 +44,7 @@
   }
 }
 
+
 .button-custom-google {
   background-color: white;
   color: #ee531e;
@@ -58,3 +59,19 @@
     background-color: #e2e0e0;
   }
 }
+
+.button-custom-lang {
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+
+
+
+

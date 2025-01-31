@@ -7,8 +7,10 @@ import { Toaster, toast } from "sonner";
 import ButtonCustom from "../../../../core/components/Button/Button";
 import { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
+import { useAppContext } from "../../../../core/context/AppContext";
 
-function ActivityEditModal({ handleClose, handleShow, show, data }) {
+function ActivityEditModal({ handleClose, show, data }) {
+  const { themeSwitcher } = useAppContext();
   const [authenticating, setAuthenticating] = useState(false);
   const [file, setFile] = useState(null);
 
@@ -35,7 +37,7 @@ function ActivityEditModal({ handleClose, handleShow, show, data }) {
         activity_name: data.activity_name,
         activity_description: data.activity_description,
         max_participants: data.max_participants,
-        activity_image: data.activity_image
+        activity_image: data.activity_image,
       });
     }
   }, [data, reset]);
@@ -77,10 +79,13 @@ function ActivityEditModal({ handleClose, handleShow, show, data }) {
   return (
     <>
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header
+          className={themeSwitcher ? "" : "bg-dark text-white"}
+          closeButton
+        >
           <Modal.Title>Editar Actividad</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={themeSwitcher ? "" : "bg-dark text-white"}>
           <Form
             className="d-flex gap-4 flex-column justify-content-center align-content-center"
             onSubmit={handleSubmit(onSubmit)}
@@ -164,8 +169,8 @@ function ActivityEditModal({ handleClose, handleShow, show, data }) {
                   </Form.Text>
                 )}
               </Col>
-            </Row>           
-            
+            </Row>
+
             <div
               style={{ width: "100%", height: "2px", backgroundColor: "gray" }}
             ></div>

@@ -43,7 +43,6 @@ export default function AppLayout({ children }) {
         <HeaderHome
           lightDarkHandler={toggleTheme}
           theme={theme}
-          icon={themeSwitcher}
         />
       </header>
       <main

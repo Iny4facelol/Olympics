@@ -7,8 +7,10 @@ import { Toaster, toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { registerSchema } from "../../../../utils/zodSchemas/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 
 export default function RegisterUserForm() {
+  const {t} = useTranslation();
   const [centerList, setCenterList] = useState([]);
   const [authenticating, setAuthenticating] = useState(false);
   const navigate = useNavigate();
@@ -63,7 +65,7 @@ export default function RegisterUserForm() {
       // el botón de registrando
       setAuthenticating(true);
       await fetchData(`api/user/register`, "post", data);
-      toast.success("Usuario registrado correctamente, se ha enviado un correo a tu email para verificar tu cuenta");
+      toast.success(t("register.toastMessage"));
       // Redirigimos al usuario a la página de login después de 3 segundos para dar sensacion de carga
       setTimeout(() => {
         navigate("/user/login");
@@ -85,14 +87,14 @@ export default function RegisterUserForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicUserName">
-            <Form.Label>Nombre*</Form.Label>
+            <Form.Label>{t("register.name")}*</Form.Label>
             <Form.Control
-            // Usamos register de useForm para registrar los campos del formulario, si hay un error en el campo se añade la clase is-invalid que pone el borde del input en rojo
+              // Usamos register de useForm para registrar los campos del formulario, si hay un error en el campo se añade la clase is-invalid que pone el borde del input en rojo
               className={`custom-input ${errors.user_name ? "is-invalid" : ""}`}
               // Usamos spread operator para pasar las propiedades del input al input
               {...register("user_name")}
               type="text"
-              placeholder="Nombre"
+              placeholder={t("register.namePlaceholder")}
             />
             {/* Si hay un error en el campo, mostramos el mensaje de error */}
             {errors.user_name && (
@@ -104,12 +106,14 @@ export default function RegisterUserForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicUserLastname">
-            <Form.Label>Apellidos*</Form.Label>
+            <Form.Label>{t("register.lastname")}*</Form.Label>
             <Form.Control
-              className={`custom-input ${errors.user_lastname ? "is-invalid" : ""}`}
+              className={`custom-input ${
+                errors.user_lastname ? "is-invalid" : ""
+              }`}
               {...register("user_lastname")}
               type="text"
-              placeholder="Apellidos"
+              placeholder={t("register.lastnamePlaceholder")}
             />
             {errors.user_lastname && (
               <Form.Text className="text-danger">
@@ -122,12 +126,12 @@ export default function RegisterUserForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicTutorName">
-            <Form.Label>Nombre del tutor*</Form.Label>
+            <Form.Label>{t("register.tutorName")}*</Form.Label>
             <Form.Control
               className={errors.user_tutor_name ? "is-invalid" : ""}
               {...register("user_tutor_name")}
               type="text"
-              placeholder="Nombre del tutor"
+              placeholder={t("register.tutorNamePlaceholder")}
             />
             {errors.user_tutor_name && (
               <Form.Text className="text-danger">
@@ -138,12 +142,12 @@ export default function RegisterUserForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicTutorLastname">
-            <Form.Label>Apellidos del tutor*</Form.Label>
+            <Form.Label>{t("register.tutorLastname")}*</Form.Label>
             <Form.Control
               className={errors.user_tutor_lastname ? "is-invalid" : ""}
               {...register("user_tutor_lastname")}
               type="text"
-              placeholder="Apellidos del tutor"
+              placeholder={t("register.tutorLastnamePlaceholder")}
             />
             {errors.user_tutor_lastname && (
               <Form.Text className="text-danger">
@@ -156,12 +160,12 @@ export default function RegisterUserForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicDNI">
-            <Form.Label>DNI*</Form.Label>
+            <Form.Label>{t("register.dni")}*</Form.Label>
             <Form.Control
               className={errors.user_dni ? "is-invalid" : ""}
               {...register("user_dni")}
               type="text"
-              placeholder="DNI"
+              placeholder={t("register.dniPlaceholder")}
             />
             {errors.user_dni && (
               <Form.Text className="text-danger">
@@ -172,12 +176,12 @@ export default function RegisterUserForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicCity">
-            <Form.Label>Localidad*</Form.Label>
+            <Form.Label>{t("register.city")}*</Form.Label>
             <Form.Control
               className={errors.user_city ? "is-invalid" : ""}
               {...register("user_city")}
               type="text"
-              placeholder="Nombre de la localidad"
+              placeholder={t("register.cityPlaceholder")}
             />
             {errors.user_city && (
               <Form.Text className="text-danger">
@@ -191,12 +195,12 @@ export default function RegisterUserForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicAddress">
-            <Form.Label>Dirección*</Form.Label>
+            <Form.Label>{t("register.address")}*</Form.Label>
             <Form.Control
               className={errors.user_address ? "is-invalid" : ""}
               {...register("user_address")}
               type="text"
-              placeholder="Dirección"
+              placeholder={t("register.addressPlaceholder")}
             />
             {errors.user_address && (
               <Form.Text className="text-danger">
@@ -207,12 +211,12 @@ export default function RegisterUserForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicPhone">
-            <Form.Label>Nº de Teléfono*</Form.Label>
+            <Form.Label>{t("register.phone")}*</Form.Label>
             <Form.Control
               className={errors.user_phone ? "is-invalid" : ""}
               {...register("user_phone")}
               type="text"
-              placeholder="Número de teléfono"
+              placeholder={t("register.phonePlaceholder")}
             />
             {errors.user_phone && (
               <Form.Text className="text-danger">
@@ -225,7 +229,7 @@ export default function RegisterUserForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicBirthDate">
-            <Form.Label>Fecha de Nacimiento*</Form.Label>
+            <Form.Label>{t("register.birthdate")}*</Form.Label>
             <Form.Control
               className={errors.user_birth_date ? "is-invalid" : ""}
               {...register("user_birth_date")}
@@ -240,12 +244,12 @@ export default function RegisterUserForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicEmail">
-            <Form.Label>Email*</Form.Label>
+            <Form.Label>{t("register.email")}*</Form.Label>
             <Form.Control
               className={errors.user_email ? "is-invalid" : ""}
               {...register("user_email")}
               type="email"
-              placeholder="Email"
+              placeholder={t("register.emailPlaceholder")}
             />
             {errors.user_email && (
               <Form.Text className="text-danger">
@@ -258,12 +262,12 @@ export default function RegisterUserForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicPassword">
-            <Form.Label>Contraseña*</Form.Label>
+            <Form.Label>{t("register.password")}*</Form.Label>
             <Form.Control
               className={errors.user_password ? "is-invalid" : ""}
               {...register("user_password")}
               type="password"
-              placeholder="Contraseña"
+              placeholder={t("register.passwordPlaceholder")}
             />
             {errors.user_password && (
               <Form.Text className="text-danger">
@@ -274,12 +278,12 @@ export default function RegisterUserForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicConfirmPassword">
-            <Form.Label>Confirmar Contraseña*</Form.Label>
+            <Form.Label>{t("register.confirmPassword")}*</Form.Label>
             <Form.Control
               className={errors.user_confirm_password ? "is-invalid" : ""}
               {...register("user_confirm_password")}
               type="password"
-              placeholder="Repite la contraseña"
+              placeholder={t("register.confirmPasswordPlaceholder")}
             />
             {errors.user_confirm_password && (
               <Form.Text className="text-danger">
@@ -293,12 +297,12 @@ export default function RegisterUserForm() {
       <Row>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicCenter">
-            <Form.Label>Centro*</Form.Label>
+            <Form.Label>{t("register.center")}*</Form.Label>
             <Form.Select
               className={errors.user_center_id ? "is-invalid" : ""}
               {...register("user_center_id")}
             >
-              <option value="">Selecciona un centro</option>
+              <option value="">{t("register.centerSelect")}</option>
               {centerList.map((center) => (
                 <option key={center.center_id} value={center.center_id}>
                   {center.center_name}
@@ -318,8 +322,8 @@ export default function RegisterUserForm() {
         <Toaster richColors position="bottom-center" />
         {/* Nuestro botton custom le podemos pasar las props 
         para reutilizarlo en este caso es type submit */}
-        <ButtonCustom type={"submit"}  bgColor={"orange"}>
-          {authenticating ? "Registrando..." : "Darse de alta"}
+        <ButtonCustom type={"submit"} bgColor={"orange"}>
+          {authenticating ? t("register.registering") : t("register.registerButton")}
         </ButtonCustom>
       </div>
     </Form>
