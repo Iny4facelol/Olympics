@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import ButtonCustom from "./Button/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { Moon, Sun } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -10,6 +10,22 @@ export default function HeaderHome({ lightDarkHandler }) {
   const { user, setUser, setToken, themeSwitcher } = useAppContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const location = useLocation();
+
+  const handleNavToSection = (sectionId) => {
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        document
+          .getElementById(sectionId)
+          ?.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+    } else {
+      document
+        .getElementById(sectionId)
+        ?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const handleNavigate = () => {
     if (user?.user_type === 1) {
@@ -34,7 +50,6 @@ export default function HeaderHome({ lightDarkHandler }) {
       navigate("/user/login");
     }
   };
-
 
   return (
     <header className="header-user">
@@ -63,13 +78,25 @@ export default function HeaderHome({ lightDarkHandler }) {
               >
                 {t("header.home")}
               </Link>
-              <a href="#aboutUs" className="link-hover fw-semibold ">
+              <a
+                href="#aboutUs"
+                onClick={() => handleNavToSection("aboutUs")}
+                className="link-hover fw-semibold "
+              >
                 {t("header.aboutUs")}
               </a>
-              <a href="#valours" className="link-hover fw-semibold">
+              <a
+                href="#valours"
+                onClick={() => handleNavToSection("values")}
+                className="link-hover fw-semibold"
+              >
                 {t("header.values")}
               </a>
-              <a href="#contact" className="link-hover fw-semibold">
+              <a
+                href="#contact"
+                onClick={() => handleNavToSection("contact")}
+                className="link-hover fw-semibold"
+              >
                 {t("header.contact")}
               </a>
             </article>

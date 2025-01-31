@@ -6,6 +6,7 @@ import CenterEditModal from "./CenterEditModal";
 import DeleteModal from "../../../../core/components/DeleteModal";
 import CenterOlympicsModal from "./CenterOlympicsModal";
 import { useAppContext } from "../../../../core/context/AppContext";
+import { useTranslation } from "react-i18next";
 
 export default function CenterList() {
   const { token, themeSwitcher } = useAppContext();
@@ -14,6 +15,7 @@ export default function CenterList() {
   const [showDelete, setShowDelete] = useState(false);
   const [showOlympics, setShowOlympics] = useState(false);
   const [centerEditData, setCenterEditData] = useState({});
+  const { t } = useTranslation();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -69,13 +71,13 @@ export default function CenterList() {
       >
         <thead>
           <tr>
-            <th>Acciones</th>
-            <th>Nombre Centro</th>
-            <th>Localidad</th>
-            <th>Región</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
-            <th>Email</th>
+            <th>{t("centers.centerListActions")}</th>
+            <th>{t("centers.centerListName")}</th>
+            <th>{t("centers.centerListCity")}</th>
+            <th>{t("centers.centerListProvince")}</th>
+            <th>{t("centers.centerListAddress")}</th>
+            <th>{t("centers.centerListPhone")}</th>
+            <th>{t("centers.centerListEmail")}</th>
           </tr>
         </thead>
         <tbody>

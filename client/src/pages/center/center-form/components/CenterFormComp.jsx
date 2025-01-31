@@ -7,10 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createCenterSchema } from "../../../../utils/zodSchemas/centerSchema";
 import { useNavigate } from "react-router-dom";
 import { toast, Toaster } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export default function CenterFormComp() {
+  const { t } = useTranslation();
   const [authenticating, setAuthenticating] = useState(false);
-  const [errorMsg , setErrorMsg] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
   const navigate = useNavigate();
 
   const {
@@ -33,7 +35,7 @@ export default function CenterFormComp() {
       setTimeout(() => {
         setAuthenticating(false);
         navigate("/admin/dashboard");
-      }, 2000)
+      }, 2000);
     } catch (error) {
       toast.error("Ha ocurrido un error");
       setAuthenticating(false);
@@ -50,11 +52,11 @@ export default function CenterFormComp() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicEmail">
-            <Form.Label>Nombre del centro</Form.Label>
+            <Form.Label>{t("centers.centerName")}</Form.Label>
             <Form.Control
               {...register("center_name")}
               type="text"
-              placeholder="Ej: IES Ribalta, IES Llombai"
+              placeholder={t("centers.centerNamePlaceholder")}
             />
           </Form.Group>
           {errors.center_name && (
@@ -65,11 +67,11 @@ export default function CenterFormComp() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicPassword">
-            <Form.Label>Email</Form.Label>
+            <Form.Label>{t("centers.centerEmail")}</Form.Label>
             <Form.Control
               {...register("center_email")}
               type="email"
-              placeholder="Ej: correocentro@email.com"
+              placeholder={t("centers.centerEmailPlaceholder")}
             />
           </Form.Group>
           {errors.center_email && (
@@ -78,16 +80,16 @@ export default function CenterFormComp() {
             </Form.Text>
           )}
           {errorMsg && (
-            <Form.Text className="text-danger">
-              {errorMsg}
-            </Form.Text>
+            <Form.Text className="text-danger">{errorMsg}</Form.Text>
           )}
         </Col>
       </Row>
       <div>
         <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
-           {authenticating ? "Creando centro..." : "Crear centro"}
+          {authenticating
+            ? t("centers.creatingButton")
+            : t("centers.createButton")}
         </ButtonCustom>
       </div>
     </Form>

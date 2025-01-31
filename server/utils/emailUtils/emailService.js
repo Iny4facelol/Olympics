@@ -6,7 +6,6 @@ import Handlebars from "handlebars";
 import nodemailer from "nodemailer";
 import fs from "fs/promises";
 
-console.log("EMAIL SERVICE", process.env.EMAIL_USER, process.env.EMAIL_PASSWORD);
 
 class EmailService {
   constructor() {
