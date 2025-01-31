@@ -9,7 +9,7 @@ import adminRoutes from './modules/admin/admin.routes.js';
 import userRoutes from './modules/user/user.routes.js';
 import centerRoutes from './modules/center/center.routes.js';
 import admin from 'firebase-admin';
-import serviceAccount from './firebaseServiceAccount.json' assert { type: 'json' };
+import serviceAccount from './firebaseServiceAccount.json' with { type: 'json' };
 
 
 const __filename = fileURLToPath(import.meta.url);
