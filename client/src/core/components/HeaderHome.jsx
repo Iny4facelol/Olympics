@@ -5,13 +5,11 @@ import { useAppContext } from "../context/AppContext";
 import { Moon, Sun } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-
 export default function HeaderHome({ lightDarkHandler }) {
   const { user, setUser, setToken, themeSwitcher } = useAppContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const location = useLocation();
-
   const handleNavToSection = (sectionId) => {
     if (location.pathname !== "/") {
       navigate("/");
@@ -26,7 +24,6 @@ export default function HeaderHome({ lightDarkHandler }) {
         ?.scrollIntoView({ behavior: "smooth" });
     }
   };
-
   const handleNavigate = () => {
     if (user?.user_type === 1) {
       navigate("/admin/dashboard");
@@ -38,7 +35,6 @@ export default function HeaderHome({ lightDarkHandler }) {
       navigate("/user/register");
     }
   };
-
   const handleLogout = () => {
     if (user) {
       localStorage.removeItem("token");
@@ -50,7 +46,6 @@ export default function HeaderHome({ lightDarkHandler }) {
       navigate("/user/login");
     }
   };
-
   return (
     <header className="header-user">
       <Container className="d-flex gap-5 py-4 justify-content-center justify-content-sm-between align-items-center flex-column flex-sm-row">
