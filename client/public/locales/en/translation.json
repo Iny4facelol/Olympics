@@ -153,8 +153,8 @@
     "updatingButton" : "Updating...",
     "actions" : "Actions",
     "activityDescriptionNull" : "This activity has no description",
-    "olympicsSuccessfullyDeleted" : "olympics successfully deleted",
-    "olympicsSuccessfullyUpdated" : "olympics successfully updated"
+    "olympicsSuccessfullyDeleted" : "Olympics successfully deleted",
+    "olympicsSuccessfullyUpdated" : "Olympics successfully updated"
   },
   "centers": {
     "centerName": "Center Name",
