@@ -121,7 +121,7 @@
     "nonAuthText": "To continue with the process, it is essential to download the corresponding authorization, sign it, and upload it back to the platform using the buttons indicated below.",
     "downloadButton": "Download Authorization",
     "uploadButton": "Upload Authorization",
-    "uploadingButton" : "Uploading...",
+    "uploadingButton": "Uploading...",
     "toastMessage": "Doc uploaded successfully!",
     "check": " Authorization under review by the responsible of your center"
   },
@@ -155,7 +155,49 @@
     "activityDescriptionNull" : "This activity has no description",
     "olympicsSuccessfullyDeleted" : "olympics successfully deleted",
     "olympicsSuccessfullyUpdated" : "olympics successfully updated"
-
+  },
+  "centers": {
+    "centerName": "Center Name",
+    "centerEmail": "Center Email",
+    "centerNamePlaceholder": "Ex: Harrow School",
+    "centerEmailPlaceholder": "Ex: yourcenter@email.com",
+    "creatingButton": "Creating...",
+    "createButton": "Create Center",
+    "adminCenters": "Admin Centers",
+    "adminCentersText1": " To add Olympics to the centers, click",
+    "adminCentersText2": "on the corresponding center.",
+    "adminCentersText3": " In case you need edit a center click",
+    "adminCentersText4": "on the corresponding center.",
+    "centerListActions": "Actions",
+    "centerListName": "Center Name",
+    "centerListCity": "City",
+    "centerListProvince": "Region",
+    "centerListAddress": "Address",
+    "centerListEmail": "Email",
+    "centerListPhone": "Phone"
+  },
+  "activities": {
+    "adminActivities": "Admin Activities",
+    "adminActivitiesText1": "In case you need edit an activity, click",
+    "adminActivitiesText2": "on the corresponding activity.",
+    "actions" : "Actions",
+    "activityName" : "Activity Name",
+    "activityNumberParts" : "Nº of participants",
+    "activityDesc" : "Description",
+    "activityImage" : "Image"
+  },
+  "user" : {
+    "adminUsers" : "Admin Users",
+    "adminUsersText1" : "In case you need edit a user, click",
+    "adminUsersText2" : "on the corresponding user.",
+    "actions" : "Actions",
+    "userName" : "User Name",
+    "userCity" : "City",
+    "userType" : "User Type",
+    "userEmail" : "Email",
+    "userPhone" : "Phone",
+    "userCenter" : "Center",
+    "userFind" : "Start typing to find a user..."
 
   }
 }

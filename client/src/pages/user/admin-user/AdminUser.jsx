@@ -3,15 +3,17 @@ import DashboardLayout from "../../../core/layout/DashboardLayout";
 import { Container } from "react-bootstrap";
 import UserList from "./components/UserList";
 import { SquarePen } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function AdminUser() {
+  const { t } = useTranslation();
   return (
     <DashboardLayout>
       <Container>
-        <h2 className="fs-1">Administrar Usuarios</h2>
+        <h2 className="fs-1">{t("user.adminUsers")}</h2>
         <p>
-          En caso de necesitar editar un usuario, pulse en{" "}
-          <SquarePen color="#0d6efd" /> en el usuario correspondiente.
+          {t("user.adminUsersText1")}{" "}
+          <SquarePen color="#0d6efd" /> {t("user.adminUsersText2")}
         </p>
         <UserList />
       </Container>

@@ -16,7 +16,8 @@ router.get("/details/:user_id", userController.userDetails);
 router.put('/editResponsible/:user_id', multerImg("activity_image") ,userController.editResponsible);
 router.put('/completeResponsible/:user_id', userController.completeResponsible);
 router.put('/editUser/:user_id', userController.editUserUser);
-router.put('/restorePassword/:user_id', userController.restorePassword)
+router.put('/restorePassword/:user_id', userController.restorePassword);
+router.post('/loginWithGoogle', userController.loginWithGoogle);
 
 // Rutas de Actividades
 router.get('/usersToAddActivity/:user_center_id', userController.getUsersToAddActivity)

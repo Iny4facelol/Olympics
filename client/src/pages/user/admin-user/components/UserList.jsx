@@ -6,6 +6,7 @@ import UserEditModal from "./UserEditModal";
 import DeleteModal from "../../../../core/components/DeleteModal";
 import ResponsibleEditModal from "./ResponsibleEditModal";
 import { useAppContext } from "../../../../core/context/AppContext";
+import { useTranslation } from "react-i18next";
 
 export default function UserList() {
   const { themeSwitcher } = useAppContext();
@@ -15,6 +16,7 @@ export default function UserList() {
   const [showResponsibleModal, setShowResponsibleModal] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [userEditData, setUserEditData] = useState({});
+  const {t} = useTranslation();
 
   const handleClose = () => {
     setShowUserModal(false);
@@ -84,7 +86,7 @@ export default function UserList() {
 
   return (
     <section className="d-flex gap-4 py-4 flex-column justify-content-center align-content-center">
-      <InputGroup className="mb-3" style={{width: "45%"}}>
+      <InputGroup className="mb-3" style={{ width: "45%" }}>
         <InputGroup.Text id="inputGroup-sizing-sm">
           <Search />
         </InputGroup.Text>
@@ -92,7 +94,7 @@ export default function UserList() {
           aria-label="Default"
           aria-describedby="inputGroup-sizing-sm"
           onChange={handleChange}
-          placeholder="Escribe para buscar..."
+          placeholder={t("user.userFind")}
         />
       </InputGroup>
       <Table
@@ -105,13 +107,13 @@ export default function UserList() {
       >
         <thead>
           <tr>
-            <th>Acciones</th>
-            <th>Nombre</th>
-            <th>Localidad</th>
-            <th>Tipo de Usuario</th>
-            <th>Centro</th>
-            <th>Teléfono</th>
-            <th>Email</th>
+            <th>{t("user.actions")}</th>
+            <th>{t("user.userName")}</th>
+            <th>{t("user.userCity")}</th>
+            <th>{t("user.userType")}</th>
+            <th>{t("user.userCenter")}</th>
+            <th>{t("user.userPhone")}</th>
+            <th>{t("user.userEmail")}</th>
           </tr>
         </thead>
         <tbody>
@@ -121,7 +123,7 @@ export default function UserList() {
                 <Trash2
                   onClick={() => handleLogicDelete(user.user_id)}
                   size="24"
-                  className="text-danger"
+                  className="text-danger custom-icon"
                   style={{ cursor: "pointer" }}
                 />{" "}
                 <SquarePen
@@ -131,7 +133,7 @@ export default function UserList() {
                     }
                   }}
                   size="24"
-                  className="text-primary"
+                  className="text-primary custom-icon"
                   style={{ cursor: "pointer" }}
                 />
               </td>

@@ -6,6 +6,7 @@ import { SquarePen, Trash2 } from "lucide-react";
 import  ActivityEditModal  from "./ActivityEditModal";
 import DeleteModal from "../../../../core/components/DeleteModal";
 import { useAppContext } from "../../../../core/context/AppContext";
+import { useTranslation } from "react-i18next";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_IMAGE_URL;
 
@@ -15,6 +16,7 @@ export default function ActivityList() {
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [activityEditData, setActivityEditData] = useState({});
+  const { t } = useTranslation();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -63,11 +65,11 @@ export default function ActivityList() {
       >
         <thead>
           <tr>
-            <th>Acciones</th>
-            <th>Nombre</th>
-            <th>Nº de participantes</th>
-            <th>Descripción</th>
-            <th>Imagen</th>
+            <th>{t("activities.actions")}</th>
+            <th>{t("activities.activityName")}</th>
+            <th>{t("activities.activityNumberParts")}</th>
+            <th>{t("activities.activityDesc")}</th>
+            <th>{t("activities.activityImage")}</th>
           </tr>
         </thead>
         <tbody>

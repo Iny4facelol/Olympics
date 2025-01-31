@@ -9,7 +9,10 @@ import { toast, Toaster } from "sonner";
 import { useAppContext } from "../../../../core/context/AppContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { signInWithGoogle, logOutGoogle } from "../../../../firebase/fireBaseAuth";  // Asegúrate de importar correctamente las funciones
 import { useTranslation } from "react-i18next";
+import  logoGoogle  from "../../../../assets/logoGoogle.svg"
+
 
 export default function LoginUserForm({ setShowForgotPassword }) {
   const { t } = useTranslation();
@@ -18,6 +21,7 @@ export default function LoginUserForm({ setShowForgotPassword }) {
   const [emailErrorMsg, setEmailErrorMsg] = useState();
   const [passwordErrorMsg, setPasswordErrorMsg] = useState();
   const [authenticating, setAuthenticating] = useState(false);
+  const [googleUser, setGoogleUser] = useState(null);  // Estado para el usuario de Google
   const navigate = useNavigate();
 
   
@@ -52,6 +56,57 @@ export default function LoginUserForm({ setShowForgotPassword }) {
       }
     }
   };
+
+  const handleLoginGoogle = async () => {
+    try {
+      const user = await signInWithGoogle(); // Llama la función de login con Google
+      if (!user) return;
+
+      // Obtener el token de Google
+      const googleToken = await user.getIdToken();
+
+      // Enviar el token al backend para validarlo
+      const response = await fetch("http://localhost:4000/api/user/loginWithGoogle", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ googleToken }),
+      });
+      console.log(response);
+      // Validar la respuesta del backend
+      if (!response.ok) {
+        throw new Error("Error en la autenticación con el backend");
+      }
+
+      const data = await response.json();
+
+      if (data.token) {
+        setToken(data.token);
+        setUser(data.user);
+
+        // Redirigir según el tipo de usuario
+        if (data.user.user_type === 1) {
+          navigate("/admin/dashboard");
+        } else if (data.user.user_type === 2) {
+          navigate("/user/res_dashboard");
+        } else if (data.user.user_type === 3) {
+          navigate("/user/dashboard");
+        }
+      }
+    } catch (error) {
+      console.error("Error al iniciar sesión con Google:", error);
+    }
+  };
+
+
+  // Maneja logout con Google
+  const handleLogoutGoogle = async () => {
+    await logOutGoogle();  // Llama la función para cerrar sesión con Google
+    setGoogleUser(null);  // Limpia el estado del usuario
+  };
+
+
 
   const {
     register,
@@ -145,12 +200,28 @@ export default function LoginUserForm({ setShowForgotPassword }) {
           </Col>
         </Row>
 
-        <div className="mt-4">
-          <ButtonCustom type={"submit"} bgColor={"orange"}>
+        <div className="mt-4 d-flex gap-3"> 
+      <div className="mt-4">
+        <Toaster richColors position="top-center" />
+        <ButtonCustom type={"submit"} bgColor={"orange"}>
             {authenticating ? t("auth.accessing") : t("auth.access")}
+        </ButtonCustom>
+      </div>
+     
+      {/* Botones de login con Google */}
+      <div className="mt-4">
+        {googleUser ? (
+          <ButtonCustom type={"button"} bgColor={"orange"} onClick={handleLogoutGoogle}>
+            Cerrar sesión con Google
           </ButtonCustom>
-        </div>
-      </Form>
+        ) : (
+          <ButtonCustom type={"button"} bgColor={"google"} onClick={handleLoginGoogle}>
+            Acceder con <img src={logoGoogle} alt="Google" width="24" height="24" />
+          </ButtonCustom>
+        )}
+      </div>
+    </div>
+    </Form>
     </>
   );
 }
