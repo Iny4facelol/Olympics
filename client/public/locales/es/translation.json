@@ -9,8 +9,8 @@
     "forgotPasswordLink": "¿Olvidaste tu contraseña?",
     "accessing": "Accediendo...",
     "access": "Acceder",
-    "cancel" : "Cancelar",
-    "toastMessage" : "¡Credenciales correctas!"
+    "cancel": "Cancelar",
+    "toastMessage": "¡Credenciales correctas!"
   },
   "register": {
     "registerTitle": "Registro",
@@ -22,7 +22,7 @@
     "tutorNamePlaceholder": "Ej: María",
     "tutorLastname": "Apellidos del Tutor",
     "tutorLastnamePlaceholder": "Ej: García",
-    "dni" : "DNI",
+    "dni": "DNI",
     "dniPlaceholder": "Ej: 12345678A",
     "city": "Localidad",
     "cityPlaceholder": "Ej: València",
@@ -37,7 +37,7 @@
     "passwordPlaceholder": "Introduce tu contraseña",
     "confirmPassword": "Confirmar Contraseña",
     "confirmPasswordPlaceholder": "Confirma tu contraseña",
-    "center" : "Centro",
+    "center": "Centro",
     "centerSelect": "Selecciona tu centro",
     "registerButton": "Darse de alta",
     "registering": "Registrando...",
@@ -102,7 +102,7 @@
       "sendingMessage": "Enviando..."
     }
   },
-  "user_dashboard" : {
+  "user_dashboard": {
     "welcomeUser": "Te damos la bienvenida,",
     "verifiedAccount": "Cuenta verificada",
     "editUser": "Editar datos del perfil",
@@ -119,21 +119,63 @@
     "activities": "Actividades",
     "nonAuthMessage": "Autorización necesaria para desbloquear perfil",
     "nonAuthText": "Para continuar con el proceso, es indispensable que descarguen la autorización correspondiente, la firmen y la suban nuevamente a la plataforma mediante los botones que se indican a continuación.",
-    "downloadButton" : "Descargar autorización",
-    "uploadButton" : "Subir autorización",
-    "uploadingButton" : "Subiendo...",
-    "toastMessage" : "Archivo subido con éxito",
-    "check" : " Autorización en revisión por el responsable de su centro"
+    "downloadButton": "Descargar autorización",
+    "uploadButton": "Subir autorización",
+    "uploadingButton": "Subiendo...",
+    "toastMessage": "Archivo subido con éxito",
+    "check": " Autorización en revisión por el responsable de su centro"
   },
-  "admin_dashboard" : {
-    "createNewCenter" : "Crear nuevo centro",
-    "adminCenters" : "Administrar Centros",
-    "createNewResp" : "Crear nuevo responsable",
-    "adminUsers" : "Administrar Usuarios",
-    "createNewOlympics" : "Crear nuevas Olimpiadas",
-    "adminOlympics" : "Administrar Olimpiadas",
-    "createNewActivity" : "Crear nueva actividad",
-    "adminActivities" : "Administrar Actividades"
+  "admin_dashboard": {
+    "createNewCenter": "Crear nuevo centro",
+    "adminCenters": "Administrar Centros",
+    "createNewResp": "Crear nuevo responsable",
+    "adminUsers": "Administrar Usuarios",
+    "createNewOlympics": "Crear nuevas Olimpiadas",
+    "adminOlympics": "Administrar Olimpiadas",
+    "createNewActivity": "Crear nueva actividad",
+    "adminActivities": "Administrar Actividades"
+  },
+  "centers": {
+    "centerName": "Nombre del Centro",
+    "centerEmail": "Correo del Centro",
+    "centerNamePlaceholder": "Ej: Colegio San José",
+    "centerEmailPlaceholder": "Ej: correocentro@email.com",
+    "creatingButton": "Creando...",
+    "createButton": "Crear Centro",
+    "adminCenters": "Administrar Centros",
+    "adminCentersText1": " Para añadir Olimpiadas a los centros, pulse",
+    "adminCentersText2": "en el centro correspondiente.",
+    "adminCentersText3": " En caso de necesitar editar una centro, pulse en",
+    "adminCentersText4": "en el centro correspondiente.",
+    "centerListActions": "Acciones",
+    "centerListName": "Nombre Centro",
+    "centerListCity": "Localidad",
+    "centerListProvince": "Región",
+    "centerListAddress": "Dirección",
+    "centerListEmail": "Correo Electrónico",
+    "centerListPhone": "Teléfono"
+  },
+  "activities" : {
+    "adminActivities": "Administrar Actividades",
+    "adminActivitiesText1": "En caso de necesitar editar una actividad, pulse en",
+    "adminActivitiesText2": "en la actividad correspondiente.",
+    "actions" : "Acciones",
+    "activityName": "Nombre",
+    "activityNumberParts" : "Nº de participantes",
+    "activityDesc" : "Descripción",
+    "activityImage" : "Imagen"
+  },
+  "user" : {
+    "adminUsers": "Administrar Usuarios",
+    "adminUsersText1": "En caso de necesitar editar un usuario, pulse en",
+    "adminUsersText2": "en el usuario correspondiente.",
+    "actions" : "Acciones",
+    "userName" : "Nombre",
+    "userCity" : "Localidad",
+    "userType" : "Tipo de Usuario",
+    "userEmail" : "Correo Electrónico",
+    "userPhone" : "Teléfono",
+    "userCenter" : "Centro",
+    "userFind" : "Empieza a escribir para encontrar un usuario..."
   }
-  
 }

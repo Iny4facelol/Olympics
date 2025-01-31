@@ -22,7 +22,7 @@ export default function Section4() {
   }, []);
 
   return (
-    <Container id="valours" className="d-flex w-100 justify-content-center">
+    <Container id="values" className="d-flex w-100 justify-content-center">
       <Container className="container-1 reveal">
         <Row id="valours" className="pt-5 reveal">
           <h2 className="fs-2 fw-bold text-white">{t("home.section4.ourValues")}</h2>
