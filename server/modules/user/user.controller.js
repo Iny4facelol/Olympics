@@ -16,6 +16,8 @@ completeResponsibleSchema,
   passwordSchema,
 } from "../../utils/zodSchemas/userSchema.js";
 
+import admin from "firebase-admin";
+
 class UserController {
   // 1º Apartado de Usuarios
     // Registro de usuario
@@ -104,6 +106,56 @@ class UserController {
       } else {
         res.status(500).json({ message: "Error en el servidor" });
       }
+    }
+  };
+
+  //Login con Google
+  loginWithGoogle = async (req, res) => {
+    const { googleToken } = req.body;
+  
+    try {
+      // Verificar el token de Google con Firebase
+      const decodedToken = await admin.auth().verifyIdToken(googleToken);
+      console.log("Decoded token:", decodedToken);
+  
+      const { email, uid } = decodedToken;
+      console.log("Email extraído del token:", email);
+  
+      // Buscar usuario en la base de datos
+      let user = await userDal.findUserByEmailGoogle(email);
+      console.log("resultado de la consulta:", user);
+  
+      if (!user) {  // Corregido para manejar null correctamente
+        return res.status(401).json({
+          error: "Usuario no registrado o eliminado. Complete sus datos antes de iniciar sesión.",
+        });
+      }
+  
+      if (user.firebase_uid !== uid) {
+        user = await userDal.updateFirebaseUid(user.user_id, uid); // Actualizamos el firebase_uid si no coincide
+        if (!user) {
+          return res.status(500).json({
+            error: "No se pudo actualizar el firebase_uid del usuario.",
+          });
+        }
+      }
+  
+      // Generar un token JWT para la sesión
+      const token = jwt.sign(
+        { user_id: user.user_id },
+        process.env.TOKEN_KEY,
+        { expiresIn: "24h" }
+      );
+  
+      return res.json({
+        message: "Inicio de sesión exitoso",
+        token,
+        user,
+      });
+  
+    } catch (error) {
+      console.error("Error al iniciar sesión con Google:", error);
+      return res.status(400).json({ error: "Token inválido o problema con la verificación" });
     }
   };
 
