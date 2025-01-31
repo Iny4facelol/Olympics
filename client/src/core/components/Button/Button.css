@@ -44,6 +44,22 @@
   }
 }
 
+
+.button-custom-google {
+  background-color: white;
+  color: #ee531e;
+  border-radius: 1rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px #6b6a6a;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #e2e0e0;
+  }
+}
+
 .button-custom-lang {
   background-color: transparent;
   border: none;
@@ -54,6 +70,7 @@
     transform: scale(1.2);
   }
 }
+
 
 
 

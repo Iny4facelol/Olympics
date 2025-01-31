@@ -54,6 +54,39 @@ class UserDal {
     }
   };
 
+  //  Seleccionar Usuario por Email Google
+  findUserByEmailGoogle = async (email) => {
+    try {
+      console.log("Buscando usuario con email:", email);
+  
+      const query = `SELECT * FROM user WHERE TRIM(user_email) = ? AND user_is_deleted = 0`;
+      const rows = await executeQuery(query, [email]);
+  
+      if (!rows || rows.length === 0) {
+        console.error(" Usuario no encontrado en la base de datos.");
+        return null;
+      }
+  
+      console.log("Usuario encontrado:", rows[0]);
+      return rows[0]; // Retorna el usuario encontrado
+    } catch (error) {
+      console.error("Error al obtener el usuario por correo:", error);
+      throw new Error("Error en la consulta de base de datos");
+    }
+  };
+
+  //Actualizar firebase_uid de google en  nuestra base de datos
+  updateFirebaseUid = async (userId, firebaseUid) => {
+    try {
+      const query = `UPDATE user SET firebase_uid = ? WHERE user_id = ?`;
+      const result = await executeQuery(query, [firebaseUid, userId]);
+      return result; // Retorna el resultado de la actualización
+    } catch (error) {
+      console.error("Error al actualizar el firebase_uid:", error);
+      throw new Error("Error al actualizar el firebase_uid");
+    }
+};
+
     // Completar registro de Responsable
 
   completeResponsible = async (values) => {
@@ -473,6 +506,7 @@ class UserDal {
           JOIN olympics_center o ON c.center_id = o.center_id
           WHERE u.user_type = 3
           AND u.user_is_auth = TRUE
+          AND u.user_is_deleted = FALSE
           AND u.user_center_id = ?;
           `;
 

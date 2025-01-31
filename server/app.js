@@ -8,10 +8,23 @@ import cors from 'cors';
 import adminRoutes from './modules/admin/admin.routes.js';
 import userRoutes from './modules/user/user.routes.js';
 import centerRoutes from './modules/center/center.routes.js';
+import admin from 'firebase-admin';
+import serviceAccount from './firebaseServiceAccount.json' assert { type: 'json' };
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const app = express();
+
+// Inicializar Firebase Admin
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://olympics-8a544.firebaseio.com' // Cambia por tu URL de base de datos Firebase
+  });
+} else {
+  admin.app(); // Usa la app ya inicializada
+}
 
 app.use(cors());
 app.use(logger('dev'));
