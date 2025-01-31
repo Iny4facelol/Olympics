@@ -3,13 +3,14 @@ import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { useForm } from "react-hook-form";
 import { Col, Form, Modal, Row } from "react-bootstrap";
 import { toast, Toaster } from "sonner";
+import { useTranslation} from "react-i18next"
 import ButtonCustom from "../../../../core/components/Button/Button";
 import axios from "axios";
 
 export default function OlympicsActivityModal({ handleClose, show, data }) {
   const [authenticating, setAuthenticating] = useState(false);
   const [activities, setActivities] = useState([]);
-
+  const {t} = useTranslation();
   const {
     register,
     handleSubmit,
@@ -109,12 +110,11 @@ export default function OlympicsActivityModal({ handleClose, show, data }) {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Añadir actividades a {data.olympics_name}</Modal.Title>
+        <Modal.Title>{t("olympics.olympicsModalTitle")} {data.olympics_name}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p className="fst-italic">
-          Para eliminar las actividades asignadas a esta olimpiada, simplemente
-          desmárquelas.
+          {t("olympics.olympicsModalText")}
         </p>
         <Form
           className="d-flex gap-4 flex-column justify-content-center align-content-center"
@@ -123,7 +123,7 @@ export default function OlympicsActivityModal({ handleClose, show, data }) {
           <Row className="row-gap-4">
             <Col md={6} sm={12}>
               <Form.Group controlId="formBasicActivities">
-                <Form.Label>Nombre Actividad</Form.Label>
+                <Form.Label>{t("olympics.activityName")}</Form.Label>
                 {activities.slice(0, 10).map((activity) => (
                   <Col key={activity.activity_id}>
                     <Form.Check
@@ -169,7 +169,7 @@ export default function OlympicsActivityModal({ handleClose, show, data }) {
             <Toaster richColors position="top-center" />
             <div>
               <ButtonCustom type={"submit"} bgColor={"orange"}>
-                {authenticating ? "Añadiendo..." : "Añadir"}
+                {authenticating ? t("olympics.addingButton") : t("olympics.addButton")}
               </ButtonCustom>
             </div>
           </div>

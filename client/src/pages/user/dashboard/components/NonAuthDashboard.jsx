@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CircleX, Download, Search, Upload } from "lucide-react";
 import ButtonCustom from "../../../../core/components/Button/Button";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
@@ -15,7 +15,7 @@ export default function NonAuthDashboard() {
   const [downloadFile, setDownloadFile] = useState();
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
-
+  console.log(downloadFile);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -47,18 +47,22 @@ export default function NonAuthDashboard() {
     }
   };
 
-  const handleDownloadDoc = async () => {
-    try {
-      const response = await fetchData(
-        `api/user/authorization-file/${user.user_id}`,
-        "get"
-      );
-      setDownloadFile(response.userFileName);
-    } catch (error) {
-      console.error("Error al descargar la autorización:", error);
-    }
-    setRevision(false);
-  };
+  useEffect(() => {
+    const handleDownloadDoc = async () => {
+      try {
+        const response = await fetchData(
+          `api/user/authorization-file/${user.user_id}`,
+          "get"
+        );
+
+        setDownloadFile(response.userFileName);
+      } catch (error) {
+        console.error("Error al descargar la autorización:", error);
+      }
+      setRevision(false);
+    };
+    handleDownloadDoc();
+  }, []);
 
   return (
     <section className="d-flex flex-column gap-3">
@@ -66,13 +70,11 @@ export default function NonAuthDashboard() {
         <h3 className="text-danger fs-4">
           {t("user_dashboard.nonAuthMessage")} <CircleX />
         </h3>
-        <p className="fs-5 pretty">
-          {t("user_dashboard.nonAuthText")}
-        </p>
+        <p className="fs-5 pretty">{t("user_dashboard.nonAuthText")}</p>
       </article>
       <article className="d-flex flex-column gap-4">
         <div className="d-flex gap-3">
-          <ButtonCustom onClick={handleDownloadDoc} bgColor={"orange"}>
+          <ButtonCustom  bgColor={"orange"}>
             <a href={`${BACKEND_URL}/${downloadFile}`} download>
               <Download size={20} /> {t("user_dashboard.downloadButton")}
             </a>
@@ -84,7 +86,9 @@ export default function NonAuthDashboard() {
           >
             <div className="d-flex align-items-center gap-2">
               <Upload size={20} />
-              {isUploading ? t("user_dashboard.uploadingButton") : t("user_dashboard.uploadButton")}
+              {isUploading
+                ? t("user_dashboard.uploadingButton")
+                : t("user_dashboard.uploadButton")}
             </div>
             <input
               ref={fileInputRef}
@@ -98,8 +102,7 @@ export default function NonAuthDashboard() {
         <div>
           {revision && (
             <h3 className="fs-4" style={{ color: "#ED931D" }}>
-              {t("user_dashboard.check")}{" "}
-              <Search />
+              {t("user_dashboard.check")} <Search />
             </h3>
           )}
         </div>
