@@ -124,17 +124,7 @@
     "uploadingButton": "Subiendo...",
     "toastMessage": "Archivo subido con éxito",
     "check": " Autorización en revisión por el responsable de su centro"
-  },
-  "admin_dashboard" : {
-    "createNewCenter" : "Crear nuevo centro",
-    "adminCenters" : "Administrar Centros",
-    "createNewResp" : "Crear nuevo responsable",
-    "adminUsers" : "Administrar Usuarios",
-    "createNewOlympics" : "Crear nuevas Olimpiadas",
-    "adminOlympics" : "Administrar Olimpiadas",
-    "createNewActivity" : "Crear nueva actividad",
-    "adminActivities" : "Administrar Actividades"
-  },
+  },  
   "olympics" : {
     "olympicsModalTitle" : "Añadir actividades a",
     "olympicsModalText" : "Para eliminar las actividades asignadas a esta olimpiada, simplemente desmárquelas.",
