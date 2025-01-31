@@ -7,9 +7,13 @@ import { Toaster, toast } from "sonner";
 import ButtonCustom from "../../../../core/components/Button/Button";
 import { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
+import { useTranslation} from "react-i18next"
+
 
 function OlympicsEditModal({ handleClose, handleShow, show, data }) {
   const [authenticating, setAuthenticating] = useState(false);
+  const {t} = useTranslation();
+
 
   const {
     register,
@@ -53,7 +57,7 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
         ...formData,
       };
       await fetchData(`api/admin/editOlympics`, "put", dataWithId);
-      toast.success("Olimpiada actualizada correctamente");
+      toast.success(t("olympics.olympicsSuccessfullyUpdated"));
       setTimeout(() => {
         setAuthenticating(false);
         handleClose();
@@ -67,7 +71,7 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
     <>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar Olimpiada</Modal.Title>
+          <Modal.Title>{t("olympics.editOlympicsTitle")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form
@@ -77,14 +81,14 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
             <Row className="row-gap-4">
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicOlympicsName">
-                  <Form.Label>Nombre de la Olimpiada*</Form.Label>
+                  <Form.Label>{t("olympics.olympicsName")}*</Form.Label>
                   <Form.Control
                     className={`custom-input ${
                       errors.olympics_name ? "is-invalid" : ""
                     }`}
                     {...register("olympics_name")}
                     type="text"
-                    placeholder="Nombre Olimpiada"
+                    placeholder={t("olympics.olympicsName")}
                   />
                 </Form.Group>
                 {errors.olympics_name && (
@@ -95,14 +99,14 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
               </Col>
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicOlympicsHostName">
-                  <Form.Label>Nombre del centro*</Form.Label>
+                  <Form.Label>{t("olympics.olympicsHostName")}*</Form.Label>
                   <Form.Control
                     className={`custom-input ${
                       errors.olympics_host_name ? "is-invalid" : ""
                     }`}
                     {...register("olympics_host_name")}
                     type="text"
-                    placeholder="Nombre del centro"
+                    placeholder={t("olympics.olympicsHostName")}
                   />
                 </Form.Group>
                 {errors.olympics_host_name && (
@@ -115,14 +119,14 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
             <Row className="row-gap-4">
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicOlympicsHostCity">
-                  <Form.Label>Localidad*</Form.Label>
+                  <Form.Label>{t("olympics.olympicsHostCity")}*</Form.Label>
                   <Form.Control
                     className={`custom-input ${
                       errors.olympics_host_city ? "is-invalid" : ""
                     }`}
                     {...register("olympics_host_city")}
                     type="text"
-                    placeholder="Localidad"
+                    placeholder={t("olympics.olympicsHostCity")}
                   />
                 </Form.Group>
                 {errors.olympics_host_city && (
@@ -133,14 +137,14 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
               </Col>
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicOlympicsHostAddress">
-                  <Form.Label>Dirección*</Form.Label>
+                  <Form.Label>{t("olympics.olympicsAddress")}*</Form.Label>
                   <Form.Control
                     className={`custom-input ${
                       errors.olympics_host_address ? "is-invalid" : ""
                     }`}
                     {...register("olympics_host_address")}
                     type="text"
-                    placeholder="Dirección del centro"
+                    placeholder={t("olympics.olympicsAddress")}
                   />
                 </Form.Group>
                 {errors.olympics_host_address && (
@@ -153,7 +157,7 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
             <Row className="row-gap-4">
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicOlympicsStartDate">
-                  <Form.Label>Fecha de inicio*</Form.Label>
+                  <Form.Label>{t("olympics.startDate")}*</Form.Label>
                   <Form.Control
                     className={`custom-input ${
                       errors.olympics_start_date ? "is-invalid" : ""
@@ -170,7 +174,7 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
               </Col>
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicOlympicsEndDate">
-                  <Form.Label>Fecha de fin*</Form.Label>
+                  <Form.Label>{t("olympics.endDate")}*</Form.Label>
                   <Form.Control
                     className={`custom-input ${
                       errors.olympics_end_date ? "is-invalid" : ""
@@ -189,7 +193,7 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
             <Row>
               <Col md={12} sm={12}>
                 <Form.Group controlId="formBasicOlympicsDesc">
-                  <Form.Label>Descripción</Form.Label>
+                  <Form.Label>{t("olympics.olympicsDescription")}</Form.Label>
                   <Form.Control
                     as={"textarea"}
                     className={`custom-input ${
@@ -197,7 +201,7 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
                     }`}
                     {...register("olympics_description")}
                     type="text"
-                    placeholder="Descripción de la olimpiada"
+                    placeholder={t("olympics.olympicsDescription")}
                   />
                 </Form.Group>
                 {errors.olympics_description && (
@@ -211,7 +215,7 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
             <div className="">
               <Toaster richColors position="top-center" />
               <ButtonCustom type={"submit"} bgColor={"orange"}>
-                {authenticating ? "Actualizando..." : "Actualizar Olimpiada"}
+                {authenticating ? t("olympics.updatingButton") : t("olympics.updateButton")}
               </ButtonCustom>
             </div>
           </Form>

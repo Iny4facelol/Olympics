@@ -6,6 +6,7 @@ import OlympicsEditModal from "./OlympicsEditModal";
 import DeleteModal from "../../../../core/components/DeleteModal";
 import OlympicsActivityModal from "./OlympicsActivityModal";
 import { useAppContext } from "../../../../core/context/AppContext";
+import { useTranslation} from "react-i18next";
 
 export default function OlympicsList() {
   const { themeSwitcher } = useAppContext();
@@ -14,6 +15,7 @@ export default function OlympicsList() {
   const [showDelete, setShowDelete] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
   const [olympicsEditData, setOlympicsEditData] = useState({});
+  const {t} = useTranslation();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -74,14 +76,14 @@ export default function OlympicsList() {
       >
         <thead>
           <tr>
-            <th>Acciones</th>
-            <th>Nombre Olimpiada</th>
-            <th>Nombre Sede</th>
-            <th>Ciudad Sede</th>
-            <th>Dirección Sede</th>
-            <th>Fecha Inicio</th>
-            <th>Fecha Fin</th>
-            <th>Descripción</th>
+            <th>{t("olympics.actions")}</th>
+            <th>{t("olympics.olympicsName")}</th>
+            <th>{t("olympics.olympicsHostName")}</th>
+            <th>{t("olympics.olympicsHostCity")}</th>
+            <th>{t("olympics.olympicsAddress")}</th>
+            <th>{t("olympics.startDate")}</th>
+            <th>{t("olympics.endDate")}</th>
+            <th>{t("olympics.olympicsDescription")}</th>
           </tr>
         </thead>
         <tbody>
@@ -122,7 +124,7 @@ export default function OlympicsList() {
               <td>
                 {olympic.olympics_description
                   ? olympic.olympics_description
-                  : "Esta actividad no tiene descripción"}
+                  : t("olympics.activityDescriptionNull")}
               </td>
             </tr>
           ))}
@@ -146,7 +148,7 @@ export default function OlympicsList() {
         handleShow={handleShowDelete}
         show={showDelete}
         data={olympicsEditData}
-        deleteMessage="Olimpiada eliminada correctamente"
+        deleteMessage={t("olympics.olympiadSuccessfullyDeleted")}
         apiEndpoint={`api/admin/logicalDeleteOlympics/${olympicsEditData.olympics_id}`}
       />
     </section>

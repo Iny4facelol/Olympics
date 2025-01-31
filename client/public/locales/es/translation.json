@@ -134,6 +134,28 @@
     "adminOlympics" : "Administrar Olimpiadas",
     "createNewActivity" : "Crear nueva actividad",
     "adminActivities" : "Administrar Actividades"
+  },
+  "olympics" : {
+    "olympicsModalTitle" : "Añadir actividades a",
+    "olympicsModalText" : "Para eliminar las actividades asignadas a esta olimpiada, simplemente desmárquelas.",
+    "activityName": "Nombre Actividad",
+    "addButton": "Añadir",
+    "addingButton": "Añadiendo...",
+    "editOlympicsTitle": "Editar Olimpiada",
+    "olympicsName": "Nombre de la Olimpiada",
+    "olympicsHostName": "Nombre del centro",
+    "olympicsHostCity": "Localidad",
+    "olympicsAddress": "Dirección",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de fin",
+    "olympicsDescription": "Descripción",
+    "updateButton": "Actualizar",
+    "updatingButton": "Actualizando...",
+    "actions" : "Acciones",
+    "activityDescriptionNull" : "Esta actividad no tiene descripción",
+    "olympiadSuccessfullyDeleted" : "Olimpiada eliminada con éxito",
+    "olympiadSuccessfullyUpdated" : "Olimpiada actualizada con éxito"
+
   }
   
 }

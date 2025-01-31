@@ -134,5 +134,28 @@
     "adminOlympics": "Admin Olympics",
     "createNewActivity": "Create New Activity",
     "adminActivities": "Admin Activities"
+  },
+  "olympics" : {
+    "olympicsModalTitle" : "Add activities to",
+    "olympicsModalText" : "To remove the activities assigned to this olympics, simply uncheck them.",
+    "activityName" : "Activity Name",
+    "addButton" : "Add",
+    "addingButton" : "Adding...",
+    "editOlympicsTitle" : "Edit Olympics",
+    "olympicsName" : "Olympics Name",
+    "olympicsHostName" : "Center name",
+    "olympicsHostCity" : "City",
+    "olympicsAddress" : "Address",
+    "startDate" : "Start Date",
+    "endDate" : "End Date",
+    "olympicsDescription" : "Description",
+    "updateButton" : "Update",
+    "updatingButton" : "Updating...",
+    "actions" : "Actions",
+    "activityDescriptionNull" : "This activity has no description",
+    "olympicsSuccessfullyDeleted" : "olympics successfully deleted",
+    "olympicsSuccessfullyUpdated" : "olympics successfully updated"
+
+
   }
 }
