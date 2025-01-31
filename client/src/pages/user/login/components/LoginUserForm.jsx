@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { signInWithGoogle, logOutGoogle } from "../../../../firebase/fireBaseAuth";  // Asegúrate de importar correctamente las funciones
 import { useTranslation } from "react-i18next";
+import  logoGoogle  from "../../../../assets/logoGoogle.svg"
 
 
 export default function LoginUserForm({ setShowForgotPassword }) {
@@ -199,6 +200,7 @@ export default function LoginUserForm({ setShowForgotPassword }) {
           </Col>
         </Row>
 
+        <div className="mt-4 d-flex gap-3"> 
       <div className="mt-4">
         <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
@@ -214,10 +216,11 @@ export default function LoginUserForm({ setShowForgotPassword }) {
           </ButtonCustom>
         ) : (
           <ButtonCustom type={"button"} bgColor={"google"} onClick={handleLoginGoogle}>
-            Accede con
+            Acceder con <img src={logoGoogle} alt="Google" width="24" height="24" />
           </ButtonCustom>
         )}
       </div>
+    </div>
     </Form>
     </>
   );
