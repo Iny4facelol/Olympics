@@ -69,7 +69,7 @@ export default function AuthDashboard({ userData }) {
               className="link-hover"
               onClick={() => handleEdit(user.user_id)}
             >
-              Editar datos del perfil <MoveRight color="#ee531e" />
+              {t("user_dashboard.editUser")} <MoveRight color="#ee531e" />
             </Link>
           </p>
         </Col>
