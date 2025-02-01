@@ -26,7 +26,6 @@ export default function AppLayout({ children }) {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
     handleIcon();
 
-    // Remove transitioning class after animation completes
     setTimeout(() => {
       setIsTransitioning(false);
     }, 500);

@@ -8,9 +8,11 @@ import ButtonCustom from "../../../../core/components/Button/Button";
 import { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { useTranslation} from "react-i18next"
+import { useAppContext } from "../../../../core/context/AppContext";
 
 
 function OlympicsEditModal({ handleClose, handleShow, show, data }) {
+  const { themeSwitcher } = useAppContext();
   const [authenticating, setAuthenticating] = useState(false);
   const {t} = useTranslation();
 
@@ -70,10 +72,13 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
   return (
     <>
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header
+          className={themeSwitcher ? "" : "bg-dark text-white"}
+          closeButton
+        >
           <Modal.Title>{t("olympics.editOlympicsTitle")}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={themeSwitcher ? "" : "bg-dark text-white"}>
           <Form
             className="d-flex gap-4 flex-column justify-content-center align-content-center"
             onSubmit={handleSubmit(onSubmit)}
@@ -211,11 +216,15 @@ function OlympicsEditModal({ handleClose, handleShow, show, data }) {
                 )}
               </Col>
             </Row>
-            <div style={{width:"100%", height:"2px", backgroundColor:"gray"}}></div>
+            <div
+              style={{ width: "100%", height: "2px", backgroundColor: "gray" }}
+            ></div>
             <div className="">
               <Toaster richColors position="top-center" />
               <ButtonCustom type={"submit"} bgColor={"orange"}>
-                {authenticating ? t("olympics.updatingButton") : t("olympics.updateButton")}
+                {authenticating
+                  ? t("olympics.updatingButton")
+                  : t("olympics.updateButton")}
               </ButtonCustom>
             </div>
           </Form>

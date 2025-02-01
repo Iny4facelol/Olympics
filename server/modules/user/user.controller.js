@@ -518,7 +518,6 @@ class UserController {
         error: error.message,
       });
     }
-    return;
   };
 
     // Descargar la Validación

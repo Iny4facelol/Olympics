@@ -8,3 +8,14 @@
 .dropdown-toggle::after {
   display: none !important;
 }
+/* 
+.dropdown-menu-custom {
+  width: 10px !important;
+    transform: translate3d(-9px, 29.5px, 0px) !important;
+} */
+/*  
+@media (width <= 1700px) {
+  .dropdown-menu-custom {
+    transform: translate3d(115px, 29.5px, 0px) !important;
+  }
+} */

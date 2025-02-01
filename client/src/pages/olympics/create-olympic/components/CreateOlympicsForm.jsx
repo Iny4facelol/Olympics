@@ -8,8 +8,10 @@ import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { toast, Toaster } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { olympicsSchema } from "../../../../utils/zodSchemas/olympicsSchema";
+import { useTranslation } from "react-i18next";
 
 export default function CreateOlympicsForm() {
+  const {t} = useTranslation();
   const [authenticating, setAuthenticating] = useState(false);
   const navigate = useNavigate();
 
@@ -40,7 +42,7 @@ export default function CreateOlympicsForm() {
       try {
         setAuthenticating(true);
         await fetchData(`api/admin/addOlympics`, "post", data);
-        toast.success("Olimpiada creada correctamente");
+        toast.success(t("olympics.toastMessage"));
         setTimeout(() => {
           setAuthenticating(false);
           navigate("/admin/dashboard");
@@ -58,14 +60,14 @@ export default function CreateOlympicsForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicOlympicsName">
-            <Form.Label>Nombre de la Olimpiada*</Form.Label>
+            <Form.Label>{t("olympics.olympicsName")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.olympics_name ? "is-invalid" : ""
               }`}
               {...register("olympics_name")}
               type="text"
-              placeholder="Nombre Olimpiada"
+              placeholder={t("olympics.olympicsNamePlaceholder")}
             />
           </Form.Group>
           {errors.olympics_name && (
@@ -76,14 +78,14 @@ export default function CreateOlympicsForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicOlympicsHostName">
-            <Form.Label>Nombre de la sede*</Form.Label>
+            <Form.Label>{t("olympics.olympicsHostName")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.olympics_host_name ? "is-invalid" : ""
               }`}
               {...register("olympics_host_name")}
               type="text"
-              placeholder="Nombre de la sede"
+              placeholder={t("olympics.olympicsHostNamePlaceholder")}
             />
           </Form.Group>
           {errors.olympics_host_name && (
@@ -96,14 +98,14 @@ export default function CreateOlympicsForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicOlympicsHostCity">
-            <Form.Label>Localidad*</Form.Label>
+            <Form.Label>{t("olympics.olympicsHostCity")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.olympics_host_city ? "is-invalid" : ""
               }`}
               {...register("olympics_host_city")}
               type="text"
-              placeholder="Localidad"
+              placeholder={t("olympics.olympicsHostCityPlaceholder")}
             />
           </Form.Group>
           {errors.olympics_host_city && (
@@ -114,14 +116,14 @@ export default function CreateOlympicsForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicOlympicsHostAddress">
-            <Form.Label>Dirección*</Form.Label>
+            <Form.Label>{t("olympics.olympicsAddress")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.olympics_host_address ? "is-invalid" : ""
               }`}
               {...register("olympics_host_address")}
               type="text"
-              placeholder="Dirección del centro"
+              placeholder={t("olympics.olympicsAddressPlaceholder")}
             />
           </Form.Group>
           {errors.olympics_host_address && (
@@ -134,7 +136,7 @@ export default function CreateOlympicsForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicOlympicsStartDate">
-            <Form.Label>Fecha de inicio*</Form.Label>
+            <Form.Label>{t("olympics.startDate")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.olympics_start_date ? "is-invalid" : ""
@@ -151,7 +153,7 @@ export default function CreateOlympicsForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicOlympicsEndDate">
-            <Form.Label>Fecha de fin*</Form.Label>
+            <Form.Label>{t("olympics.endDate")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.olympics_end_date ? "is-invalid" : ""
@@ -170,14 +172,14 @@ export default function CreateOlympicsForm() {
       <Row>
           <Col md={6} sm={12}>
             <Form.Group controlId="formBasicOlympicsDesc">
-              <Form.Label>Descripción</Form.Label>
+              <Form.Label>{t("olympics.olympicsDescription")}</Form.Label>
               <Form.Control
                 className={`custom-input ${
                   errors.olympics_description ? "is-invalid" : ""
                 }`}
                 {...register("olympics_description")}
                 type="text"
-                placeholder="Descripción de la olimpiada"
+                placeholder={t("olympics.olympicsDescriptionPlaceholder")}
               />
             </Form.Group>
             {errors.olympics_description && (
@@ -191,7 +193,7 @@ export default function CreateOlympicsForm() {
       <div className="mt-4">
         <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
-          {authenticating ? "Creando..." : "Crear Olimpiada"}
+          {authenticating ? t("olympics.olympicsCreating") : t("olympics.olympicsButton")}
         </ButtonCustom>
       </div>
     </Form>

@@ -6,8 +6,10 @@ import { toast, Toaster } from "sonner";
 import { useTranslation} from "react-i18next"
 import ButtonCustom from "../../../../core/components/Button/Button";
 import axios from "axios";
+import { useAppContext } from "../../../../core/context/AppContext";
 
-export default function OlympicsActivityModal({ handleClose, show, data }) {
+export default function OlympicsActivityModal({ handleClose, show, data }) {  
+  const {themeSwitcher} = useAppContext();
   const [authenticating, setAuthenticating] = useState(false);
   const [activities, setActivities] = useState([]);
   const {t} = useTranslation();
@@ -109,13 +111,16 @@ export default function OlympicsActivityModal({ handleClose, show, data }) {
 
   return (
     <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>{t("olympics.olympicsModalTitle")} {data.olympics_name}</Modal.Title>
+      <Modal.Header
+        className={themeSwitcher ? "" : "bg-dark text-white"}
+        closeButton
+      >
+        <Modal.Title>
+          {t("olympics.olympicsModalTitle")} {data.olympics_name}
+        </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <p className="fst-italic">
-          {t("olympics.olympicsModalText")}
-        </p>
+      <Modal.Body className={themeSwitcher ? "" : "bg-dark text-white"}>
+        <p className="fst-italic">{t("olympics.olympicsModalText")}</p>
         <Form
           className="d-flex gap-4 flex-column justify-content-center align-content-center"
           onSubmit={handleSubmit(onSubmit)}
@@ -162,14 +167,13 @@ export default function OlympicsActivityModal({ handleClose, show, data }) {
               )}
             </Col>
           </Row>
-          <div
-            style={{ width: "100%", height: "1px", backgroundColor: "gray" }}
-          ></div>
           <div className="d-flex flex-column">
             <Toaster richColors position="top-center" />
             <div>
               <ButtonCustom type={"submit"} bgColor={"orange"}>
-                {authenticating ? t("olympics.addingButton") : t("olympics.addButton")}
+                {authenticating
+                  ? t("olympics.addingButton")
+                  : t("olympics.addButton")}
               </ButtonCustom>
             </div>
           </div>

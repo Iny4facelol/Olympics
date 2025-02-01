@@ -2,8 +2,8 @@ import { dbPool, executeQuery } from "../../config/db.js";
 
 class UserDal {
   // 1º Apartado de Usuario
-    // Registro de Usuario
-  
+  // Registro de Usuario
+
   register = async (values) => {
     try {
       let sql = `
@@ -29,7 +29,7 @@ class UserDal {
     }
   };
 
-    // Seleccionar Usuario por ID
+  // Seleccionar Usuario por ID
 
   findUserById = async (user_id) => {
     try {
@@ -39,9 +39,9 @@ class UserDal {
     } catch (error) {
       throw error;
     }
-  }
+  };
 
-    // Seleccionar Usuario por Email
+  // Seleccionar Usuario por Email
 
   getUserByEmail = async (email) => {
     try {
@@ -58,15 +58,15 @@ class UserDal {
   findUserByEmailGoogle = async (email) => {
     try {
       console.log("Buscando usuario con email:", email);
-  
+
       const query = `SELECT * FROM user WHERE TRIM(user_email) = ? AND user_is_deleted = 0`;
       const rows = await executeQuery(query, [email]);
-  
+
       if (!rows || rows.length === 0) {
         console.error(" Usuario no encontrado en la base de datos.");
         return null;
       }
-  
+
       console.log("Usuario encontrado:", rows[0]);
       return rows[0]; // Retorna el usuario encontrado
     } catch (error) {
@@ -85,9 +85,9 @@ class UserDal {
       console.error("Error al actualizar el firebase_uid:", error);
       throw new Error("Error al actualizar el firebase_uid");
     }
-};
+  };
 
-    // Completar registro de Responsable
+  // Completar registro de Responsable
 
   completeResponsible = async (values) => {
     try {
@@ -109,7 +109,7 @@ class UserDal {
     }
   };
 
-    // Actualizar Responsable
+  // Actualizar Responsable
 
   updateResponsible = async (user_id, userData) => {
     const {
@@ -148,7 +148,7 @@ class UserDal {
     }
   };
 
-    // Actualizar Usuario 
+  // Actualizar Usuario
 
   updateUserUser = async (user_id, userData) => {
     const {
@@ -199,8 +199,8 @@ class UserDal {
     }
   };
 
-    // Detalles de un Usuario 
-  
+  // Detalles de un Usuario
+
   searchUserDetails = async (user_id) => {
     try {
       const query = `
@@ -254,21 +254,21 @@ class UserDal {
     }
   };
 
-    // Actualizar Contraseña de Usuario
+  // Actualizar Contraseña de Usuario
 
   updatePassword = async (hash, user_id) => {
     try {
       let sql = "UPDATE user SET user_password = ? WHERE user_id = ?";
-      let values = [hash, user_id]
+      let values = [hash, user_id];
       const result = await executeQuery(sql, values);
       return result;
     } catch (error) {
-      throw new Error("Error al actualizar la contraseña")
+      throw new Error("Error al actualizar la contraseña");
     }
-  }
+  };
 
   // 2º Apartado Centro
-    // Seleccionar Centro
+  // Seleccionar Centro
 
   getCenter = async () => {
     try {
@@ -280,7 +280,7 @@ class UserDal {
     }
   };
 
-    //Completar Centro
+  //Completar Centro
 
   completeCenter = async (centerData) => {
     const {
@@ -316,9 +316,9 @@ class UserDal {
       throw new Error("Error al completar el centro");
     }
   };
-  
+
   // 3º Apartado de Actividades
-    // Actividades de un Usuario 
+  // Actividades de un Usuario
 
   getUserActivities = async (user_id, olympics_id) => {
     try {
@@ -335,8 +335,8 @@ class UserDal {
       throw new Error("Error al obtener actividades del usuario");
     }
   };
-  
-    // Actividades de una Olimpiada
+
+  // Actividades de una Olimpiada
 
   getActivitiesFromOlympics = async (olympics_id) => {
     try {
@@ -355,7 +355,7 @@ class UserDal {
   };
 
   // 4º Apartado de Validaciones y Autorizaciones
-    // Usuario Pendiente de Validación
+  // Usuario Pendiente de Validación
 
   getPendingValidationUsers = async (user_center_id) => {
     try {
@@ -373,7 +373,7 @@ class UserDal {
     }
   };
 
-    // Actualizar Estado de Autorización
+  // Actualizar Estado de Autorización
 
   updateAuthorizationPath = async (user_id, filePath) => {
     try {
@@ -387,8 +387,8 @@ class UserDal {
       throw err;
     }
   };
-  
-    // Validar Documento de Autorización
+
+  // Validar Documento de Autorización
 
   updateDocumentValidation = async (user_id) => {
     try {
@@ -404,8 +404,8 @@ class UserDal {
     }
   };
 
-    // Obtener Autorización
-  
+  // Obtener Autorización
+
   getAuthorizationPath = async (userId) => {
     const query = `
       SELECT user_permission_file
@@ -421,7 +421,7 @@ class UserDal {
     }
   };
 
-    // Obtener Usuario Autorizado por ID
+  // Obtener Usuario Autorizado por ID
 
   getUnauthorizedUserById = async (userId) => {
     try {
@@ -441,7 +441,7 @@ class UserDal {
     }
   };
 
-    // Validar Registro de Usuario 
+  // Validar Registro de Usuario
 
   validateRegistrationUser = async (user_id) => {
     try {
@@ -457,7 +457,7 @@ class UserDal {
     }
   };
 
-    // Seleccionar Autorización del centro
+  // Seleccionar Autorización del centro
 
   getAuthorizationFileFromDB = async (user_id) => {
     try {
@@ -478,24 +478,19 @@ class UserDal {
     }
   };
 
-    // Guardar el archivo
+  // Guardar el archivo
 
-  saveUserPermissionFile = async (user_id, fileName, filePath) => {
+  saveUserPermissionFile = async (user_id, fileName) => {
     try {
-      const query = `
-        UPDATE user 
-        SET user_permission_file = ?, 
-            user_is_auth = true
-        WHERE user_id = ?
-      `;
-      await executeQuery(query, [filePath, user_id]);
+      const query = "UPDATE user SET user_permission_file = ? WHERE user_id = ?"
+      await executeQuery(query, [fileName, user_id]);
     } catch (error) {
       console.error("Error al guardar el archivo en la base de datos:", error);
       throw error;
     }
   };
 
-    // DUDA , donde poner 
+  // DUDA , donde poner
 
   getUsersToAddActivity = async (user_center_id) => {
     try {
@@ -517,7 +512,7 @@ class UserDal {
     }
   };
 
-    // DUDA, donde poner
+  // DUDA, donde poner
 
   addActivityToUser = async (user_id, activities, center_id, olympics_id) => {
     const connection = await dbPool.getConnection();
@@ -757,31 +752,16 @@ class UserDal {
     }
   };
 
-  saveUserPermissionFile = async (user_id,fileName) => {
-    try {
-      const query = `
-        UPDATE user   
-        SET user_permission_file = ?, 
-        WHERE user_id = ?
-      `;
-      await executeQuery(query, [fileName, user_id]);
-      console.log("Archivo guardado en la base de datos.");
-    } catch (error) {
-      console.error("Error al guardar el archivo en la base de datos:", error);
-      throw error;
-    }
-  };
-
   updatePassword = async (hash, user_id) => {
     try {
       let sql = "UPDATE user SET user_password = ? WHERE user_id = ?";
-      let values = [hash, user_id]
+      let values = [hash, user_id];
       const result = await executeQuery(sql, values);
       return result;
     } catch (error) {
-      throw new Error("Error al actualizar la contraseña")
+      throw new Error("Error al actualizar la contraseña");
     }
-  }
+  };
 }
 
 export default new UserDal();

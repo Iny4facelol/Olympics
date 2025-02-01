@@ -10,7 +10,11 @@
     "accessing": "Accediendo...",
     "access": "Acceder",
     "cancel": "Cancelar",
-    "toastMessage": "¡Credenciales correctas!"
+    "toastMessage": "¡Credenciales correctas!",
+    "passwordPlaceholder": "Introduce tu contraseña",
+    "emailPlaceholder": "Ej: tucorreo@email.com",
+    "googleLogin": "Acceder con",
+    "googleLogging": "Accediendo..."
   },
   "register": {
     "registerTitle": "Registro",
@@ -125,37 +129,6 @@
     "toastMessage": "Archivo subido con éxito",
     "check": " Autorización en revisión por el responsable de su centro"
   },
-  "admin_dashboard" : {
-    "createNewCenter" : "Crear nuevo centro",
-    "adminCenters" : "Administrar Centros",
-    "createNewResp" : "Crear nuevo responsable",
-    "adminUsers" : "Administrar Usuarios",
-    "createNewOlympics" : "Crear nuevas Olimpiadas",
-    "adminOlympics" : "Administrar Olimpiadas",
-    "createNewActivity" : "Crear nueva actividad",
-    "adminActivities" : "Administrar Actividades"
-  },
-  "olympics" : {
-    "olympicsModalTitle" : "Añadir actividades a",
-    "olympicsModalText" : "Para eliminar las actividades asignadas a esta olimpiada, simplemente desmárquelas.",
-    "activityName": "Nombre Actividad",
-    "addButton": "Añadir",
-    "addingButton": "Añadiendo...",
-    "editOlympicsTitle": "Editar Olimpiada",
-    "olympicsName": "Nombre de la Olimpiada",
-    "olympicsHostName": "Nombre del centro",
-    "olympicsHostCity": "Localidad",
-    "olympicsAddress": "Dirección",
-    "startDate": "Fecha de inicio",
-    "endDate": "Fecha de fin",
-    "olympicsDescription": "Descripción",
-    "updateButton": "Actualizar",
-    "updatingButton": "Actualizando...",
-    "actions" : "Acciones",
-    "activityDescriptionNull" : "Esta actividad no tiene descripción",
-    "olympiadSuccessfullyDeleted" : "Olimpiada eliminada con éxito",
-    "olympiadSuccessfullyUpdated" : "Olimpiada actualizada con éxito"
-  },
   "admin_dashboard": {
     "createNewCenter": "Crear nuevo centro",
     "adminCenters": "Administrar Centros",
@@ -165,6 +138,39 @@
     "adminOlympics": "Administrar Olimpiadas",
     "createNewActivity": "Crear nueva actividad",
     "adminActivities": "Administrar Actividades"
+  },
+  "olympics": {
+    "olympicsModalTitle": "Añadir actividades a",
+    "olympicsModalText": "Para eliminar las actividades asignadas a esta olimpiada, simplemente desmárquelas.",
+    "activityName": "Nombre Actividad",
+    "addButton": "Añadir",
+    "addingButton": "Añadiendo...",
+    "editOlympicsTitle": "Editar Olimpiada",
+    "olympicsName": "Nombre de la Olimpiada",
+    "olympicsNamePlaceholder": "Ej: Olimpiadas Escolares 2021",
+    "olympicsHostName": "Nombre de la sede",
+    "olympicsHostNamePlaceholder": "Ej: Colegio Lluis Vives",
+    "olympicsHostCity": "Localidad de la sede",
+    "olympicsHostCityPlaceholder": "Ej: València",
+    "olympicsAddress": "Dirección de la sede",
+    "olympicsAddressPlaceholder": "Ej: Calle Mayor, 1",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de fin",
+    "olympicsDescription": "Descripción",
+    "olympicsDescriptionPlaceholder": "Ej: Estas olimpiadas están enfocadas en...",
+    "updateButton": "Actualizar",
+    "updatingButton": "Actualizando...",
+    "actions": "Acciones",
+    "activityDescriptionNull": "Esta actividad no tiene descripción",
+    "olympiadSuccessfullyDeleted": "Olimpiada eliminada con éxito",
+    "olympiadSuccessfullyUpdated": "Olimpiada actualizada con éxito",
+    "toastMessage": "¡Olimpiada creada con éxito!",
+    "olympicsButton": "Crear Olimpiada",
+    "olympicsCreating": "Creando...",
+    "olympicsText1": "Para añadir actividades a las olimpiadas, pulse",
+    "olympicsText2": "en la olimpiada correspondiente.",
+    "olympicsText3": " En caso de necesitar editar una olimpiada, pulse en",
+    "olympicsText4": "en la olimpiada correspondiente."
   },
   "centers": {
     "centerName": "Nombre del Centro",
@@ -186,27 +192,47 @@
     "centerListEmail": "Correo Electrónico",
     "centerListPhone": "Teléfono"
   },
-  "activities" : {
+  "activities": {
     "adminActivities": "Administrar Actividades",
     "adminActivitiesText1": "En caso de necesitar editar una actividad, pulse en",
     "adminActivitiesText2": "en la actividad correspondiente.",
-    "actions" : "Acciones",
+    "actions": "Acciones",
     "activityName": "Nombre",
-    "activityNumberParts" : "Nº de participantes",
-    "activityDesc" : "Descripción",
-    "activityImage" : "Imagen"
+    "activityNumberParts": "Nº de participantes",
+    "activityDesc": "Descripción",
+    "activityImage": "Imagen",
+    "activityNamePlaceholder": "Ej: Baloncesto",
+    "activityNumberPartsPlaceholder": "Ej: 10",
+    "activityDescPlacerholder": "Ej: Este deporte consiste en...",
+    "activityButton": "Crear Actividad",
+    "activityCreating": "Creando..."
   },
-  "user" : {
+  "user": {
     "adminUsers": "Administrar Usuarios",
     "adminUsersText1": "En caso de necesitar editar un usuario, pulse en",
     "adminUsersText2": "en el usuario correspondiente.",
-    "actions" : "Acciones",
-    "userName" : "Nombre",
-    "userCity" : "Localidad",
-    "userType" : "Tipo de Usuario",
-    "userEmail" : "Correo Electrónico",
-    "userPhone" : "Teléfono",
-    "userCenter" : "Centro",
-    "userFind" : "Empieza a escribir para encontrar un usuario..."
+    "actions": "Acciones",
+    "userName": "Nombre",
+    "userCity": "Localidad",
+    "userType": "Tipo de Usuario",
+    "userEmail": "Correo Electrónico",
+    "userPhone": "Teléfono",
+    "userCenter": "Centro",
+    "userFind": "Empieza a escribir para encontrar un usuario...",
+    "respName": "Nombre del Responsable",
+    "respNamePlacerholder": "Ej: Juan",
+    "respEmail": "Correo del Responsable",
+    "respEmailPlaceholder": "Ej: emailresponsable@email.com",
+    "respCenter": "Centro",
+    "respButton": "Crear Responsable",
+    "respCreating": "Creando...",
+    "respSelectCenter": "Selecciona el centro"
+  },
+  "deleteModal": {
+    "deleteModalTitle": "¿Deseas continuar con la eliminación?",
+    "deleteModalText": "Esta acción no se puede deshacer.",
+    "deleteButton": "Eliminar",
+    "deleteDeleting": "Eliminando...",
+    "cancelButton": "Cancelar"
   }
 }
