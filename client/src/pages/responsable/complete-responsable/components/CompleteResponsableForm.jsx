@@ -185,7 +185,6 @@ export default function CompleteResponsableForm() {
         </Col>
       </Row>
       <div>
-        <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
           {authenticating ? "Completando..." : "Completar registro"}
         </ButtonCustom>

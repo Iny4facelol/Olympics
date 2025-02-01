@@ -1,17 +1,21 @@
 import { Col, Form, Row } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
-import { centerSchema, editCenterSchema } from "../../../../utils/zodSchemas/centerSchema";
+import {
+  centerSchema,
+  editCenterSchema,
+} from "../../../../utils/zodSchemas/centerSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from "sonner";
 import ButtonCustom from "../../../../core/components/Button/Button";
 import { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
+import { useAppContext } from "../../../../core/context/AppContext";
 
-function CenterEditModal({ handleClose, handleShow, show, data }) {
+function CenterEditModal({ handleClose, show, data }) {
+  const { themeSwitcher } = useAppContext();
   const [authenticating, setAuthenticating] = useState(false);
   const [file, setFile] = useState(null);
-
 
   const {
     register,
@@ -68,10 +72,13 @@ function CenterEditModal({ handleClose, handleShow, show, data }) {
   return (
     <>
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header
+          className={themeSwitcher ? "" : "bg-dark text-white"}
+          closeButton
+        >
           <Modal.Title>Editar Centro</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={themeSwitcher ? "" : "bg-dark text-white"}>
           <Form
             className="d-flex gap-4 flex-column justify-content-center align-content-center"
             onSubmit={handleSubmit(onSubmit)}

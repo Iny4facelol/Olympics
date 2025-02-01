@@ -8,11 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import React from "react";
 import { registerResponsibleSchema } from "../../../../utils/zodSchemas/registerSchema";
+import { useTranslation } from "react-i18next";
 
 export default function CreateResponsableForm() {
   const [authenticating, setAuthenticating] = useState(false);
   const [centerList, setCenterList] = useState([]);
   const navigate = useNavigate();
+  const {t} = useTranslation();
 
   useEffect(() => {
     const getData = async () => {
@@ -64,12 +66,12 @@ export default function CreateResponsableForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicName">
-            <Form.Label>Nombre del responsable*</Form.Label>
+            <Form.Label>{t("user.respName")}*</Form.Label>
             <Form.Control
               className={`custom-input ${errors.user_name ? "is-invalid" : ""}`}
               {...register("user_name")}
               type="text"
-              placeholder="Ej: Juan Pérez"
+              placeholder={t("user.respNamePlacerholder")}
             />
           </Form.Group>
           {errors.user_name && (
@@ -80,12 +82,12 @@ export default function CreateResponsableForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicEmail">
-            <Form.Label>Email</Form.Label>
+            <Form.Label>{t("user.respEmail")}*</Form.Label>
             <Form.Control
               className={`custom-input ${errors.user_name ? "is-invalid" : ""}`}
               {...register("user_email")}
               type="email"
-              placeholder="Ej: correoresponsable@email.com"
+              placeholder={t("user.respEmailPlaceholder")}
             />
           </Form.Group>
           {errors.user_email && (
@@ -98,12 +100,12 @@ export default function CreateResponsableForm() {
       <Row>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicCenter">
-            <Form.Label>Centro*</Form.Label>
+            <Form.Label>{t("user.respCenter")}*</Form.Label>
             <Form.Select
               className={errors.user_center_id ? "is-invalid" : ""}
               {...register("user_center_id")}
             >
-              <option value="">Selecciona un centro</option>
+              <option value="">{t("user.respSelectCenter")}</option>
               {centerList.map((center) => (
                 <option key={center.center_id} value={center.center_id}>
                   {center.center_name}
@@ -119,9 +121,8 @@ export default function CreateResponsableForm() {
         </Col>
       </Row>
       <div>
-        <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
-          {authenticating ? "Creando..." : "Crear responsable"}
+          {authenticating ? t("user.respCreating") : t("user.respButton")}
         </ButtonCustom>
       </div>
     </Form>

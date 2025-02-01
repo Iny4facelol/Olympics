@@ -4,8 +4,10 @@ import ButtonCustom from "../../../../core/components/Button/Button";
 import { toast, Toaster } from "sonner";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { useForm } from "react-hook-form";
+import { useAppContext } from "../../../../core/context/AppContext";
 
 export default function CenterOlympicsModal({ handleClose, show, data }) {
+  const { themeSwitcher } = useAppContext();
   const [authenticating, setAuthenticating] = useState(false);
   const [olympics, setOlympics] = useState([]);
 
@@ -97,10 +99,13 @@ export default function CenterOlympicsModal({ handleClose, show, data }) {
 
   return (
     <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
+      <Modal.Header
+        className={themeSwitcher ? "" : "bg-dark text-white"}
+        closeButton
+      >
         <Modal.Title>Añadir olimpiada a {data.center_name}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={themeSwitcher ? "" : "bg-dark text-white"}>
         <p className="fst-italic">
           Seleccione una olimpiada para asignar a este centro.
         </p>
@@ -149,9 +154,6 @@ export default function CenterOlympicsModal({ handleClose, show, data }) {
               </Form.Group>
             </Col>
           </Row>
-          <div
-            style={{ width: "100%", height: "1px", backgroundColor: "gray" }}
-          ></div>
           <div className="d-flex flex-column">
             <Toaster richColors position="top-center" />
             <div>

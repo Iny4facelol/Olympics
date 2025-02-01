@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import "./Section2.css";
 
 export default function Section2() {
   const { t } = useTranslation();
@@ -15,11 +16,11 @@ export default function Section2() {
           </h2>
         </Col>
       </Row>
-      <div className="d-flex gap-5 justify-content-between">
-        <article style={{ width: "45%" }}>
+      <div className="d-flex justify-content-between flex-column flex-xl-row text-container">
+        <article>
           <p className="pretty">{t("home.section2.text1")}</p>
         </article>
-        <article style={{ width: "45%" }}>
+        <article >
           <p>{t("home.section2.text2")}</p>
         </article>
       </div>

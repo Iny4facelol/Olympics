@@ -13,7 +13,6 @@
   }
 }
 
-
 .button-custom-dark {
   background-color: #2e2e2e;
   color: #fdfdfd;
@@ -44,13 +43,33 @@
   }
 }
 
+.button-custom-google-dark {
+  background-color: white;
+  color: white;
+  position: relative;
+  padding: 0.5rem 1rem;
+  border: 2px solid transparent;
+  border-radius: 20px; /* 🔹 Bordes redondeados */
+  background: linear-gradient(#2e2e2e, #2e2e2e) padding-box,
+    linear-gradient(90deg, #4285f4, #ea4335, #fbbc05, #34a853) border-box;
+  font-weight: bold;
+  box-shadow: 0 2px 4px #6b6a6a;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #4d4c4c;
+  }
+}
 
 .button-custom-google {
   background-color: white;
   color: #ee531e;
-  border-radius: 1rem;
-  border: none;
+  position: relative;
   padding: 0.5rem 1rem;
+  border: 2px solid transparent;
+  border-radius: 20px; /* 🔹 Bordes redondeados */
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(90deg, #4285f4, #ea4335, #fbbc05, #34a853) border-box;
   font-weight: bold;
   box-shadow: 0 2px 4px #6b6a6a;
   cursor: pointer;
@@ -70,8 +89,3 @@
     transform: scale(1.2);
   }
 }
-
-
-
-
-

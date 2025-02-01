@@ -13,6 +13,8 @@ body {
 }
 
 .theme-transition.header-user,
+.theme-transition-main-admin,
+.theme-transition.dashboard-header,
 .theme-transition.main-user {
   position: sticky;
   overflow: hidden;
@@ -33,6 +35,8 @@ body {
 }
 
 .header-user.theme-transition::before,
+.main-admin.theme-transition::before,
+.dashboard-header.theme-transition::before,
 .main-user.theme-transition::before {
   content: '';
   position: absolute;
