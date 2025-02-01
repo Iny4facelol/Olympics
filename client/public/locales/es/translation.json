@@ -139,9 +139,9 @@
     "createNewActivity": "Crear nueva actividad",
     "adminActivities": "Administrar Actividades"
   },
-  "olympics": {
-    "olympicsModalTitle": "Añadir actividades a",
-    "olympicsModalText": "Para eliminar las actividades asignadas a esta olimpiada, simplemente desmárquelas.",
+  "olympics" : {
+    "olympicsModalTitle" : "Añadir actividades a",
+    "olympicsModalText" : "Para eliminar las actividades asignadas a esta olimpiada, simplemente desmárquelas.",
     "activityName": "Nombre Actividad",
     "addButton": "Añadir",
     "addingButton": "Añadiendo...",

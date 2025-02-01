@@ -139,7 +139,11 @@ class UserController {
           });
         }
       }
-  
+      
+      // Volver a obtener los datos actualizados del usuario
+      user = await userDal.findUserByEmailGoogle(email);
+
+
       // Generar un token JWT para la sesión
       const token = jwt.sign(
         { user_id: user.user_id },
