@@ -552,30 +552,33 @@ class UserController {
   findUserByEmail = async (req, res) => {
     const parsedData = emailSchema.parse(req.body);
     const { user_email } = parsedData;
-    try {      
+  
+    try {
       const result = await userDal.getUserByEmail(user_email);
-      
+  
       if (result.length === 0) {
-        res.status(401).json({ emailError: "El email introducido no existe" });
-      } else {        
-        const token = jwt.sign(
-          { user_id: result[0].user_id },
-          process.env.TOKEN_KEY,
-          { expiresIn: "24h" }
-        );        
-        await emailService.sendResetPasswordEmail(parsedData, token);
+        return res.status(401).json({ emailError: "El email introducido no existe" });
       }
-      
+  
+      const token = jwt.sign(
+        { user_id: result[0].user_id },
+        process.env.TOKEN_KEY,
+        { expiresIn: "24h" }
+      );
+  
+      await emailService.sendResetPasswordEmail(parsedData, token);
+  
       return res.status(201).json({
         message: "Token creado",
         insertId: result[0].user_id
       });
+  
     } catch (error) {
       if (error instanceof z.ZodError) {
-        res.status(400).json({ error: error.errors });
-      } else {
-        res.status(500).json({ msg: "Error al hacer petición ", error });
+        return res.status(400).json({ error: error.errors });
       }
+  
+      return res.status(500).json({ msg: "Error al hacer petición ", error });
     }
   };
 }
