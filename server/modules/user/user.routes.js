@@ -33,6 +33,9 @@ router.put('/authUser/:user_id', userController.ResponsibleValidateDocument);
 router.put("/validateRegistrationUser/:validationToken" , userController.validateRegistrationUser)
 router.put('/upload-authorization/:user_id',multerFile("authorization"),userController.uploadAuthorizationFile);
 router.get("/authorization-file/:user_id", userController.getAuthorizationFile);
+//ruta para que el responsable pueda descargar la autorizacion firmada del alumno
+router.get('/authorization-file/responsible/:user_id', userController.getAuthorizationFileForResponsible);
+
   // Ruta de alumnos pendientes de validación
 router.get('/pendingValidationUsers/:user_center_id', userController.getPendingValidationUsers);
   // Ruta de perfil usuario no autorizado

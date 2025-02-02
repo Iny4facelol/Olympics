@@ -524,7 +524,7 @@ class UserController {
     }
   };
 
-    // Descargar la Validación
+    // Descargar la Validación del centro
 
   getAuthorizationFile = async (req, res) => {
     try {
@@ -547,6 +547,30 @@ class UserController {
       });
     }
     return;
+  };
+
+  // Descargar el documemnto de autorización firmado por el alumno/padre
+  getAuthorizationFileForResponsible = async (req, res) => {
+    try {
+      const student_user_id = req.params.user_id;
+  
+      const userFileName = await userDal.getAuthorizationFileFromDBForResponsible(student_user_id);
+  
+      if (!userFileName) {
+        return res.status(404).json({
+          message: "El archivo de autorización firmado no se encuentra",
+        });
+      }
+  
+      // Si el archivo existe, devuelve el nombre del archivo
+      res.status(200).json({ userFileName });
+    } catch (error) {
+      console.error("Error en getAuthorizationFileForResponsible:", error);
+      res.status(500).json({
+        message: "Error al procesar la solicitud.",
+        error: error.message,
+      });
+    }
   };
 
   findUserByEmail = async (req, res) => {
