@@ -5,6 +5,7 @@ import CreateOlympicsForm from "./components/CreateOlympicsForm";
 import { useTranslation } from "react-i18next";
 
 export default function CreateOlympics() {
+
   const { t} = useTranslation();
   return (
     <DashboardLayout>

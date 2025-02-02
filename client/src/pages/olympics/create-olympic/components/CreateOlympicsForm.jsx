@@ -14,8 +14,7 @@ export default function CreateOlympicsForm() {
   const {t} = useTranslation();
   const [authenticating, setAuthenticating] = useState(false);
   const navigate = useNavigate();
-
-
+  const { t } = useTranslation();
 
   const {
     register,
@@ -37,6 +36,7 @@ export default function CreateOlympicsForm() {
       olympics_description: "",
     },
   });
+
 
     const onSubmit = async (data) => {
       try {
@@ -67,6 +67,7 @@ export default function CreateOlympicsForm() {
               }`}
               {...register("olympics_name")}
               type="text"
+
               placeholder={t("olympics.olympicsNamePlaceholder")}
             />
           </Form.Group>
@@ -85,6 +86,7 @@ export default function CreateOlympicsForm() {
               }`}
               {...register("olympics_host_name")}
               type="text"
+
               placeholder={t("olympics.olympicsHostNamePlaceholder")}
             />
           </Form.Group>
@@ -105,6 +107,7 @@ export default function CreateOlympicsForm() {
               }`}
               {...register("olympics_host_city")}
               type="text"
+
               placeholder={t("olympics.olympicsHostCityPlaceholder")}
             />
           </Form.Group>
@@ -189,7 +192,6 @@ export default function CreateOlympicsForm() {
             )}
           </Col>
       </Row>
-
       <div className="mt-4">
         <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>

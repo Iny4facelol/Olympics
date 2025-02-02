@@ -140,6 +140,11 @@
     "adminActivities": "Administrar Actividades"
   },
   "olympics" : {
+    "olympicsTitle" : "Administrar Olimpiadas",
+    "createOlympicsTitle": "Crear nueva Olimpiada",
+    "olympicsAddText" : "Para añadir Actividades a las olimpiadas, pulse",
+    "olympicsEditText" : "Para editar una olimpiada, pulse",
+    "olympicsSubText" : "en la olimpiada correspondiente.",
     "olympicsModalTitle" : "Añadir actividades a",
     "olympicsModalText" : "Para eliminar las actividades asignadas a esta olimpiada, simplemente desmárquelas.",
     "activityName": "Nombre Actividad",
