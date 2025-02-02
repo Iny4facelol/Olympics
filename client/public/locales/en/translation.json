@@ -136,6 +136,11 @@
     "adminActivities": "Admin Activities"
   },
   "olympics" : {
+    "olympicsTitle" : "Manage Olympics",
+    "createOlympicsTitle": "Create new Olympics",
+    "olympicsAddText" : "To add activities to the olympics, click",
+    "olympicsEditText" : "To edit an olympics, click",
+    "olympicsSubText" : "on the corresponding olympics.",
     "olympicsModalTitle" : "Add activities to",
     "olympicsModalText" : "To remove the activities assigned to this olympics, simply uncheck them.",
     "activityName" : "Activity Name",
@@ -154,7 +159,10 @@
     "actions" : "Actions",
     "activityDescriptionNull" : "This activity has no description",
     "olympicsSuccessfullyDeleted" : "Olympics successfully deleted",
-    "olympicsSuccessfullyUpdated" : "Olympics successfully updated"
+    "olympicsSuccessfullyUpdated" : "Olympics successfully updated",
+    "olympicsSuccessfullyCreated" : "Olympics successfully created",
+    "createButton" : "Create Olympics",
+    "creatingButton" : "Creating..."
   },
   "centers": {
     "centerName": "Center Name",

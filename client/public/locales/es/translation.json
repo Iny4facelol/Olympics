@@ -126,6 +126,11 @@
     "check": " Autorización en revisión por el responsable de su centro"
   },  
   "olympics" : {
+    "olympicsTitle" : "Administrar Olimpiadas",
+    "createOlympicsTitle": "Crear nueva Olimpiada",
+    "olympicsAddText" : "Para añadir Actividades a las olimpiadas, pulse",
+    "olympicsEditText" : "Para editar una olimpiada, pulse",
+    "olympicsSubText" : "en la olimpiada correspondiente.",
     "olympicsModalTitle" : "Añadir actividades a",
     "olympicsModalText" : "Para eliminar las actividades asignadas a esta olimpiada, simplemente desmárquelas.",
     "activityName": "Nombre Actividad",
@@ -144,7 +149,10 @@
     "actions" : "Acciones",
     "activityDescriptionNull" : "Esta actividad no tiene descripción",
     "olympiadSuccessfullyDeleted" : "Olimpiada eliminada con éxito",
-    "olympiadSuccessfullyUpdated" : "Olimpiada actualizada con éxito"
+    "olympiadSuccessfullyUpdated" : "Olimpiada actualizada con éxito",
+    "olympiadSuccessfullyCreated" : "Olimpiada creada con éxito",
+    "createButton": "Crear Olimpiada",
+    "creatingButton": "Creando..."
   },
   "admin_dashboard": {
     "createNewCenter": "Crear nuevo centro",
