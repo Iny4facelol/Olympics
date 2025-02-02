@@ -7,8 +7,10 @@ import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { toast, Toaster } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { activitySchema } from "../../../../utils/zodSchemas/activitySchema";
+import { useTranslation } from "react-i18next";
 
 export default function CreateActivityForm() {
+    const {t} = useTranslation();
   const [file, setFile] = useState(null);
   const [authenticating, setAuthenticating] = useState(false);
   const navigate = useNavigate();
@@ -60,14 +62,14 @@ export default function CreateActivityForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicActivityName">
-            <Form.Label>Nombre de la Actividad*</Form.Label>
+            <Form.Label>{t("activities.activityName")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.activity_name ? "is-invalid" : ""
               }`}
               {...register("activity_name")}
               type="text"
-              placeholder="Nombre actividad"
+              placeholder={t("activities.activityNamePlaceholder")}
             />
           </Form.Group>
           {errors.activity_name && (
@@ -78,14 +80,14 @@ export default function CreateActivityForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicMaxParticipants">
-            <Form.Label>Número máximo de participantes*</Form.Label>
+            <Form.Label>{t("activities.activityMaxNumberParts")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.max_participants ? "is-invalid" : ""
               }`}
               {...register("max_participants", { valueAsNumber: true })}
               type="number"
-              placeholder="Número máximo de participantes"
+              placeholder={t("activities.activityNumberPartsPlaceholder")}
             />
           </Form.Group>
           {errors.max_participants && (
@@ -98,7 +100,7 @@ export default function CreateActivityForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicActivityImage">
-            <Form.Label>Imagen de la actividad*</Form.Label>
+            <Form.Label>{t("activities.activityImage")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.activity_image ? "is-invalid" : ""
@@ -120,15 +122,14 @@ export default function CreateActivityForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicActivityDescription">
-            <Form.Label>Descripción de la actividad</Form.Label>
+            <Form.Label>{t("activities.activityDesc")}</Form.Label>
             <Form.Control
-              as={"textarea"}
               className={`custom-input ${
                 errors.activity_description ? "is-invalid" : ""
               }`}
               {...register("activity_description")}
               type="text"
-              placeholder="Descripción actividad"
+              placeholder={t("activities.activityDescPlacerholder")}
             />
           </Form.Group>
           {errors.activity_description && (
@@ -142,7 +143,9 @@ export default function CreateActivityForm() {
       <div className="mt-4">
         <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
-          {authenticating ? "Creando..." : "Crear Actividad"}
+          {authenticating
+            ? t("activities.activityCreating")
+            : t("activities.activityButton")}
         </ButtonCustom>
       </div>
     </Form>

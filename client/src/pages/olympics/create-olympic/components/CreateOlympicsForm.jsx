@@ -11,6 +11,7 @@ import { olympicsSchema } from "../../../../utils/zodSchemas/olympicsSchema";
 import { useTranslation } from "react-i18next";
 
 export default function CreateOlympicsForm() {
+  const {t} = useTranslation();
   const [authenticating, setAuthenticating] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -36,19 +37,20 @@ export default function CreateOlympicsForm() {
     },
   });
 
-  const onSubmit = async (data) => {
-    try {
-      setAuthenticating(true);
-      await fetchData(`api/admin/addOlympics`, "post", data);
-      toast.success(t("olympics.createSuccess"));
-      setTimeout(() => {
-        setAuthenticating(false);
-        navigate("/admin/dashboard");
-      }, 2000);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
+    const onSubmit = async (data) => {
+      try {
+        setAuthenticating(true);
+        await fetchData(`api/admin/addOlympics`, "post", data);
+        toast.success(t("olympics.toastMessage"));
+        setTimeout(() => {
+          setAuthenticating(false);
+          navigate("/admin/dashboard");
+        }, 2000);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
   return (
     <Form
@@ -65,7 +67,8 @@ export default function CreateOlympicsForm() {
               }`}
               {...register("olympics_name")}
               type="text"
-              placeholder={t("olympics.olympicsName")}
+
+              placeholder={t("olympics.olympicsNamePlaceholder")}
             />
           </Form.Group>
           {errors.olympics_name && (
@@ -83,7 +86,8 @@ export default function CreateOlympicsForm() {
               }`}
               {...register("olympics_host_name")}
               type="text"
-              placeholder={t("olympics.olympicsHostName")}
+
+              placeholder={t("olympics.olympicsHostNamePlaceholder")}
             />
           </Form.Group>
           {errors.olympics_host_name && (
@@ -103,7 +107,8 @@ export default function CreateOlympicsForm() {
               }`}
               {...register("olympics_host_city")}
               type="text"
-              placeholder={t("olympics.olympicsHostCity")}
+
+              placeholder={t("olympics.olympicsHostCityPlaceholder")}
             />
           </Form.Group>
           {errors.olympics_host_city && (
@@ -121,7 +126,7 @@ export default function CreateOlympicsForm() {
               }`}
               {...register("olympics_host_address")}
               type="text"
-              placeholder={t("olympics.olympicsAddress")}
+              placeholder={t("olympics.olympicsAddressPlaceholder")}
             />
           </Form.Group>
           {errors.olympics_host_address && (
@@ -168,30 +173,29 @@ export default function CreateOlympicsForm() {
         </Col>
       </Row>
       <Row>
-        <Col md={6} sm={12}>
-          <Form.Group controlId="formBasicOlympicsDesc">
-            <Form.Label>{t("olympics.olympicsDescription")}</Form.Label>
-            <Form.Control
-              className={`custom-input ${
-                errors.olympics_description ? "is-invalid" : ""
-              }`}
-              {...register("olympics_description")}
-              type="text"
-              placeholder={t("olympics.olympicsDescription")}
-            />
-          </Form.Group>
-          {errors.olympics_description && (
-            <Form.Text className="text-danger">
-              {errors.olympics_description.message}
-            </Form.Text>
-          )}
-        </Col>
+          <Col md={6} sm={12}>
+            <Form.Group controlId="formBasicOlympicsDesc">
+              <Form.Label>{t("olympics.olympicsDescription")}</Form.Label>
+              <Form.Control
+                className={`custom-input ${
+                  errors.olympics_description ? "is-invalid" : ""
+                }`}
+                {...register("olympics_description")}
+                type="text"
+                placeholder={t("olympics.olympicsDescriptionPlaceholder")}
+              />
+            </Form.Group>
+            {errors.olympics_description && (
+              <Form.Text className="text-danger">
+                {errors.olympics_description.message}
+              </Form.Text>
+            )}
+          </Col>
       </Row>
-
       <div className="mt-4">
         <Toaster richColors position="top-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
-          {authenticating ? t("olympics.creatingButton") : t("olympics.createButton")}
+          {authenticating ? t("olympics.olympicsCreating") : t("olympics.olympicsButton")}
         </ButtonCustom>
       </div>
     </Form>

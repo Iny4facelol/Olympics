@@ -6,18 +6,18 @@ import { CirclePlus, SquarePen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export default function AdminOlympics() {
-  const { t } = useTranslation();
+  const {t} = useTranslation()
   return (
     <DashboardLayout>
       <Container className="d-flex flex-column gap-3">
-        <h2 className="fs-1">{t("olympics.olympicsTitle")}</h2>
+        <h2 className="fs-1">{t("admin_dashboard.adminOlympics")}</h2>
         <p className="mb-2">
-          {t("olympics.olympicsAddText")} <CirclePlus color="green" />{" "}
-          {t("olympics.olympicsSubText")}
+          {t("olympics.olympicsText1")}{" "}
+          <CirclePlus color="green" /> {t("olympics.olympicsText2")}
         </p>
         <p>
-          {t("olympics.olympicsEditText")} <SquarePen color="#0d6efd" />{" "}
-          {t("olympics.olympicsSubText")}
+          {t("olympics.olympicsText3")}{" "}
+          <SquarePen color="#0d6efd" /> {t("olympics.olympicsText4")}
         </p>
         <OlympicsList />
       </Container>

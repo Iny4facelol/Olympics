@@ -105,7 +105,6 @@ export default function ResetPasswordForm() {
         </Col>
       </Row>
       <div>
-        <Toaster richColors position="bottom-center" />
         <ButtonCustom type={"submit"} bgColor={"orange"}>
           {authenticating ? "Guardando cambios..." : "Cambiar contraseña"}
         </ButtonCustom>

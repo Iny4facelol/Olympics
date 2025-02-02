@@ -30,7 +30,7 @@ export default function LanguageSwitcher() {
         </ButtonCustom>
       </Dropdown.Toggle>
 
-      <Dropdown.Menu className="rounded-4 bg-transparent border-0">
+      <Dropdown.Menu className="rounded-4 bg-transparent border-0 dropdown-menu-custom">
         {languages.map((lang) => (
           <Dropdown.Item
             style={{ width: "max-content" }}

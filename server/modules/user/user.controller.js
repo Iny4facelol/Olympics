@@ -139,7 +139,11 @@ class UserController {
           });
         }
       }
-  
+      
+      // Volver a obtener los datos actualizados del usuario
+      user = await userDal.findUserByEmailGoogle(email);
+
+
       // Generar un token JWT para la sesión
       const token = jwt.sign(
         { user_id: user.user_id },
@@ -518,10 +522,9 @@ class UserController {
         error: error.message,
       });
     }
-    return;
   };
 
-    // Descargar la Validación
+    // Descargar la Validación del centro
 
   getAuthorizationFile = async (req, res) => {
     try {
@@ -546,33 +549,60 @@ class UserController {
     return;
   };
 
+  // Descargar el documemnto de autorización firmado por el alumno/padre
+  getAuthorizationFileForResponsible = async (req, res) => {
+    try {
+      const student_user_id = req.params.user_id;
+  
+      const userFileName = await userDal.getAuthorizationFileFromDBForResponsible(student_user_id);
+  
+      if (!userFileName) {
+        return res.status(404).json({
+          message: "El archivo de autorización firmado no se encuentra",
+        });
+      }
+  
+      // Si el archivo existe, devuelve el nombre del archivo
+      res.status(200).json({ userFileName });
+    } catch (error) {
+      console.error("Error en getAuthorizationFileForResponsible:", error);
+      res.status(500).json({
+        message: "Error al procesar la solicitud.",
+        error: error.message,
+      });
+    }
+  };
+
   findUserByEmail = async (req, res) => {
     const parsedData = emailSchema.parse(req.body);
     const { user_email } = parsedData;
-    try {      
+  
+    try {
       const result = await userDal.getUserByEmail(user_email);
-      
+  
       if (result.length === 0) {
-        res.status(401).json({ emailError: "El email introducido no existe" });
-      } else {        
-        const token = jwt.sign(
-          { user_id: result[0].user_id },
-          process.env.TOKEN_KEY,
-          { expiresIn: "24h" }
-        );        
-        await emailService.sendResetPasswordEmail(parsedData, token);
+        return res.status(401).json({ emailError: "El email introducido no existe" });
       }
-      
+  
+      const token = jwt.sign(
+        { user_id: result[0].user_id },
+        process.env.TOKEN_KEY,
+        { expiresIn: "24h" }
+      );
+  
+      await emailService.sendResetPasswordEmail(parsedData, token);
+  
       return res.status(201).json({
         message: "Token creado",
         insertId: result[0].user_id
       });
+  
     } catch (error) {
       if (error instanceof z.ZodError) {
-        res.status(400).json({ error: error.errors });
-      } else {
-        res.status(500).json({ msg: "Error al hacer petición ", error });
+        return res.status(400).json({ error: error.errors });
       }
+  
+      return res.status(500).json({ msg: "Error al hacer petición ", error });
     }
   };
 }

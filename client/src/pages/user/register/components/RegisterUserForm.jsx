@@ -318,8 +318,6 @@ export default function RegisterUserForm() {
         </Col>
       </Row>
       <div>
-        {/* Componente de notificaciones.: Toaster */}
-        <Toaster richColors position="bottom-center" />
         {/* Nuestro botton custom le podemos pasar las props 
         para reutilizarlo en este caso es type submit */}
         <ButtonCustom type={"submit"} bgColor={"orange"}>

@@ -3,10 +3,21 @@ import ButtonCustom from "./Button/Button";
 import { fetchData } from "../../utils/axios/axiosHelper";
 import { useState } from "react";
 import { toast, Toaster } from "sonner";
+import { useAppContext } from "../context/AppContext";
+import { useTranslation } from "react-i18next";
 
-function DeleteModal({ show, handleClose, handleShow, data, deleteMessage , apiEndpoint }) {
+function DeleteModal({
+  show,
+  handleClose,
+  handleShow,
+  data,
+  deleteMessage,
+  apiEndpoint,
+}) {
+  const { themeSwitcher } = useAppContext();
+  const { t } = useTranslation();
   const [authenticating, setAuthenticating] = useState(false);
-  
+
   const handleDelete = async () => {
     try {
       setAuthenticating(true);
@@ -19,7 +30,7 @@ function DeleteModal({ show, handleClose, handleShow, data, deleteMessage , apiE
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <>
@@ -29,16 +40,31 @@ function DeleteModal({ show, handleClose, handleShow, data, deleteMessage , apiE
         backdrop="static"
         keyboard={false}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>¿Deseas continuar con la eliminación?</Modal.Title>
+        <Modal.Header
+          className={themeSwitcher ? "" : "bg-dark text-white"}
+          closeButton
+        >
+          <Modal.Title>{t("deleteModal.deleteModalTitle")}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-            <p className="fs-5 fw-bold m-0">Esta acción es irreversible, asegúrate bien antes de proceder a la eliminación. </p>
+        <Modal.Body className={themeSwitcher ? "" : "bg-dark text-white"}>
+          <p className="fs-5 fw-bold m-0">
+            {t("deleteModal.deleteModalText")}{" "}
+          </p>
         </Modal.Body>
-        <Modal.Footer className="d-flex justify-content-start">
+        <Modal.Footer
+          className={
+            themeSwitcher
+              ? "d-flex justify-content-start"
+              : " d-flex justify-content-start bg-dark text-white"
+          }
+        >
           <Toaster richColors position="top-center" />
-          <ButtonCustom onClick={handleDelete} bgColor={"orange"}>{authenticating ? "Borrando..." : "Aceptar"}</ButtonCustom>
-          <ButtonCustom onClick={handleClose} bgColor={"orange"}>Cancelar</ButtonCustom>
+          <ButtonCustom onClick={handleDelete} bgColor={"orange"}>
+            {authenticating ? t("deleteModal.deletingButton") : t("deleteModal.deleteButton")}
+          </ButtonCustom>
+          <ButtonCustom onClick={handleClose} bgColor={"orange"}>
+           {t("deleteModal.cancelButton")}
+          </ButtonCustom>
         </Modal.Footer>
       </Modal>
     </>
