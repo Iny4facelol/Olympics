@@ -11,7 +11,6 @@ import { olympicsSchema } from "../../../../utils/zodSchemas/olympicsSchema";
 import { useTranslation } from "react-i18next";
 
 export default function CreateOlympicsForm() {
-  const {t} = useTranslation();
   const [authenticating, setAuthenticating] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();

@@ -7,6 +7,7 @@ import "./AuthUsersList.css";
 import DeleteModal from "../../../../core/components/DeleteModal";
 import AuthModal from "./AuthModal";
 import DenyModal from "./DenyModal";
+import { useTranslation } from "react-i18next";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_DOC_URL;
 
@@ -17,6 +18,7 @@ export default function AuthUsersList() {
   const [show, setShow] = useState(false);
   const [showDeny, setShowDeny] = useState(false);
   const [downloadFile, setDownloadFile] = useState(null);
+  const { t } = useTranslation();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -85,9 +87,9 @@ export default function AuthUsersList() {
       >
         <thead>
           <tr>
-            <th>Acciones</th>
-            <th>Nombre Alumno</th>
-            <th>Autorización</th>
+            <th>{t("responsible.actions")}</th>
+            <th>{t("responsible.studentName")}</th>
+            <th>{t("responsible.authorization")}</th>
           </tr>
         </thead>
         <tbody>
@@ -111,12 +113,12 @@ export default function AuthUsersList() {
                 {user.user_name} {user.user_lastname}
               </td>
               <td className="col-permission-file">
-              {user.user_permission_file ? (
+                {user.user_permission_file ? (
                   <button
                     onClick={() => handleDownload(user.user_id)}
                     className="btn btn-link text-primary"
                   >
-                    Descargar autorización
+                    {t("responsible.downloadAuthorization")}
                   </button>
                 ) : (
                   "No disponible"

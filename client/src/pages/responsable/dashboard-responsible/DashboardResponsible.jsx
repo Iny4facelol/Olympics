@@ -5,11 +5,13 @@ import { useAppContext } from "../../../core/context/AppContext";
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
 import ResponsibleEditModal from "./components/ResponsibleEditModal";
+import { useTranslation } from "react-i18next";
 
 export default function ResponsibleDashboard() {
   const { user } = useAppContext();
   const [show, setShow] = useState(false);
   const [responsibleEditData, setResponsibleEditData] = useState({});
+  const { t } = useTranslation();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -26,7 +28,7 @@ export default function ResponsibleDashboard() {
         <div className="d-flex flex-column gap-5">
           <Row>
             <h2 className="fs-1">
-              Te damos la bienvenida,{" "}
+              {t("responsible.dashRespTitle")}{" "}
               <span style={{ fontWeight: "bold" }} className="custom-span">
                 {user.user_name}
               </span>{" "}
@@ -42,7 +44,8 @@ export default function ResponsibleDashboard() {
                   className="link-hover"
                   onClick={() => handleEdit(user.user_id)}
                 >
-                  Editar datos personales <MoveRight color="#ee531e" />
+                  {t("responsible.dashRespEdit")}
+                  <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
@@ -55,7 +58,8 @@ export default function ResponsibleDashboard() {
                   className="link-hover"
                   to={"/user/res_dashboard/addActivitiesToUser"}
                 >
-                  Asignar Alumnos a Actividades <MoveRight color="#ee531e" />
+                  {t("responsible.assignActivity")}
+                  <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>
@@ -68,7 +72,8 @@ export default function ResponsibleDashboard() {
                   className="link-hover"
                   to={"/user/res_dashboard/authUser"}
                 >
-                  Validar Autorizaciones Alumnos <MoveRight color="#ee531e" />
+                  {t("responsible.validateAuth")}
+                  <MoveRight color="#ee531e" />
                 </Link>
               </p>
             </Col>

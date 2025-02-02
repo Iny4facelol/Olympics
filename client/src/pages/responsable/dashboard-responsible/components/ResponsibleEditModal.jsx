@@ -8,12 +8,14 @@ import ButtonCustom from "../../../../core/components/Button/Button";
 import { useEffect, useState } from "react";
 import { fetchData } from "../../../../utils/axios/axiosHelper";
 import { useAppContext } from "../../../../core/context/AppContext";
+import { useTranslation } from "react-i18next";
 
 function ResponsibleEditModal({ handleClose, show, data }) {
   const { user, themeSwitcher } = useAppContext();
   const [authenticating, setAuthenticating] = useState(false);
   const [centerList, setCenterList] = useState([]);
   const editUser = { ...user };
+  const { t } = useTranslation();
 
   const {
     register,
@@ -64,7 +66,7 @@ function ResponsibleEditModal({ handleClose, show, data }) {
     try {
       setAuthenticating(true);
       await fetchData(`api/user/editResponsible/${data}`, "put", formData);
-      toast.success("Usuario actualizado correctamente");
+      toast.success(t("responsible.toastEditMessage"));
       setTimeout(() => {
         setAuthenticating(false);
         handleClose();
@@ -81,7 +83,7 @@ function ResponsibleEditModal({ handleClose, show, data }) {
           className={themeSwitcher ? "" : "bg-dark text-white"}
           closeButton
         >
-          <Modal.Title>Editar Usuario</Modal.Title>
+          <Modal.Title>{t("responsible.modalEditTittle")}</Modal.Title>
         </Modal.Header>
         <Modal.Body className={themeSwitcher ? "" : "bg-dark text-white"}>
           <Form
@@ -91,14 +93,14 @@ function ResponsibleEditModal({ handleClose, show, data }) {
             <Row className="row-gap-4">
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicUserName">
-                  <Form.Label>Nombre*</Form.Label>
+                  <Form.Label>{t("responsible.name")}*</Form.Label>
                   <Form.Control
                     className={`custom-input ${
                       errors.user_name ? "is-invalid" : ""
                     }`}
                     {...register("user_name")}
                     type="text"
-                    placeholder="Nombre"
+                    placeholder={t("responsible.name")}
                   />
                 </Form.Group>
                 {errors.user_name && (
@@ -109,14 +111,14 @@ function ResponsibleEditModal({ handleClose, show, data }) {
               </Col>
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicUserLastname">
-                  <Form.Label>Apellidos*</Form.Label>
+                  <Form.Label>{t("responsible.lastname")}*</Form.Label>
                   <Form.Control
                     className={`custom-input ${
                       errors.user_lastname ? "is-invalid" : ""
                     }`}
                     {...register("user_lastname")}
                     type="text"
-                    placeholder="Apellidos"
+                    placeholder={t("responsible.lastname")}
                   />
                 </Form.Group>
                 {errors.user_lastname && (
@@ -129,12 +131,12 @@ function ResponsibleEditModal({ handleClose, show, data }) {
             <Row className="row-gap-4">
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicDNI">
-                  <Form.Label>DNI*</Form.Label>
+                  <Form.Label>{t("responsible.respDni")}*</Form.Label>
                   <Form.Control
                     className={errors.user_dni ? "is-invalid" : ""}
                     {...register("user_dni")}
                     type="text"
-                    placeholder="DNI"
+                    placeholder={t("responsible.respDniPlaceholder")}
                   />
                   {errors.user_dni && (
                     <Form.Text className="text-danger">
@@ -145,12 +147,12 @@ function ResponsibleEditModal({ handleClose, show, data }) {
               </Col>
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicCity">
-                  <Form.Label>Localidad*</Form.Label>
+                  <Form.Label>{t("responsible.city")}*</Form.Label>
                   <Form.Control
                     className={errors.user_city ? "is-invalid" : ""}
                     {...register("user_city")}
                     type="text"
-                    placeholder="Nombre de la localidad"
+                    placeholder={t("responsible.city")}
                   />
                   {errors.user_city && (
                     <Form.Text className="text-danger">
@@ -163,12 +165,12 @@ function ResponsibleEditModal({ handleClose, show, data }) {
             <Row className="row-gap-4">
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicPhone">
-                  <Form.Label>Nº de Teléfono*</Form.Label>
+                  <Form.Label>{t("responsible.respPhone")}*</Form.Label>
                   <Form.Control
                     className={errors.user_phone ? "is-invalid" : ""}
                     {...register("user_phone")}
                     type="text"
-                    placeholder="Número de teléfono"
+                    placeholder={t("responsible.respPhonePlaceholder")}
                   />
                   {errors.user_phone && (
                     <Form.Text className="text-danger">
@@ -179,12 +181,12 @@ function ResponsibleEditModal({ handleClose, show, data }) {
               </Col>
               <Col md={6} sm={12}>
                 <Form.Group controlId="formBasicCenter">
-                  <Form.Label>Centro*</Form.Label>
+                  <Form.Label>{t("responsible.center")}*</Form.Label>
                   <Form.Select
                     className={errors.user_center_id ? "is-invalid" : ""}
                     {...register("user_center_id")}
                   >
-                    <option value="">Selecciona un centro</option>
+                    <option value="">{t("responsible.selectCenter")}</option>
                     {centerList.map((center) => (
                       <option key={center.center_id} value={center.center_id}>
                         {center.center_name}
@@ -202,7 +204,7 @@ function ResponsibleEditModal({ handleClose, show, data }) {
             <div>
               <Toaster richColors position="top-center" />
               <ButtonCustom type={"submit"} bgColor={"orange"}>
-                {authenticating ? "Actualizando..." : "Actualizar Usuario"}
+                {authenticating ? t("responsible.updatingButton") : t("responsible.updateButton")}
               </ButtonCustom>
             </div>
           </Form>
