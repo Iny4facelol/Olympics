@@ -8,19 +8,21 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import React from "react";
 import { completeRegisterResponsibleSchema } from "../../../../utils/zodSchemas/registerSchema";
+import { useTranslation } from "react-i18next";
 
 export default function CompleteResponsableForm() {
   const [authenticating, setAuthenticating] = useState(false);
   const [userId, setUserId] = useState(null);
   const params = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const token = params.registerToken;
     if (token) {
       verifyToken(token);
     }
-  }, [])
+  }, []);
 
   const verifyToken = async (token) => {
     try {
@@ -34,8 +36,7 @@ export default function CompleteResponsableForm() {
     } catch (error) {
       console.error(error);
     }
-  }
-
+  };
 
   const {
     register,
@@ -58,13 +59,13 @@ export default function CompleteResponsableForm() {
     try {
       setAuthenticating(true);
       await fetchData(`api/user/completeResponsible/${userId}`, "put", data);
-      toast.success("Responsable creado correctamente");
+      toast.success(t("responsible.respToastMessage"));
       setTimeout(() => {
         setAuthenticating(false);
         navigate("/user/login");
       }, 2000);
     } catch (error) {
-      toast.error("Ha ocurrido un error");
+      toast.error(t("responsible.respToastMessageError"));
       console.error(error);
     }
   };
@@ -77,12 +78,12 @@ export default function CompleteResponsableForm() {
       <Row className="row-gap-4">
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicName">
-            <Form.Label>Nombre del responsable*</Form.Label>
+            <Form.Label>{t("responsible.respName")}*</Form.Label>
             <Form.Control
               className={`custom-input ${errors.user_name ? "is-invalid" : ""}`}
               {...register("user_name")}
               type="text"
-              placeholder="Ej: Juan"
+              placeholder={t("responsible.respNamePlacerholder")}
             />
           </Form.Group>
           {errors.user_name && (
@@ -93,14 +94,14 @@ export default function CompleteResponsableForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicUserLastname">
-            <Form.Label>Apellidos*</Form.Label>
+            <Form.Label>{t("responsible.respLastname")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.user_lastname ? "is-invalid" : ""
               }`}
               {...register("user_lastname")}
               type="text"
-              placeholder="Ej: Pérez Gómez"
+              placeholder={t("responsible.respLastnamePlacerholder")}
             />
           </Form.Group>
           {errors.user_lastname && (
@@ -113,14 +114,14 @@ export default function CompleteResponsableForm() {
       <Row>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicPhone">
-            <Form.Label>Teléfono*</Form.Label>
+            <Form.Label>{t("responsible.respPhone")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.user_phone ? "is-invalid" : ""
               }`}
               {...register("user_phone")}
               type="text"
-              placeholder="Ej: 666555432"
+              placeholder={t("responsible.respPhonePlaceholder")}
             />
           </Form.Group>
           {errors.user_phone && (
@@ -131,12 +132,12 @@ export default function CompleteResponsableForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicDni">
-            <Form.Label>DNI*</Form.Label>
+            <Form.Label>{t("responsible.respDni")}*</Form.Label>
             <Form.Control
               className={`custom-input ${errors.user_dni ? "is-invalid" : ""}`}
               {...register("user_dni")}
               type="text"
-              placeholder="Ej: 12345678A"
+              placeholder={t("responsible.respDniPlaceholder")}
             />
           </Form.Group>
           {errors.user_dni && (
@@ -149,14 +150,14 @@ export default function CompleteResponsableForm() {
       <Row>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicPassword">
-            <Form.Label>Contraseña*</Form.Label>
+            <Form.Label>{t("responsible.respPassword")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.user_password ? "is-invalid" : ""
               }`}
               {...register("user_password")}
               type="password"
-              placeholder="Contraseña"
+              placeholder={t("responsible.respPasswordPlaceholder")}
             />
           </Form.Group>
           {errors.user_password && (
@@ -167,14 +168,14 @@ export default function CompleteResponsableForm() {
         </Col>
         <Col md={6} sm={12}>
           <Form.Group controlId="formBasicConfirmPassword">
-            <Form.Label>Confirmar contraseña*</Form.Label>
+            <Form.Label>{t("responsible.respConfirmPassword")}*</Form.Label>
             <Form.Control
               className={`custom-input ${
                 errors.user_confirm_password ? "is-invalid" : ""
               }`}
               {...register("user_confirm_password")}
               type="password"
-              placeholder="Confirmar contraseña"
+              placeholder={t("responsible.respConfirmPasswordPlacerholder")}
             />
           </Form.Group>
           {errors.user_confirm_password && (
@@ -186,7 +187,7 @@ export default function CompleteResponsableForm() {
       </Row>
       <div>
         <ButtonCustom type={"submit"} bgColor={"orange"}>
-          {authenticating ? "Completando..." : "Completar registro"}
+          {authenticating ? t("responsible.respButtonCreating") : t("responsible.respButton")}
         </ButtonCustom>
       </div>
     </Form>
