@@ -373,6 +373,25 @@ class UserDal {
     }
   };
 
+  // Descargar la autorización firmada por el alumno
+  getAuthorizationFileFromDBForResponsible = async ( student_user_id) => {
+    try {
+      const sql = `
+        SELECT u.user_permission_file
+        FROM user u
+        WHERE u.user_id = ? AND u.user_is_deleted = 0;
+      `;
+      const result = await executeQuery(sql, [student_user_id]);
+
+      if (result && result.length > 0) {
+        return result[0].user_permission_file; // Devuelve el nombre del archivo
+      }
+      return null; // Si no se encuentra el archivo
+    } catch (error) {
+      throw error;
+    }
+};
+
   // Actualizar Estado de Autorización
 
   updateAuthorizationPath = async (user_id, filePath) => {
