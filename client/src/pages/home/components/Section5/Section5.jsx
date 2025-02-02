@@ -78,7 +78,7 @@ export default function Section5() {
                 }`}
                 {...register("user_name")}
                 type="text"
-                placeholder="Ej: Jorge"
+                placeholder={t("home.section5.namePlaceholder")}
               />
             </Form.Group>
             {errors.user_name && (
@@ -96,7 +96,7 @@ export default function Section5() {
                 }`}
                 {...register("user_email")}
                 type="email"
-                placeholder="Ej: jorge@email.com"
+                placeholder={t("home.section5.emailPlaceholder")}
               />
               {errors.user_email && (
                 <Form.Text className="text-danger">
