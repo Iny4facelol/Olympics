@@ -1,4 +1,4 @@
-import { z } from "../../../server/node_modules/zod";
+import {z} from 'zod';
 
 export const completeCenterSchema = z.object({
   center_city: z.string().min(3, "Debe tener al mínimo 3 carácteres"),
@@ -18,5 +18,5 @@ export const editCenterSchema = z.object({
   center_city: z.string().min(3, "Debe tener al mínimo 3 carácteres"),
   center_province: z.string().min(3, "Debe tener al mínimo 3 carácteres"),
   center_address: z.string().min(5, "Debe tener al mínimo 5 carácteres"),
-  center_phone: z.string().min(9, "Debe tener al mínimo 9 números"),
-});
+  center_phone: z.string().min(9, "Debe tener al mínimo 9 números")
+})
