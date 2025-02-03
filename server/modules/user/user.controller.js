@@ -15,6 +15,7 @@ import {
 } from "../../utils/zodSchemas/userSchema.js";
 
 import admin from "firebase-admin";
+import { loginSchema } from "../../utils/zodSchemas/loginSchema.js";
 
 class UserController {
   // 1º Apartado de Usuarios
