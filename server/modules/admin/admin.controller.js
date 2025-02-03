@@ -10,7 +10,7 @@ import {
   registerResponsibleSchema,
 } from "../../utils/zodSchemas/userSchema.js";
 import { olympicsSchema } from "../../utils/zodSchemas/olympicsSchema.js";
-import { z } from "../../../server/node_modules/zod";
+import { z } from "zod";
 import {
   createCenterSchema,
   editCenterSchema,
@@ -18,7 +18,7 @@ import {
 
 class AdminController {
   // 1º Apartado de Olimpiadas
-    // Añadir Olimpiada
+  // Añadir Olimpiada
 
   addOlympics = async (req, res) => {
     const parsedData = olympicsSchema.parse(req.body);
@@ -38,7 +38,7 @@ class AdminController {
     }
   };
 
-    // Ver todas las Olimpiadas
+  // Ver todas las Olimpiadas
 
   allOlympics = async (req, res) => {
     try {
@@ -50,7 +50,7 @@ class AdminController {
     }
   };
 
-    // Editar Olimpiada
+  // Editar Olimpiada
 
   editOlympics = async (req, res) => {
     const parsedData = olympicsSchema.parse(req.body);
@@ -68,7 +68,7 @@ class AdminController {
     }
   };
 
-    //borrado logico de olimpiadas
+  //borrado logico de olimpiadas
   logicalDeleteOlympics = async (req, res) => {
     const { olympics_id } = req.params;
     console.log("ID de la olimpiada recibido:", olympics_id);
@@ -81,23 +81,30 @@ class AdminController {
     }
   };
 
-    // Ver Actividades de una Olimpiada
+  // Ver Actividades de una Olimpiada
 
-    getOlympicsWithActivity = async (req, res) => {
-      const { olympics_id } = req.params;
-    
-      try {
-        const results = await adminDal.getOlympicsWithActivity(olympics_id);
-    
-        if (results.length > 0) {
-          res.status(200).json({message: "Olimpiada y actividades obtenidas correctamente",data: results,});
-        }
-      } catch (error) {
-        res.status(500).json({
-          message: "Error al obtener la olimpiada y actividades",error: error.message,});
+  getOlympicsWithActivity = async (req, res) => {
+    const { olympics_id } = req.params;
+
+    try {
+      const results = await adminDal.getOlympicsWithActivity(olympics_id);
+
+      if (results.length > 0) {
+        res
+          .status(200)
+          .json({
+            message: "Olimpiada y actividades obtenidas correctamente",
+            data: results,
+          });
       }
-    };
-  
+    } catch (error) {
+      res.status(500).json({
+        message: "Error al obtener la olimpiada y actividades",
+        error: error.message,
+      });
+    }
+  };
+
   // 2º Apartado de Centro
   // Añadir un Centro
 
@@ -123,7 +130,9 @@ class AdminController {
         res.status(400).json({ error: error.errors });
       } else {
         console.error(error);
-        return res.status(500).json({ message: "El email ya está asociado a un centro" });
+        return res
+          .status(500)
+          .json({ message: "El email ya está asociado a un centro" });
       }
     }
   };
@@ -135,9 +144,12 @@ class AdminController {
       const { authorization } = req.headers;
       const userType = getUserTypeAndValidateToken(authorization);
 
-
-      if(userType !== 1){
-        return res.status(401).json({message: "No tienes permisos para acceder a esta información"})
+      if (userType !== 1) {
+        return res
+          .status(401)
+          .json({
+            message: "No tienes permisos para acceder a esta información",
+          });
       }
 
       const centers = await adminDal.getAllCenters();
@@ -160,7 +172,7 @@ class AdminController {
       }
       console.log(data);
       const parsedData = editCenterSchema.parse(data);
-      
+
       const result = await adminDal.editCenter(parsedData, file);
       res.status(200).json(result);
     } catch (error) {
@@ -306,16 +318,16 @@ class AdminController {
     try {
       // Lista de claves permitidas para los filtros
       const allowedKeys = [
-        'center_name',
-        'user_type',
-        'user_name',
-        'user_lastname',
-        'user_city',
-        'user_phone',
-        'user_email',
-        'user_center_id'
+        "center_name",
+        "user_type",
+        "user_name",
+        "user_lastname",
+        "user_city",
+        "user_phone",
+        "user_email",
+        "user_center_id",
       ];
-  
+
       // Creamos un objeto filtro a partir de los parámetros de la consulta
       const filter = {};
       Object.keys(req.query).forEach((key) => {
@@ -323,16 +335,16 @@ class AdminController {
           filter[key] = req.query[key]; // Añadimos el filtro si la clave es válida
         }
       });
-  
+
       // Llamamos al DAL para obtener los datos
       const users = await adminDal.searchUsers(filter);
-  
+
       // Respondemos con los datos obtenidos
       res.status(200).json(users);
     } catch (error) {
-      console.error('Error en searchUsers:', error);
+      console.error("Error en searchUsers:", error);
       res.status(500).json({
-        message: 'Error al buscar usuarios',
+        message: "Error al buscar usuarios",
         error: error.message,
       });
     }
@@ -341,19 +353,18 @@ class AdminController {
   // Formulario de contacto
 
   contactUs = async (req, res) => {
-    const parsedData = contactSchema.parse(req.body)
+    const parsedData = contactSchema.parse(req.body);
     try {
       await emailService.sendContactEmail(parsedData);
-      return res.status(201).json({message: "Email enviado"})
+      return res.status(201).json({ message: "Email enviado" });
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json({ error: error.errors });
       } else {
-        res.status(400).json({msg: "Error al enviar email", error})
-      } 
+        res.status(400).json({ msg: "Error al enviar email", error });
+      }
     }
-  }
-  
+  };
 
   // 4º Apartado de Actividades
   // Añadir una Actividad
@@ -443,7 +454,6 @@ class AdminController {
 
       const { activity_id, activity_id_to_delete } = req.body;
 
-  
       await adminDal.updateOlympicsActivities(
         olympics_id,
         activity_id,
@@ -459,25 +469,27 @@ class AdminController {
     }
   };
 
-    // Añade Olimpiada al centro
+  // Añade Olimpiada al centro
 
   addOlympicsToCenter = async (req, res) => {
     try {
-      const { center_id} = req.params;
+      const { center_id } = req.params;
       const { olympics_id, olympics_id_to_delete } = req.body;
 
       await adminDal.updateCenterOlympics(
         center_id,
         olympics_id,
         olympics_id_to_delete
-      )
+      );
 
-      res.status(200).json({ message: "Olimpiadas actualizadas correctamente" });
+      res
+        .status(200)
+        .json({ message: "Olimpiadas actualizadas correctamente" });
     } catch (error) {
       console.log("Error al actualizar olimpiadas", error);
       res.status(500).json({ message: "Error al actualizar olimpiadas" });
     }
-  }
+  };
 
   // Ver Actividades de una Olimpiada
 
@@ -499,7 +511,7 @@ class AdminController {
     } catch (error) {
       res.status(500).json({ message: "Error al obtener las olimpiadas" });
     }
-  }
+  };
 
   //borrado logico de actividades
   logicalDeleteActivity = async (req, res) => {
@@ -534,12 +546,11 @@ class AdminController {
   };
 
   verifyTokenUser = async (req, res) => {
-    
     try {
       const { token } = req.params;
       const decoded = jwt.verify(token, process.env.TOKEN_KEY);
       console.log("verify", decoded);
-      
+
       const user = await adminDal.getUserById(decoded.user_id);
 
       if (!user) {

@@ -3,12 +3,12 @@ import emailService from "../../utils/emailUtils/emailService.js";
 import jwt from "jsonwebtoken";
 import { comparePassword, hashPassword } from "../../utils/hashUtils.js";
 import { generateToken, getIdFromToken } from "../../utils/tokenUtils.js";
-import { z } from "../../../server/node_modules/zod";
+import { z } from "zod";
 import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
 import { completeCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
 import {
-registerSchema,
-completeResponsibleSchema,
+  registerSchema,
+  completeResponsibleSchema,
   editUserSchema,
   editResponsibleSchema,
   emailSchema,
@@ -19,7 +19,7 @@ import admin from "firebase-admin";
 
 class UserController {
   // 1º Apartado de Usuarios
-    // Registro de usuario
+  // Registro de usuario
 
   register = async (req, res) => {
     const parsedData = registerSchema.parse(req.body);
@@ -77,7 +77,7 @@ class UserController {
     }
   };
 
-    // Login de Usuario
+  // Login de Usuario
 
   login = async (req, res) => {
     const parsedData = loginSchema.parse(req.body);
@@ -111,25 +111,27 @@ class UserController {
   //Login con Google
   loginWithGoogle = async (req, res) => {
     const { googleToken } = req.body;
-  
+
     try {
       // Verificar el token de Google con Firebase
       const decodedToken = await admin.auth().verifyIdToken(googleToken);
       console.log("Decoded token:", decodedToken);
-  
+
       const { email, uid } = decodedToken;
       console.log("Email extraído del token:", email);
-  
+
       // Buscar usuario en la base de datos
       let user = await userDal.findUserByEmailGoogle(email);
       console.log("resultado de la consulta:", user);
-  
-      if (!user) {  // Corregido para manejar null correctamente
+
+      if (!user) {
+        // Corregido para manejar null correctamente
         return res.status(401).json({
-          error: "Usuario no registrado o eliminado. Complete sus datos antes de iniciar sesión.",
+          error:
+            "Usuario no registrado o eliminado. Complete sus datos antes de iniciar sesión.",
         });
       }
-  
+
       if (user.firebase_uid !== uid) {
         user = await userDal.updateFirebaseUid(user.user_id, uid); // Actualizamos el firebase_uid si no coincide
         if (!user) {
@@ -138,31 +140,29 @@ class UserController {
           });
         }
       }
-      
+
       // Volver a obtener los datos actualizados del usuario
       user = await userDal.findUserByEmailGoogle(email);
 
-
       // Generar un token JWT para la sesión
-      const token = jwt.sign(
-        { user_id: user.user_id },
-        process.env.TOKEN_KEY,
-        { expiresIn: "24h" }
-      );
-  
+      const token = jwt.sign({ user_id: user.user_id }, process.env.TOKEN_KEY, {
+        expiresIn: "24h",
+      });
+
       return res.json({
         message: "Inicio de sesión exitoso",
         token,
         user,
       });
-  
     } catch (error) {
       console.error("Error al iniciar sesión con Google:", error);
-      return res.status(400).json({ error: "Token inválido o problema con la verificación" });
+      return res
+        .status(400)
+        .json({ error: "Token inválido o problema con la verificación" });
     }
   };
 
-    // Buscar Usuario por ID
+  // Buscar Usuario por ID
 
   findUserById = async (req, res) => {
     try {
@@ -173,9 +173,9 @@ class UserController {
     } catch (error) {
       return res.status(400).json({ message: error.message });
     }
-  }
+  };
 
-    // Completas Responsable 
+  // Completas Responsable
 
   completeResponsible = async (req, res) => {
     const parsedData = completeResponsibleSchema.parse(req.body);
@@ -207,7 +207,7 @@ class UserController {
     }
   };
 
-    // Editar Responsable
+  // Editar Responsable
 
   editResponsible = async (req, res) => {
     try {
@@ -232,7 +232,7 @@ class UserController {
     }
   };
 
-    // Editar Usuario
+  // Editar Usuario
 
   editUserUser = async (req, res) => {
     const parsedData = editUserSchema.parse(req.body);
@@ -251,7 +251,7 @@ class UserController {
     }
   };
 
-    //LISTADO PARA VER (EL RESPONSABLE, USER TYPE =2) ALUMNOS Y POSTERIORMENTE ASIGNAR ACTIVIDADES
+  //LISTADO PARA VER (EL RESPONSABLE, USER TYPE =2) ALUMNOS Y POSTERIORMENTE ASIGNAR ACTIVIDADES
 
   getUsersToAddActivity = async (req, res) => {
     try {
@@ -264,7 +264,7 @@ class UserController {
     }
   };
 
-    // Añadir actividad a Usuario
+  // Añadir actividad a Usuario
 
   addActivityToUser = async (req, res) => {
     try {
@@ -293,7 +293,7 @@ class UserController {
     }
   };
 
-    // Detalles de Usuario
+  // Detalles de Usuario
 
   userDetails = async (req, res) => {
     try {
@@ -307,7 +307,7 @@ class UserController {
     }
   };
 
-    // Restaurar Contraseña de Usuario
+  // Restaurar Contraseña de Usuario
 
   restorePassword = async (req, res) => {
     const parsedData = passwordSchema.parse(req.body);
@@ -316,18 +316,18 @@ class UserController {
       const { user_id } = req.params;
       const hash = await hashPassword(user_password);
       await userDal.updatePassword(hash, user_id);
-      res.status(200).json({ msg: "Contraseña actualizada con éxito."})
+      res.status(200).json({ msg: "Contraseña actualizada con éxito." });
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json({ error: error.errors });
       } else {
-        res.status(400).json({ message: error.message })
+        res.status(400).json({ message: error.message });
       }
     }
-  }
+  };
 
   // 2º Apartado de Actividades
-    // Ver Actividades de un Usuario
+  // Ver Actividades de un Usuario
 
   getUserActivities = async (req, res) => {
     try {
@@ -336,10 +336,16 @@ class UserController {
       if (!user_id || !olympics_id) {
         return res
           .status(400)
-          .json({ message: "El id del usuario y el id de las olimpiadas son requeridos" });
+          .json({
+            message:
+              "El id del usuario y el id de las olimpiadas son requeridos",
+          });
       }
 
-      const userActivities = await userDal.getUserActivities(user_id, olympics_id);
+      const userActivities = await userDal.getUserActivities(
+        user_id,
+        olympics_id
+      );
 
       return res.status(200).json(userActivities);
     } catch (error) {
@@ -349,9 +355,9 @@ class UserController {
         error,
       });
     }
-  }
+  };
 
-    // Ver Actividades de una Olimpiada
+  // Ver Actividades de una Olimpiada
 
   getActivitiesFromOlympics = async (req, res) => {
     try {
@@ -373,7 +379,7 @@ class UserController {
   };
 
   // 3º Apartado Centro
-    // Completar Centro
+  // Completar Centro
 
   completeCenter = async (req, res) => {
     const parsedData = completeCenterSchema.parse(req.body);
@@ -408,7 +414,7 @@ class UserController {
   };
 
   // 4º Apartado de Validaciones
-    // Validar documento desde Responsable
+  // Validar documento desde Responsable
 
   ResponsibleValidateDocument = async (req, res) => {
     try {
@@ -424,7 +430,7 @@ class UserController {
     }
   };
 
-    // Validar Registro de Usuario
+  // Validar Registro de Usuario
 
   validateRegistrationUser = async (req, res) => {
     try {
@@ -440,7 +446,7 @@ class UserController {
     }
   };
 
-    // Validación pendiente 
+  // Validación pendiente
 
   getPendingValidationUsers = async (req, res) => {
     try {
@@ -461,7 +467,7 @@ class UserController {
     }
   };
 
-    // Obtener la validación 
+  // Obtener la validación
 
   getUnauthorizedUserProfile = async (req, res) => {
     try {
@@ -494,7 +500,7 @@ class UserController {
     }
   };
 
-    // Subir la validación
+  // Subir la validación
 
   uploadAuthorizationFile = async (req, res) => {
     try {
@@ -506,7 +512,7 @@ class UserController {
       } else {
         await userDal.saveUserPermissionFile(
           req.params.user_id,
-          req.file.filename,
+          req.file.filename
         );
 
         res.status(200).json({
@@ -523,7 +529,7 @@ class UserController {
     }
   };
 
-    // Descargar la Validación del centro
+  // Descargar la Validación del centro
 
   getAuthorizationFile = async (req, res) => {
     try {
@@ -536,7 +542,7 @@ class UserController {
           message: "El archivo de autorización no se encuentra",
         });
       } else {
-        res.status(200).json({userFileName})
+        res.status(200).json({ userFileName });
       }
     } catch (error) {
       console.error("Error en getAuthorizationFile:", error);
@@ -552,15 +558,16 @@ class UserController {
   getAuthorizationFileForResponsible = async (req, res) => {
     try {
       const student_user_id = req.params.user_id;
-  
-      const userFileName = await userDal.getAuthorizationFileFromDBForResponsible(student_user_id);
-  
+
+      const userFileName =
+        await userDal.getAuthorizationFileFromDBForResponsible(student_user_id);
+
       if (!userFileName) {
         return res.status(404).json({
           message: "El archivo de autorización firmado no se encuentra",
         });
       }
-  
+
       // Si el archivo existe, devuelve el nombre del archivo
       res.status(200).json({ userFileName });
     } catch (error) {
@@ -575,32 +582,33 @@ class UserController {
   findUserByEmail = async (req, res) => {
     const parsedData = emailSchema.parse(req.body);
     const { user_email } = parsedData;
-  
+
     try {
       const result = await userDal.getUserByEmail(user_email);
-  
+
       if (result.length === 0) {
-        return res.status(401).json({ emailError: "El email introducido no existe" });
+        return res
+          .status(401)
+          .json({ emailError: "El email introducido no existe" });
       }
-  
+
       const token = jwt.sign(
         { user_id: result[0].user_id },
         process.env.TOKEN_KEY,
         { expiresIn: "24h" }
       );
-  
+
       await emailService.sendResetPasswordEmail(parsedData, token);
-  
+
       return res.status(201).json({
         message: "Token creado",
-        insertId: result[0].user_id
+        insertId: result[0].user_id,
       });
-  
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ error: error.errors });
       }
-  
+
       return res.status(500).json({ msg: "Error al hacer petición ", error });
     }
   };
