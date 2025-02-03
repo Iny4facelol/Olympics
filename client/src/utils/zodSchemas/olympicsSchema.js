@@ -1,4 +1,4 @@
-import { z } from "../../../client/node_modules/zod";
+import { z } from "zod";
 
 export const olympicsSchema = z.object({
   olympics_name: z.string().min(3, "Debe tener al mínimo 3 carácteres"),

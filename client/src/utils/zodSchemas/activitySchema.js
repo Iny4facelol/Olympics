@@ -1,4 +1,4 @@
-import { z } from "../../../client/node_modules/zod";
+import { z } from "zod";
 
 export const activitySchema = z.object({
   activity_name: z
