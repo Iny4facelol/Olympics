@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "../../../client/node_modules/zod";
 
 export const contactSchema = z.object({
   user_email: z.string().email("El email no es válido"),

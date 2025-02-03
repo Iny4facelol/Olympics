@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "../../../client/node_modules/zod";
 
 export const activitySchema = z.object({
   activity_name: z
@@ -32,6 +32,5 @@ export const editActivitySchema = z.object({
   max_participants: z.number({
     invalid_type_error: "El número máximo de participantes debe ser un número",
   }),
-  activity_image: z
-    .any()
+  activity_image: z.any(),
 });

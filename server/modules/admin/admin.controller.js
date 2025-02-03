@@ -10,7 +10,7 @@ import {
   registerResponsibleSchema,
 } from "../../utils/zodSchemas/userSchema.js";
 import { olympicsSchema } from "../../utils/zodSchemas/olympicsSchema.js";
-import { z } from "zod";
+import { z } from "../../../server/node_modules/zod";
 import {
   createCenterSchema,
   editCenterSchema,

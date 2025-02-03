@@ -1,10 +1,9 @@
 import userDal from "./user.dal.js";
 import emailService from "../../utils/emailUtils/emailService.js";
 import jwt from "jsonwebtoken";
-import path from "path";
 import { comparePassword, hashPassword } from "../../utils/hashUtils.js";
 import { generateToken, getIdFromToken } from "../../utils/tokenUtils.js";
-import { z } from "zod";
+import { z } from "../../../server/node_modules/zod";
 import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
 import { completeCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
 import {
