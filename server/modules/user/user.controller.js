@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import { comparePassword, hashPassword } from "../../utils/hashUtils.js";
 import { generateToken, getIdFromToken } from "../../utils/tokenUtils.js";
 import { z } from "zod";
-import { loginSchema } from "../../../client/src/utils/zodSchemas/loginSchema.js";
 import { completeCenterSchema } from "../../utils/zodSchemas/centerSchema.js";
 import {
   registerSchema,
