@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { emailSchema } from "../../../../../../server/utils/zodSchemas/userSchema";
 import { Col, Form, Row } from "react-bootstrap";
 import { toast } from "sonner";
 import ButtonCustom from "../../../../core/components/Button/Button";
