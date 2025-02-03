@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import { emailSchema } from "../../../../utils/zodSchemas/registerSchema";
 
 export const ForgotPasswordForm = ({ setShowForgotPassword }) => {
   const [authenticating, setAuthenticating] = useState(false);
