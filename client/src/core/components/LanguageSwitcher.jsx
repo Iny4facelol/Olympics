@@ -13,7 +13,7 @@ export default function LanguageSwitcher() {
     { code: "en", name: "English", flag: "/gb.png" },
   ];
 
-  const currentLanguage = languages.find((lang) => lang.code === i18n.language);
+  const currentLanguage = languages.find((lang) => lang.code === i18n.language) || languages[0];
 
   return (
     <Dropdown>
