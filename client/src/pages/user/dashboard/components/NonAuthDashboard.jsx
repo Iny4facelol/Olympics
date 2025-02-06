@@ -66,7 +66,7 @@ export default function NonAuthDashboard() {
 
   return (
     <section className="d-flex flex-column gap-3">
-      <article className="w-50">
+      <article className="w-100 w-md-50">
         <h3 className="text-danger fs-4">
           {t("user_dashboard.nonAuthMessage")} <CircleX />
         </h3>
@@ -82,7 +82,7 @@ export default function NonAuthDashboard() {
           <ButtonCustom
             onClick={() => fileInputRef.current?.click()}
             bgColor="orange"
-            disabled={isUploading}
+            disabled={isUploading}j
           >
             <div className="d-flex align-items-center gap-2">
               <Upload size={20} />

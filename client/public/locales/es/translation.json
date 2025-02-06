@@ -205,7 +205,7 @@
     "adminActivitiesText2": "en la actividad correspondiente.",
     "actions": "Acciones",
     "activityName": "Nombre",
-    "activityNumberParts": "Nº de participantes",
+    "activityMaxNumberParts": "Nº de participantes",
     "activityDesc": "Descripción",
     "activityImage": "Imagen",
     "activityNamePlaceholder": "Ej: Baloncesto",
